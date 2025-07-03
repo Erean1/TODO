@@ -44,7 +44,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Yapılacaklar Listesi</title>\n\n    <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n\n</head>\n\n<body>\n    <div class=\"container mt-5\">\n        <div class=\"row\">\n\n            <div class=\"col-md-8 offset-md-2\">\n                {{#error}}\n                <div class=\"alert alert-danger p-1 text-center\">\n                    <h4>{{message}}</h4>\n                </div>\n\n                {{/error}}\n                {{#message}}<p class=\"text-danger\">{{.}}</p>{{/message}}\n                <form action=\"/add\" method=\"POST\">\n                    <div class=\"input-group input-group-lg\">\n                        <input  type=\"text\" name=\"name\" class=\"form-control {{#error}}border-danger{{/error}}\" placeholder=\"Görev\" />\n                        <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n                        <button class=\"btn btn-primary px-5\" type=\"submit\">Ekle</button>\n                    </div>\n                </form>\n                <div class=\"card mt-2 overflow-hidden\">\n                    <div class=\"card-body p-0\">\n                        <div class=\"table-responsive\">\n                            <table class=\"table table-hover m-0\">\n                                <thead class=\"table-dark\">\n                                    <tr>\n                                        <th colspan=\"2\">İş</th>\n                                    </tr>\n                                </thead>\n                                <tbody>\n                                    {{#payload}}\n                                    <tr>\n                                        <td>{{name}}</td>\n                                        <td class=\" text-end\">\n\n                                            <div class=\"btn-group\">\n                                                <form method=\"POST\">\n                                                    <input type=\"hidden\" name=\"id\" value=\"{{id}}\"/>\n                                                {{#done}}\n                                                    <button type=\"submit\" class=\"btn btn-warning\">Aç</button>\n                                                    {{/done}}\n                                                    {{^done}}\n                                                    <button type=\"submit\" class=\"btn btn-info\">Düzenle</button>\n                                                    <button type=\"submit\" class=\"btn btn-secondary\">Hatırlatıcı</button>\n                                                    <button type=\"submit\" class=\"btn btn-success\">Tamamla</button>\n                                                    {{/done}}\n                                                    <button type=\"submit\" formaction=\"/trash\" class=\"btn btn-danger\">Sil</button>\n                                                </form>\n                                            </div>\n                                        </td>\n                                    </tr>\n                                    {{/payload}}\n                                    {{^payload}}\n                                    <tr>\n                                        <td colspan=\"2\" class=\"text-muted text-center\">Henüz Hiç Giriş Yapılmadı...</td>\n                                    </tr>\n                                    {{/payload}}\n                                </tbody>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n\n    <script src=\"/js/bootstrap.bundle.min.js\"></script>\n</body>\n\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Yapılacaklar Listesi</title>\n\n    <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n\n</head>\n\n<body>\n    <div class=\"container mt-5\">\n        <div class=\"row\">\n\n            <div class=\"col-md-8 offset-md-2\">\n                {{#error}}\n                <div class=\"alert alert-danger p-1 text-center\">\n                    <h4>{{message}}</h4>\n                </div>\n\n                {{/error}}\n                {{#message}}<p class=\"text-danger\">{{.}}</p>{{/message}}\n                <form action=\"/operation/add\" method=\"POST\">\n                    <div class=\"input-group input-group-lg\">\n                        <input  type=\"text\" name=\"name\" class=\"form-control {{#error}}border-danger{{/error}}\" placeholder=\"Görev\" />\n                        <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n                        <button class=\"btn btn-primary px-5\" type=\"submit\">Ekle</button>\n                    </div>\n                </form>\n                <div class=\"card mt-2 overflow-hidden\">\n                    <div class=\"card-body p-0\">\n                        <div class=\"table-responsive\">\n                            <table class=\"table table-hover m-0\">\n                                <thead class=\"table-dark\">\n                                    <tr>\n                                        <th colspan=\"2\">İş</th>\n                                    </tr>\n                                </thead>\n                                <tbody>\n                                    {{#payload}}\n                                    <tr class=\"align-middle\">\n                                        <td class=\"text-center\">\n                                            {{#done}}\n                                            <h4 class=\"text-muted\"><del>{{name}}</del></h4>\n                                            {{/done}}\n                                            {{^done}}\n                                            <h4>{{name}}</h4>\n                                            {{/done}}\n                                            <div class=\"badge bg-secondary\">\n                                                <smal><i class=\"bi bi-calendar\"></i>({{date}} - {{time}})</smal>\n                                            </div>\n                                        </td>\n                                        <td class=\" text-end\">\n\n                                            <div class=\"btn-group\">\n                                                <form method=\"POST\">\n                                                    <input type=\"hidden\" name=\"id\" value=\"{{id}}\"/>\n                                                {{#done}}\n                                                    <button type=\"submit\" data-bs-toggle=\"tooltip\" data-bs-title=\"Aç\" formaction=\"/operation/open\" class=\"btn btn-warning\"><i class=\"bi bi-arrow-clockwise\"> </i>Aç</button>\n                                                    {{/done}}\n                                                    {{^done}}\n                                                    <a type=\"submit\" data-bs-toggle=\"tooltip\" href=\"/edit/{{id}}\" data-bs-title=\"Düzenle\" class=\"btn btn-info\"><i class=\"bi bi-pencil-square\"></i>Düzenle</a>\n                                                    <button type=\"submit\" data-bs-toggle=\"tooltip\" data-bs-title=\"Hatırlatıcı\" class=\"btn btn-secondary\"><i class=\"bi bi-alarm-fill\"></i> Hatırlatıcı</button>\n                                                    <button type=\"submit\" data-bs-toggle=\"tooltip\" data-bs-title=\"Tamamla\" formaction=\"/operation/complete\" class=\"btn btn-success\"><i class=\"bi bi-check-lg \"></i> Tamamla</button>\n                                                    {{/done}}\n                                                    <button type=\"submit\"data-bs-toggle=\"tooltip\" data-bs-title=\"Sil\" formaction=\"/operation/trash\" class=\"btn btn-danger\"><i class=\"bi bi-trash\"></i> Sil</button>\n                                                </form>\n                                            </div>\n                                        </td>\n                                    </tr>\n                                    {{/payload}}\n                                    {{^payload}}\n                                    <tr>\n                                        <td colspan=\"2\" class=\"text-muted text-center\">Henüz Hiç Giriş Yapılmadı...</td>\n                                    </tr>\n                                    {{/payload}}\n                                </tbody>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n\n    <script src=\"/js/bootstrap.bundle.min.js\"></script>\n    <script>\n        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle=\"tooltip\"]')\n        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))\n    </script>\n</body>\n\n</html>",
         "output": "str",
         "x": 520,
         "y": 180,
@@ -63,7 +63,7 @@
         "outputs": 0,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\n\nconst DB = global.get(\"DB\") || {\n    todo : []\n}\n\n\n/*\n * TODO DB ŞEMA\n * id : NOW\n * name : \"\"\n * done : \"true|false\"\n * stamp : {\n * created_at : NOW \n * ip : IP\n * username : \"\"\n * email : \"\"  \n * }\n*/\n\n\nglobal.set(\"DB\",DB);",
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\n\nconst DB = global.get(\"DB\") || {\n    todo : []\n}\n\n\n/*\n * TODO DB ŞEMA\n * id : NOW\n * name : \"\"\n * done : \"true|false\"\n * stamp : {\n * created_at : NOW \n * ip : IP\n * username : \"\"\n * email : \"\"\n * date : \"GG.AY.YYYY\",\n * time : \"SS:DD\"  \n * }\n*/\n\n\nglobal.set(\"DB\",DB);",
         "finalize": "",
         "libs": [],
         "x": 350,
@@ -120,120 +120,14 @@
         ]
     },
     {
-        "id": "b0c75bbbd13725dd",
-        "type": "http in",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "url": "/add",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 180,
-        "y": 320,
-        "wires": [
-            [
-                "34f504142db440cc",
-                "93178ff31e670b66"
-            ]
-        ]
-    },
-    {
-        "id": "3544e15ecfe0c0fc",
-        "type": "http response",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "statusCode": "302",
-        "headers": {
-            "location": "/"
-        },
-        "x": 860,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "5977f53cff724a39",
-        "type": "function",
-        "z": "d8112b18e3794244",
-        "name": "db.todo.add()",
-        "func": "const DB = global.get(\"DB\");\n\nlet todo = DB.todo\n\nconst now = new Date().getTime()\n\nlet name = msg.payload.name;\n\n\nlet pushedTodo = todo.push({\n    id : now,\n    name : msg.payload.name,\n    done : false,\n    stamp : {\n        createdAt : now,\n        ip : msg.req.ip,\n        username : \"\",\n        email : \"\",\n    }\n})\n\n\nDB.todo = todo\nglobal.set(\"DB\", DB)\nreturn msg;\n\n\n\n\n\n\n\n\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 630,
-        "y": 320,
-        "wires": [
-            [
-                "3544e15ecfe0c0fc"
-            ]
-        ]
-    },
-    {
-        "id": "34f504142db440cc",
-        "type": "debug",
-        "z": "d8112b18e3794244",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "93178ff31e670b66",
-        "type": "function",
-        "z": "d8112b18e3794244",
-        "name": "validation",
-        "func": "if (!msg.payload.name){\n    node.error(\"Görev Alanı Boş Olamaz!\", msg);\n    return;\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 420,
-        "y": 320,
-        "wires": [
-            [
-                "5977f53cff724a39"
-            ]
-        ]
-    },
-    {
-        "id": "dcabc62dc1b32479",
-        "type": "catch",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "scope": [
-            "93178ff31e670b66"
-        ],
-        "uncaught": false,
-        "x": 410,
-        "y": 380,
-        "wires": [
-            [
-                "afcf10c152259667",
-                "7c9f9cfdbd21d077"
-            ]
-        ]
-    },
-    {
         "id": "7765fe84dbd1e489",
         "type": "link in",
         "z": "d8112b18e3794244",
         "name": "link in 1",
         "links": [
-            "afcf10c152259667",
-            "daa7307be832ffbf",
-            "478f89cc27c51694"
+            "577603f3c1a70e7d",
+            "82f79ae440d13591",
+            "8dd8b7c843c955c3"
         ],
         "x": 205,
         "y": 140,
@@ -244,91 +138,43 @@
         ]
     },
     {
-        "id": "afcf10c152259667",
-        "type": "link out",
-        "z": "d8112b18e3794244",
-        "name": "link out 1",
-        "mode": "link",
-        "links": [
-            "7765fe84dbd1e489"
-        ],
-        "x": 535,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "7c9f9cfdbd21d077",
-        "type": "debug",
-        "z": "d8112b18e3794244",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 560,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "0df35df04f368704",
+        "id": "896689446630c146",
         "type": "http in",
         "z": "d8112b18e3794244",
         "name": "",
-        "url": "/trash",
+        "url": "/operation/:type",
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 170,
-        "y": 540,
+        "x": 220,
+        "y": 320,
         "wires": [
             [
-                "57f0eac77d7300c4",
-                "eb15834299b2720d"
+                "2cf1c9ccf564e8d6"
             ]
         ]
     },
     {
-        "id": "57f0eac77d7300c4",
-        "type": "debug",
-        "z": "d8112b18e3794244",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 400,
-        "y": 500,
-        "wires": []
-    },
-    {
-        "id": "eb15834299b2720d",
+        "id": "2cf1c9ccf564e8d6",
         "type": "function",
         "z": "d8112b18e3794244",
         "name": "validation",
-        "func": "if (!msg.payload.id){\n    msg.error = {\n        message : \"Silmek istediğinz id bilgisi olmalı.\"\n    }   \n    return [null,msg]\n}\n\nreturn msg;",
+        "func": "const typeLookup = {\n    trash: {\n        text: \"Silmek\",\n        requireArgs : [\"id\"]\n    },\n    complete: {\n        text : \"Tamamlamak\",\n        requireArgs : [\"id\"]\n    },\n    open: {\n        text : \"Açmak\",\n        requireArgs : [\"id\"]\n    },\n    add : {\n        text : \"Eklemek\",\n        requireArgs : [\"name\"]\n    },\n    update : {\n        text : \"Güncellemek\",\n        requireArgs : [\"id\",\"name\"]\n    }\n}\n\nif (!Object.keys(typeLookup).includes(msg.req.params.type)) {\n    msg.error = {\n        message: `${msg.req.params.type} geçersiz bir parametredir `\n    }\n    return [null, msg]\n}\n\n\n\nif (!typeLookup[msg.req.params.type].requireArgs.every(arg => msg.payload[arg])) {\n    msg.error = {\n        message: `${typeLookup[msg.req.params.type].text} istediğinz elemanın ${typeLookup[msg.req.params.type].requireArgs} bilgisi(leri) olmalı.`\n    }\n    return [null, msg]\n}\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 560,
+        "x": 440,
+        "y": 320,
         "wires": [
             [
-                "375c8a92bad62ea3"
+                "cf0ab06fa2e1711d"
             ],
             [
-                "daa7307be832ffbf",
-                "3d9e73b94745fa58"
+                "8dd8b7c843c955c3",
+                "6e3de78d34cae51a"
             ]
         ],
         "outputLabels": [
@@ -337,26 +183,25 @@
         ]
     },
     {
-        "id": "375c8a92bad62ea3",
+        "id": "cf0ab06fa2e1711d",
         "type": "function",
         "z": "d8112b18e3794244",
-        "name": "db.todo.delete()",
-        "func": "const DB = global.get(\"DB\");\n\nlet todo = DB.todo\n\nconst index = todo.findIndex(x => x.id == msg.payload.id);\n\nif(!~index) {\n    msg.error =  {\n        message : \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n\n    return [null,msg];\n}\n\ntodo.splice(index,1);\n\nDB.todo = todo;\n\nglobal.set(\"DB\", DB)\nreturn msg;\n\n\n\n\n\n\n\n\n\n",
+        "name": "db.todo.opt()",
+        "func": "const DB = global.get(\"DB\");\n\nlet todo = DB.todo\n\nconst date = new Date()\nconst now = date.getTime()\n\nif (msg.req.params.type === \"add\") {\n    todo.push({\n        id: now,\n        name: msg.payload.name,\n        done: false,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: \"\",\n            email: \"\",\n        },\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\")\n\n    })\n} else {\n    const index = todo.findIndex(x => x.id == msg.payload.id);\n\n    if (!~index) {\n        msg.error = {\n            message: \"Id ile eşleşen bir kayıt bulunamadı.\"\n        }\n        return [null, msg];\n    }\n\n    if (msg.req.params.type === \"update\" && todo[index].done) {\n        msg.error = {\n            message: \"Tamamlanan işler güncellenemez.\"\n        }\n        return [null, msg];\n    }\n\n\n\n    if (msg.req.params.type === \"trash\") {\n        todo.splice(index, 1);\n    } else {\n        switch (msg.req.params.type) {\n            case \"complete\":\n                todo[index].done = true;\n                break;\n\n            case \"open\":\n                todo[index].done = false;\n                break;\n            case \"update\": \n                todo[index].name = msg.payload.name\n                break;\n        }\n        todo[index].stamp = {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: \"\",\n            email: \"\"\n        }\n        todo[index].date = date.toLocaleDateString(\"TR\")\n        todo[index].time = date.toLocaleTimeString(\"TR\")\n    }\n}\n\n\n\n\n\n\n\n\nglobal.set(\"DB\", DB)\nreturn msg;\n\n\n\n\n\n\n\n\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 540,
+        "x": 650,
+        "y": 300,
         "wires": [
             [
-                "2d4262804f5f0790"
+                "d695a57c02f4c794"
             ],
             [
-                "478f89cc27c51694",
-                "05af7306645ca71e"
+                "577603f3c1a70e7d"
             ]
         ],
         "outputLabels": [
@@ -365,7 +210,20 @@
         ]
     },
     {
-        "id": "2d4262804f5f0790",
+        "id": "8dd8b7c843c955c3",
+        "type": "link out",
+        "z": "d8112b18e3794244",
+        "name": "link out 6",
+        "mode": "link",
+        "links": [
+            "7765fe84dbd1e489"
+        ],
+        "x": 575,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "d695a57c02f4c794",
         "type": "http response",
         "z": "d8112b18e3794244",
         "name": "",
@@ -373,68 +231,124 @@
         "headers": {
             "location": "/"
         },
-        "x": 840,
-        "y": 540,
+        "x": 880,
+        "y": 300,
         "wires": []
     },
     {
-        "id": "daa7307be832ffbf",
+        "id": "577603f3c1a70e7d",
         "type": "link out",
         "z": "d8112b18e3794244",
-        "name": "link out 2",
+        "name": "link out 7",
         "mode": "link",
         "links": [
             "7765fe84dbd1e489"
         ],
-        "x": 535,
-        "y": 620,
+        "x": 835,
+        "y": 360,
         "wires": []
     },
     {
-        "id": "478f89cc27c51694",
+        "id": "7dc909a1b99ebea2",
+        "type": "http in",
+        "z": "d8112b18e3794244",
+        "name": "",
+        "url": "/edit/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 480,
+        "wires": [
+            [
+                "afb4034377d9af0a"
+            ]
+        ]
+    },
+    {
+        "id": "afb4034377d9af0a",
+        "type": "function",
+        "z": "d8112b18e3794244",
+        "name": "db.todo.findOne()",
+        "func": "const DB = global.get(\"DB\");\n\nmsg.payload = DB.todo.find(x => x.id == msg.req.params.id)\n\nif (!msg.payload) {\n    msg.payload = {\n        message: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg]\n}\n\nif (msg.req.params.type === \"update\" && msg.payload.done) {\n    msg.error = {\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\n\n\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 480,
+        "wires": [
+            [
+                "7c99d5ae6806d6c9"
+            ],
+            [
+                "82f79ae440d13591"
+            ]
+        ],
+        "outputLabels": [
+            "Success",
+            "Error"
+        ]
+    },
+    {
+        "id": "7c99d5ae6806d6c9",
+        "type": "template",
+        "z": "d8112b18e3794244",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Yapılacaklar Listesi</title>\n\n    <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n\n</head>\n\n<body>\n    <div class=\"container mt-5\">\n        <div class=\"row\">\n\n            <div class=\"col-md-8 offset-md-2\">\n                {{#error}}\n                <div class=\"alert alert-danger p-1 text-center\">\n                    <h4>{{message}}</h4>\n                </div>\n\n                {{/error}}\n                {{#message}}<p class=\"text-danger\">{{.}}</p>{{/message}}\n                <form action=\"/operation/update\" method=\"POST\">\n                    <input type=\"hidden\" name=\"id\" value=\"{{payload.id}}\"/>\n                    <div class=\"mb-3\">\n                        <input  type=\"text\" name=\"name\" value=\"{{payload.name}}\" class=\"form-control form-control-lg {{#error}}border-danger{{/error}}{{^error}}border-info{{/error}}\" placeholder=\"Görev\" />\n                    </div>\n                    <div class=\"mb-3 text-end\">\n                        <a class=\"btn btn-danger\" href=\"/\" type=\"submit\">Vazgeç</a>\n                        <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n                        <button class=\"btn btn-warning px-4\" type=\"submit\">Düzenle</button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n\n\n    <script src=\"/js/bootstrap.bundle.min.js\"></script>\n    <script>\n        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle=\"tooltip\"]')\n        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))\n    </script>\n</body>\n\n</html>",
+        "output": "str",
+        "x": 640,
+        "y": 440,
+        "wires": [
+            [
+                "63a30b5a157b51ba"
+            ]
+        ]
+    },
+    {
+        "id": "82f79ae440d13591",
         "type": "link out",
         "z": "d8112b18e3794244",
-        "name": "link out 3",
+        "name": "link out 1",
         "mode": "link",
         "links": [
             "7765fe84dbd1e489"
         ],
-        "x": 795,
-        "y": 600,
+        "x": 585,
+        "y": 500,
         "wires": []
     },
     {
-        "id": "3d9e73b94745fa58",
+        "id": "63a30b5a157b51ba",
+        "type": "http response",
+        "z": "d8112b18e3794244",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 790,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "6e3de78d34cae51a",
         "type": "debug",
         "z": "d8112b18e3794244",
-        "name": "debug 4",
+        "name": "debug 1",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 560,
-        "y": 660,
-        "wires": []
-    },
-    {
-        "id": "05af7306645ca71e",
-        "type": "debug",
-        "z": "d8112b18e3794244",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 820,
-        "y": 660,
+        "x": 460,
+        "y": 420,
         "wires": []
     }
 ]
