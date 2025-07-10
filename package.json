@@ -10,7 +10,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@buglss/node-red-crontinject": "~3.0.2",
     "node-red": "^4.0.9",
+    "node-red-contrib-bcrypt": "~0.1.6",
+    "node-red-contrib-jwt": "~0.1.0",
+    "node-red-contrib-mongodb4": "~3.1.1",
+    "node-red-node-email": "~3.0.3",
     "nodemon": "^3.1.10"
   }
 }
