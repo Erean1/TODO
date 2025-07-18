@@ -1,0 +1,31 @@
+{
+  "title": "Kayıt Ol",
+  "elements": [
+    {
+      "type": "text",
+      "name": "displayName",
+      "title": "Ad Soyad",
+      "isRequired": true
+    },
+    {
+      "type": "text",
+      "name": "username",
+      "title": "Kullanıcı Adı",
+      "isRequired": true
+    },
+    {
+      "type": "text",
+      "name": "email",
+      "title": "E-posta",
+      "isRequired": true,
+      "inputType": "email"
+    },
+    {
+      "type": "text",
+      "name": "password",
+      "title": "Şifre",
+      "isRequired": true,
+      "inputType": "password"
+    }
+  ]
+}

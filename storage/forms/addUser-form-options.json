@@ -1,0 +1,29 @@
+{
+        "showQuestionNumbers": "off",
+        "elements": [{
+            "type": "text",
+            "name": "username",
+            "isRequired": true,
+            "placeHolder": "UserName",
+            "validators": [{
+                "type": "regex",
+                "regex": "\\S+",
+                "text": "Lütfen geçerli bir görev girin"
+            }]
+        },
+        {
+            "type" : "text",
+            "name" : "password",
+            "isRequired" : true,
+            "placeHolder" : "Parola",
+            "inputType" : "password"
+        },
+        {
+            "type" : "text",
+            "name" : "email",
+            "isRequired" : true,
+            "placeHolder" : "email",
+            "inputType" : "email"
+        }
+    ]  
+}
