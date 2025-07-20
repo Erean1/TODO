@@ -3,9 +3,9 @@
         "elements": [{
             "type": "text",
             "name": "name",
-            "title": "Yeni Görev Ekle",
+            "title": "Güncelle",
             "isRequired": true,
-            "placeHolder": "Planın Nedir?",
+            "placeHolder": "...",
             "validators": [{
                 "type": "regex",
                 "regex": "\\S+",

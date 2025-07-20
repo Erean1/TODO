@@ -17,42 +17,6 @@
       "visible": true,
       "orderable": true,
       "searchable": true
-    },
-    {
-      "name": "actions",
-      "data": null,
-      "title": "İşlemler",
-      "visible": true,
-      "orderable": false,
-      "searchable": false,
-      "renderType": "buttons",
-      "buttons": [
-        {
-          "name": "done",
-          "label": "Done",
-          "class": "btn-success"
-        },
-        {
-          "name": "trash",
-          "label": "Trash",
-          "class": "btn-danger"
-        },
-        {
-          "name": "complete",
-          "label": "Complete",
-          "class": "btn-primary"
-        },
-        {
-          "name": "edit",
-          "label": "Edit",
-          "class": "btn-warning"
-        },
-        {
-          "name": "schedule",
-          "label": "Schedule",
-          "class": "btn-info"
-        }
-      ]
     }
   ]
 }

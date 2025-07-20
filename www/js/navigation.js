@@ -1,61 +1,78 @@
-import loadForm from "./form.js"; 
-import { loadTable } from "./tables.js"
+import FormController from "./form.js";
+import { loadTable } from "./tables.js";
 
-async function loadPage() {
-    const hash = window.location.hash.substring(1);  
-    const content = document.getElementById("contentContainer");
-    content.innerHTML = `Yükleniyor...`;
+class SPAController {
+  constructor() {
+    this.formLoader = new FormController();
+    this.tableLoader = loadTable; 
+    this.content = document.getElementById("contentContainer");
+  }
+  // LOADCONTENT FUNCTION
+  async loadContent(type, kind, tableId) {
+    try {
+      const res = await fetch("/"+type);
+      const html = await res.text();
+      this.content.innerHTML = html;
+      if (kind === "form") {
+        await this.formLoader.loadForm(`${type}-form`);
+      } else if (kind === "table") {
+        await this.tableLoader(`${tableId}`, `${type}`);
+      }
+    } catch (err) {
+      console.error("Hata",err)
+    }
+  }
+  // LOADPAGE FUNCTIONS
+  async loadPage() {
+    const hash = window.location.hash.substring(1);
+    this.content.innerHTML = "Yükleniyor...";
 
-    if (hash === "logout"){ 
-      await fetch("/api/logout"); 
-      location.href = "/login"; 
+    const routes = {
+      myTodos : ["myTodos","table","todo-table"],
+      addTodo : ["addTodo","form",],
+      addUser : ["addUser","form",],
+      userList : ["userList","table","user-table"],
     }
-    if (hash === ""){
-      content.innerHTML = "<h1>ANASAYFA</h1>";
+
+    if (hash === "logout") {
+      await fetch("/api/logout");
+      window.location.href = "/login";
       return;
     }
-    if (hash === "myTodos"){
-      const res = await fetch("/myTodos");
-      const html = await res.text();
-      content.innerHTML = html;
-      await loadTable("todo-table", "myTodos");
-    }
-    if (hash === "admin"){
-      const res = await fetch("/user-list");
-      const html = await res.text();
-      content.innerHTML = html;
-    }
-    if (hash === "addTodo"){
-      const res = await fetch("/addTodo");
-      const html = await res.text();
-      content.innerHTML = html;
-      await loadForm("addTodo-form");
+    if (hash === "myTodos") {
+      await this.loadContent(...routes[hash])
       return;
     }
-    if (hash === "addUser"){
-      const res = await fetch("/addUser");
-      const html = await res.text();
-      content.innerHTML = html;
-      await loadForm("addUser-form");
+    if (hash === "addTodo") {
+      await this.loadContent(...routes[hash])
       return;
     }
-    if (hash === "userList"){
-      const res = await fetch("/userList");
-      const html = await res.text();
-      content.innerHTML = html;
-      await loadTable("user-table", "users");
+    if (hash === "addUser") {
+      await this.loadContent(...routes[hash])
       return;
     }
+    if (hash === "userList") {
+      await this.loadContent(...routes[hash])
+      return;
+    }
+  }
+  // INIT FUNCTION 
+  async init(){
+    window.addEventListener("hashchange",this.loadPage.bind(this));
+    window.addEventListener("DOMContentLoaded",() => {
+      if (window.location.hash){
+        this.loadPage();
+      } else {
+        window.location.hash = ""
+      }
+    })
+  }
+
+
 }
 
-// Sayfa ilk yüklendiğinde ve hash değiştiğinde çağırmak için:
-window.addEventListener("hashchange", loadPage);
-window.addEventListener("DOMContentLoaded", () => {
-  if (window.location.hash) {
-    loadPage();
-  } else {
-    window.location.hash = "";
-  }
-});
+const spa = new SPAController();
 
-export default loadPage;
+spa.init()
+
+export default SPAController;

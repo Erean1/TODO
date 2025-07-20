@@ -17,22 +17,6 @@
       "visible": true,
       "orderable": true,
       "searchable": true
-    },
-    {
-      "name": "actions",
-      "data": null,
-      "title": "İşlemler",
-      "visible": true,
-      "orderable": false,
-      "searchable": false,
-      "renderType": "buttons",
-      "buttons": [
-        {
-          "name": "edit",
-          "label": "Edit",
-          "class": "btn-warning"
-        }
-      ]
     }
   ]
 }

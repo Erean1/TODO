@@ -1,95 +1,123 @@
-  import loadPage from "./navigation.js";
+// ! import SPAController from "./navigation.js";
+// type = storage/forms/type
+class FormController {
+  constructor() {
+    // this.spa = new SPAController();
+  }
 
-  function showError(message) {
+  async showError(message) {
     const errorDiv = document.createElement("div");
     errorDiv.className = "alert alert-danger";
     errorDiv.textContent = message;
-    const errorexist = document.querySelector(".alert.alert-danger");
-    if (errorexist){
-      errorexist.remove()
+    const errorExist = document.querySelector(".alert.alert-danger");
+    if (errorExist) {
+      errorExist.remove();
     }
-
     const surveyContainer = document.getElementById("surveyContainer");
-    surveyContainer.parentNode.insertBefore(errorDiv,surveyContainer)
+    surveyContainer.parentNode.insertBefore(errorDiv, surveyContainer);
   }
 
+  async loadForm(type) {
+    const res = await fetch(`/api/forms/${type}`);
+    const formJson = await res.json();
 
 
-  export default async function loadForm(type) {
-        
-    const res = await fetch(`/api/forms/${type}`); // Form modelini storageden çeken apiye istek attık
-    const formJson = await res.json(); // formJsona responseyi json yapıp atadık
-    console.log(formJson);
-    const survey = new Survey.Model(formJson); // survey değişkenine formJsonun bir SurveyModeli olduğunu belirttik
-    if (type === "addTodo-form" || type === "addUser-form") {
-      survey.completeText = "Ekle";
+    let operationID = null;
+    if (type==="editTodo-form"){
+      const pathParts = window.location.pathname.split("/");
+      operationID = pathParts[pathParts.length - 1]
+    }
+
+
+
+    if (type === "editTodo-form") {
+      formJson.elements.push({
+        type: "html",
+        name : "cancel-button",
+        html : `<a href="/" class="px-5 btn btn-danger btn-md">Vazgeç</a>`
+      });
+    }
+
+    const survey = new Survey.Model(formJson);
+
+    if (type === "addUser-form" || type === "addTodo-form") {
+      (survey.completeText = "Ekle"), (survey.showCompletedPage = false);
     } else if (type === "login-form") {
-      survey.completeText = "Giriş Yap";
+      survey.completeText = "Giriş yap";
       survey.showCompletedPage = false;
-    } else if (type === "register-form"){
-      survey.completeText = "Kayıt OL";
-      survey.showCompletedPage = false
+    } else if (type === "register-form") {
+      survey.completeText = "Kayıt Ol";
+      survey.showCompletedPage = false;
+    } else if (type === "editTodo-form") {
+      survey.completeText = "Güncelle";
+      survey.showCompletedPage = false;
     }
 
     const endpointMap = {
-      "addTodo-form": "/api/operation/add", // burda gelen type göre operation işlemlerini gerçekleştiriyoruz,
+      "editTodo-form": "/api/operation/update",
+      "addTodo-form": "/api/operation/add",
       "addUser-form": "/api/user-operation/add",
       "login-form": "/api/login",
-      "register-form" : "/api/register"
+      "register-form": "/api/register",
     };
 
-    survey.onComplete.add(async function (sender) {
-      // ekleye bastığı gibi burası çalışcak
-      const formData = sender.data; // sender.data yanii formdan gelen verileri çektik
+    survey.onComplete.add(async (sender) => {
+      const formData = sender.data;
 
-      const endpoint = endpointMap[type]; // endpoint tanımladık
+      if (operationID){
+        formData._id = operationID
+      }
+
+      const endpoint = endpointMap[type];
+
       if (!endpoint) {
-        console.error(`Form tipi bulunamadı`);
+        console.error("Form tipi yok");
         return;
       }
+
       try {
-        const response = await fetch(endpoint, {
-          // endpointe post isteğini attık formDatayı yolladık
+        const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
-
-        if (!response.ok) {
-          throw new Error("API HATASI" + response.statusText);
+        if (!res.ok) {
+          throw new Error("HATA", res.statusText);
         }
-        // yeni
-        const data = await response.json()
-        console.log(data)
-
-          // yeni
-        if (data.success === false){
-          showError(data.error || "Bir Hata oluştu");
-          await loadForm(type)
+        const data = await res.json();
+        if (data.success === false) {
+          this.showError(data.error || "Bir şeyler yalnış gitti");
+          // await loadForm(type)
+          setTimeout(() => {
+            window.location.reload();
+          }, "1000");
           return;
         }
-
         switch (type) {
-          case "addTodo-form":
-          case "addUser-form":
-            window.location = "#myTodos";
-            await loadPage();
-            break;
           case "login-form":
-            window.location.href = "/"
+            window.location.href = "/";
             break;
           case "register-form":
             window.location.href = "/login";
             break;
+          case "addTodo-form":
+            window.location = "#myTodos";
+            // await this.spa.loadPage();
+            break;
+          case "editTodo-form":
+            window.location = `/#myTodos`
+            break;
+          case "addUser-form":
+            window.location = "#userList";
+            // await this.spa.loadPage();
+            break;
         }
-        console.log("Veri başarıyla kaydedildi", endpoint);
-
       } catch (err) {
         console.error("HATA", err);
       }
     });
-
-    $("#surveyContainer").Survey({ model: survey }); // render ettik formu
-
-    // survey.render("surveyContainer");
+    $("#surveyContainer").Survey({ model: survey });
   }
+}
+
+export default FormController;
