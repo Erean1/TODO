@@ -175,7 +175,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 4",
-        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip) {\n    msg.payload = {\n        refreshToken : msg.refresh\n    }\n    return [null,msg]\n}\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\ndelete  msg.refresh\ndelete msg.token\nreturn msg;",
+        "func": "// token yoksa hata çevir 2. çıkıştan\nif (msg.statusCode === 401 || msg.token.ip !== msg.req.ip) {\n    msg.payload = {\n        refreshToken : msg.refresh\n    }\n    delete msg.refresh\n    delete msg.token\n    delete msg.error\n    return [null,msg]\n}\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\ndelete  msg.refresh\ndelete msg.token\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -270,7 +270,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 26",
-        "func": "if (!msg.refresh){\n    return [null,msg]\n}\n\nmsg.method = \"POST\"\nmsg.headers = {\n    \"Content-Type\" : \"application/json\"\n};\n\n\nreturn [msg,null]",
+        "func": "if (!msg.payload.refreshToken){\n    return [null,msg]\n}\n\nmsg.method = \"POST\"\nmsg.headers = {\n    \"Content-Type\" : \"application/json\"\n};\n\n\nreturn [msg,null]",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -363,7 +363,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 31",
-        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip) {\n    return [null,msg]\n}\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nreturn msg;",
+        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip) {\n    return [null,msg]\n}\n\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.token}; HttpOnly; Secure; Path=/; Max-age=60`,]\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.statusCode =302\nmsg.headers.location = \"/\"\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -901,8 +901,7 @@
         "y": 563.9999904632568,
         "wires": [
             [
-                "cf0ab06fa2e1711d",
-                "3e648320e8d6686c"
+                "cf0ab06fa2e1711d"
             ],
             [
                 "4f89f5bfbc63161c"
@@ -935,8 +934,7 @@
                 "d39bd054e0ace37e"
             ],
             [
-                "461c351409a6d868",
-                "0b0e42b8fc861836"
+                "461c351409a6d868"
             ]
         ],
         "outputLabels": [
@@ -1763,8 +1761,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 2026.71431350708,
-        "y": 1118.7143125534058,
+        "x": 2020,
+        "y": 1040,
         "wires": [
             [
                 "5697a4298bcd5365"
@@ -1783,8 +1781,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 1978.7143211364746,
-        "y": 1193.7143096923828,
+        "x": 2020,
+        "y": 1100,
         "wires": [
             [
                 "78da0bd605dbb6d4"
@@ -1798,8 +1796,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 2176.71431350708,
-        "y": 1118.7143125534058,
+        "x": 2170,
+        "y": 1040,
         "wires": []
     },
     {
@@ -1814,8 +1812,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2150,
-        "y": 1200,
+        "x": 2170,
+        "y": 1100,
         "wires": [
             [
                 "7003096b0bf05686"
@@ -1837,8 +1835,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 2336.71431350708,
-        "y": 1158.7143125534058,
+        "x": 2350,
+        "y": 1100,
         "wires": [
             [
                 "ba3cd595d952f470"
@@ -1863,8 +1861,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 2516.71431350708,
-        "y": 1158.7143125534058,
+        "x": 2530,
+        "y": 1100,
         "wires": []
     },
     {
@@ -1998,8 +1996,7 @@
         "y": 1660,
         "wires": [
             [
-                "f78c4da52dbb84c8",
-                "22389cf0a10a0f39"
+                "f78c4da52dbb84c8"
             ]
         ]
     },
@@ -2012,8 +2009,7 @@
         "y": 1660,
         "wires": [
             [
-                "d0fddc2988667b6e",
-                "ddef01c3098287aa"
+                "d0fddc2988667b6e"
             ],
             [
                 "d0fddc2988667b6e"
@@ -2036,8 +2032,7 @@
         "y": 1660,
         "wires": [
             [
-                "8f786c815763cb25",
-                "271196f17d7be24f"
+                "8f786c815763cb25"
             ]
         ]
     },
@@ -2057,8 +2052,7 @@
         "y": 1660,
         "wires": [
             [
-                "932ef563800a4a22",
-                "4fc32f73a173132a"
+                "932ef563800a4a22"
             ]
         ]
     },
@@ -2073,74 +2067,6 @@
         },
         "x": 900,
         "y": 1660,
-        "wires": []
-    },
-    {
-        "id": "22389cf0a10a0f39",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 370,
-        "y": 1600,
-        "wires": []
-    },
-    {
-        "id": "ddef01c3098287aa",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 534.199951171875,
-        "y": 1608.9332275390625,
-        "wires": []
-    },
-    {
-        "id": "271196f17d7be24f",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 7",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 740,
-        "y": 1580,
-        "wires": []
-    },
-    {
-        "id": "4fc32f73a173132a",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 8",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 864.199951171875,
-        "y": 1611.9332275390625,
         "wires": []
     },
     {
@@ -2180,40 +2106,6 @@
         ]
     },
     {
-        "id": "0b0e42b8fc861836",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1060,
-        "y": 660,
-        "wires": []
-    },
-    {
-        "id": "3e648320e8d6686c",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 830,
-        "y": 480,
-        "wires": []
-    },
-    {
         "id": "4fc3fb7cb280308d",
         "type": "mongodb4",
         "z": "7357fc440e36aebb",
@@ -2225,8 +2117,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1850,
-        "y": 1260,
+        "x": 1960,
+        "y": 1240,
         "wires": [
             []
         ]
@@ -2449,7 +2341,9 @@
             [
                 "afb4034377d9af0a"
             ],
-            []
+            [
+                "afb4034377d9af0a"
+            ]
         ]
     },
     {
@@ -2589,7 +2483,9 @@
             [
                 "f57203d89cf961cc"
             ],
-            []
+            [
+                "f57203d89cf961cc"
+            ]
         ]
     },
     {
@@ -2742,7 +2638,9 @@
             [
                 "3eb7b4ad9032e7b7"
             ],
-            []
+            [
+                "3eb7b4ad9032e7b7"
+            ]
         ]
     },
     {
@@ -3043,7 +2941,7 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 3",
-        "func": "const refresh = msg.payload\nmsg.payload = {\n    success: true,\n    accessToken : msg.token,\n    refreshToken : refresh\n    \n};\n\nconst logData = {\n    action : \"login\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"ip yok\"\n}\nconst msgForLog = {\n    payload : logData\n};\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.accessToken}; HttpOnly; Secure; Path=/; Max-age=3600`,\n    `refreshToken=${msg.payload.refreshToken}; HttpOnly; Secure; Path=/; Max-Age=604800`\n    ]\n\nreturn [msg,msgForLog];\n",
+        "func": "const refresh = msg.payload\nmsg.payload = {\n    success: true,\n    accessToken : msg.token,\n    refreshToken : refresh\n    \n};\n\nconst logData = {\n    action : \"login\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"ip yok\"\n}\nconst msgForLog = {\n    payload : logData\n};\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.accessToken}; HttpOnly; Secure; Path=/; Max-age=60`,\n    `refreshToken=${msg.payload.refreshToken}; HttpOnly; Secure; Path=/; Max-Age=604800`\n    ]\n\nreturn [msg,msgForLog];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -3173,8 +3071,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 197,
-        "y": 604.0000190734863,
+        "x": 168.25,
+        "y": 609.0000228881836,
         "wires": [
             [
                 "b41224b290d09dec"
@@ -3193,8 +3091,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 367,
-        "y": 604.0000190734863,
+        "x": 338.25,
+        "y": 609.0000228881836,
         "wires": [
             [
                 "7589e350539a0ace"
@@ -3216,8 +3114,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 597,
-        "y": 584.0000190734863,
+        "x": 568.25,
+        "y": 589.0000228881836,
         "wires": [
             [
                 "76e20a3f4101d050"
@@ -3236,8 +3134,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 950,
-        "y": 580,
+        "x": 921.25,
+        "y": 585.0000038146973,
         "wires": [
             [
                 "d9cbac2404fe6a7a"
@@ -3259,8 +3157,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1330,
-        "y": 560,
+        "x": 1301.25,
+        "y": 565.0000038146973,
         "wires": []
     },
     {
@@ -3276,8 +3174,8 @@
         "match": "match",
         "outputs": 1,
         "rounds": 10,
-        "x": 757,
-        "y": 584.0000190734863,
+        "x": 728.25,
+        "y": 589.0000228881836,
         "wires": [
             [
                 "10ed3dc0692b9af7"
@@ -3293,8 +3191,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1190,
-        "y": 620,
+        "x": 1161.25,
+        "y": 625.0000038146973,
         "wires": []
     },
     {
@@ -3306,8 +3204,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 570,
-        "y": 660,
+        "x": 541.25,
+        "y": 665.0000038146973,
         "wires": []
     },
     {
@@ -3361,8 +3259,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1160,
-        "y": 560,
+        "x": 1131.25,
+        "y": 565.0000038146973,
         "wires": [
             [
                 "5e99b1bb4e1f9782"
@@ -3419,8 +3317,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 230,
-        "y": 920,
+        "x": 180,
+        "y": 921.250020980835,
         "wires": [
             [
                 "78b4e530ccb81d0d"
@@ -3433,9 +3331,11 @@
         "z": "a494dcc6cc32ec33",
         "name": "",
         "statusCode": "",
-        "headers": {},
-        "x": 1350,
-        "y": 920,
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1300,
+        "y": 921.250020980835,
         "wires": []
     },
     {
@@ -3449,10 +3349,10 @@
         "jwkurl": "",
         "secret": "21821f287ef6747b1d9161b29e52c1ed",
         "key": "",
-        "signvar": "token",
-        "storetoken": "token",
-        "x": 590,
-        "y": 920,
+        "signvar": "payload",
+        "storetoken": "payload",
+        "x": 540,
+        "y": 921.250020980835,
         "wires": [
             [
                 "aa3047f4a0c61364"
@@ -3464,14 +3364,14 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 27",
-        "func": "msg.user = msg.token\nmsg.payload = {\n    username: msg.user.username,\n    displayName: msg.user.displayName,\n    roles: msg.user.roles,\n    ip: msg.req.ip\n}\n\nreturn msg;",
+        "func": "msg.user = msg.payload\nmsg.payload = {\n    username: msg.user.username,\n    displayName: msg.user.displayName,\n    roles: msg.user.roles,\n    ip: msg.req.ip\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
+        "x": 730,
         "y": 920,
         "wires": [
             [
@@ -3491,9 +3391,9 @@
         "secret": "d051c56a37ecd1eb89a9412ed5912dc9",
         "key": "",
         "signvar": "payload",
-        "storetoken": "token",
-        "x": 990,
-        "y": 920,
+        "storetoken": "payload",
+        "x": 940,
+        "y": 921.250020980835,
         "wires": [
             [
                 "96f6f26210ec81f5"
@@ -3505,15 +3405,15 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 28",
-        "func": "msg.payload = {\n    success: true,\n    token: msg.token,\n};\n\n\nreturn msg;\n",
+        "func": "msg.payload = {\n    success: true,\n    token: msg.payload,\n};\n\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1190,
-        "y": 920,
+        "x": 1140,
+        "y": 921.250020980835,
         "wires": [
             [
                 "db5a54ef18e5e7d3"
@@ -3525,15 +3425,15 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 29",
-        "func": "msg.token = msg.payload.refreshToken\nreturn msg;",
+        "func": "msg.payload = msg.payload.refreshToken\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 920,
+        "x": 380,
+        "y": 921.250020980835,
         "wires": [
             [
                 "a308166d35578658"
@@ -3570,8 +3470,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1070,
-        "y": 680,
+        "x": 1041.25,
+        "y": 685.0000038146973,
         "wires": [
             []
         ]
@@ -3681,27 +3581,9 @@
         "y": 140,
         "wires": [
             [
-                "7699960a7e081580",
                 "18610c648bdeb780"
             ]
         ]
-    },
-    {
-        "id": "7699960a7e081580",
-        "type": "debug",
-        "z": "b3c1ef86c9e1d050",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1220,
-        "y": 80,
-        "wires": []
     },
     {
         "id": "18610c648bdeb780",
@@ -3835,26 +3717,9 @@
         "y": 317.0000066757202,
         "wires": [
             [
-                "2088b76e4166b254",
                 "fc510dc0c20f406f"
             ]
         ]
-    },
-    {
-        "id": "2088b76e4166b254",
-        "type": "debug",
-        "z": "b3c1ef86c9e1d050",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 971.9999656677246,
-        "y": 277.0000066757202,
-        "wires": []
     },
     {
         "id": "fc510dc0c20f406f",

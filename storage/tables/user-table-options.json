@@ -1,5 +1,5 @@
 {
-  "tableName": "todoList",
+  "tableName": "userList",
   "columns": [
     {
       "name": "username",
