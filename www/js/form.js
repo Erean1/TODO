@@ -17,13 +17,13 @@ class FormController {
     surveyContainer.parentNode.insertBefore(errorDiv, surveyContainer);
   }
 
-  async loadForm(type) {
+  async loadForm(type,prefillData = {}) {
     const res = await fetch(`/api/forms/${type}`);
     const formJson = await res.json();
 
 
     let operationID = null;
-    if (type==="editTodo-form"){
+    if (type==="editTodo-form" || type==="editUser-form"){
       const pathParts = window.location.pathname.split("/");
       operationID = pathParts[pathParts.length - 1]
     }
@@ -40,6 +40,12 @@ class FormController {
 
     const survey = new Survey.Model(formJson);
 
+    if (prefillData && Object.keys(prefillData).length > 0){
+      survey.data = prefillData
+    }
+
+
+
     if (type === "addUser-form" || type === "addTodo-form") {
       (survey.completeText = "Ekle"), (survey.showCompletedPage = false);
     } else if (type === "login-form") {
@@ -51,6 +57,9 @@ class FormController {
     } else if (type === "editTodo-form") {
       survey.completeText = "Güncelle";
       survey.showCompletedPage = false;
+    }else if (type === "editUser-form") {
+      survey.completeText = "Güncelle";
+      survey.showCompletedPage = false;
     }
 
     const endpointMap = {
@@ -58,6 +67,7 @@ class FormController {
       "addTodo-form": "/api/operation/add",
       "addUser-form": "/api/user-operation/add",
       "login-form": "/api/login",
+      "editUser-form" : "/api/user-operation/update",
       "register-form": "/api/register",
     };
 
@@ -81,6 +91,7 @@ class FormController {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
+        console.log(res)
         if (!res.ok) {
           throw new Error("HATA", res.statusText);
         }
@@ -102,14 +113,15 @@ class FormController {
             break;
           case "addTodo-form":
             window.location = "#myTodos";
-            // await this.spa.loadPage();
             break;
           case "editTodo-form":
             window.location = `/#myTodos`
             break;
+          case "editUser-form": 
+            window.location = "/#userList";
+            break;
           case "addUser-form":
             window.location = "#userList";
-            // await this.spa.loadPage();
             break;
         }
       } catch (err) {

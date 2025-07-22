@@ -13,6 +13,9 @@ export async function loadTable(type, dataType) {
     case "userList":
       tableId = "#userTable";
       break;
+    case "logs":
+      tableId = "#logTable"
+      break;
   }
   if (dataType === "userList") {
     tableJson.columns.push({
@@ -59,7 +62,7 @@ export async function loadTable(type, dataType) {
 
 $(document).on("click", "button.action-btn", async function () {
   const id = $(this).data("id");
-  const type = $(this).data("type");
+  const type = $(this).data("type");  
 
   try {
     const res = await fetch(`/api/operation/${type}`, {
@@ -67,7 +70,7 @@ $(document).on("click", "button.action-btn", async function () {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id: id }),
+      body: JSON.stringify({ _id: id }),
     });
     const json = await res.json();
     console.log(json);

@@ -17,6 +17,14 @@
       "visible": true,
       "orderable": true,
       "searchable": true
+    },
+    {
+      "name" : "roles",
+      "data" : "roles",
+      "title" : "Roller",
+      "visible" : true,
+      "orderable" : true,
+      "searchable" : true
     }
   ]
 }

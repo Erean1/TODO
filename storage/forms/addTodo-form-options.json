@@ -1,15 +1,39 @@
- {
-        "showQuestionNumbers": "off",
-        "elements": [{
-            "type": "text",
-            "name": "name",
-            "title": "Yeni Görev Ekle",
-            "isRequired": true,
-            "placeHolder": "Planın Nedir?",
-            "validators": [{
-                "type": "regex",
-                "regex": "\\S+",
-                "text": "Lütfen geçerli bir görev girin"
-            }]
-        }]  
+{
+  "showQuestionNumbers": "off",
+  "elements": [
+    {
+      "type": "text",
+      "name": "name",
+      "title": "Yeni Görev Ekle",
+      "isRequired": true,
+      "placeHolder": "Planın Nedir?",
+      "validators": [
+        {
+          "type": "regex",
+          "regex": "\\S+",
+          "text": "Lütfen geçerli bir görev girin"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "name": "priority",
+      "title": "Öncelik Seviyesi",
+      "isRequired": true,
+      "choices": [
+        { "value": "low", "text": "Düşük" },
+        { "value": "medium", "text": "Orta" },
+        { "value": "high", "text": "Yüksek" }
+      ],
+      "placeHolder": "Bir öncelik seçin"
+    },
+    {
+      "type": "text",
+      "name": "due_date",
+      "title": "Bitiş Tarihi",
+      "isRequired": true,
+      "inputType" : "date",
+      "placeHolder": "Tarih seçiniz"
+    }
+  ]
 }

@@ -1,35 +1,35 @@
 {
-  "tableName": "todoList",
+  "tableName": "logLİst",
   "columns": [
     {
-      "name": "name",
-      "data": "name",
-      "title": "Görev",
+      "name": "action",
+      "data": "action",
+      "title": "Action",
       "visible": true,
       "orderable": true,
       "searchable": true
     },
 
     {
-      "name": "stamp.username",
-      "data": "stamp.username",
-      "title": "Kullanıcı",
+      "name": "user",
+      "data": "user",
+      "title": "User",
       "visible": true,
       "orderable": true,
       "searchable": true
     },
     {
-      "name" : "priority",
-      "data" : "priority",
-      "title" : "Öncelik",
+      "name" : "timestamp",
+      "data" : "timestamp",
+      "title" : "TimesTamp",
       "visible" : true,
       "orderable" : true,
       "searchable" : true
     },
     {
-      "name" : "due_date",
-      "data" : "due_date",
-      "title" : "Bitiş Tarihi",
+      "name" : "ip",
+      "data" : "ip",
+      "title" : "IP",
       "searchable" : true,
       "visible" : true,
       "orderable" : true

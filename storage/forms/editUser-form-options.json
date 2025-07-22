@@ -1,0 +1,72 @@
+{
+  "showQuestionNumbers": "off",
+  "elements": [
+    {
+      "type": "text",
+      "name": "username",
+      "title": "Kullanıcı Adı",
+      "isRequired": false,
+      "readOnly" : true,
+      "placeHolder": "Kullanıcı Adı",
+      "validators": [
+        {
+          "type": "regex",
+          "regex": "\\S+",
+          "text": "Lütfen geçerli bir Kullanıcı Adı Girin"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "displayName",
+      "title": "İsim Soyisim",
+      "isRequired": false,
+      "placeHolder": "...",
+      "validators": [
+        {
+          "type": "regex",
+          "regex": "\\S+",
+          "text": "Lütfen geçerli bir İsim girin"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "password",
+      "title": "Parola",
+      "isRequired": false,
+      "placeHolder": "...",
+      "validators": [
+        {
+          "type": "regex",
+          "regex": "\\S+",
+          "text": "Lütfen geçerli bir İsim girin"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "email",
+      "title": "Eposta",
+      "isRequired": true,
+      "placeHolder": "...",
+      "validators": [
+        {
+          "type": "regex",
+          "regex": "\\S+",
+          "text": "Lütfen geçerli bir İsim girin"
+        }
+      ]
+    },
+    {
+      "type" : "checkbox",
+      "name" : "roles",
+      "title" : "Kullanıcı Rolleri",
+      "isRequired" : true,
+      "choices" : [
+        {"value" : "admin" , "text"  :"admin"},
+        {"value" : "user", "text" : "user"}
+      ]
+    }
+  ]
+}

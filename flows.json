@@ -16,6 +16,14 @@
         "env": []
     },
     {
+        "id": "c97b21956f467bbb",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "9a024a21c0703f56",
         "type": "tab",
         "label": "Partials",
@@ -27,6 +35,14 @@
         "id": "a494dcc6cc32ec33",
         "type": "tab",
         "label": "AUTH",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "b3c1ef86c9e1d050",
+        "type": "tab",
+        "label": "Görev Takip",
         "disabled": false,
         "info": "",
         "env": []
@@ -55,6 +71,16 @@
                 "wires": [
                     {
                         "id": "c7500ef4fb4169e6",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 1920,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "4cdfbb42a913bcc4",
                         "port": 0
                     }
                 ]
@@ -127,12 +153,12 @@
         "id": "13b56b3e9d46889f",
         "type": "jwt verify",
         "z": "85ff2d8e203f5bb5",
-        "name": "",
+        "name": "accessverify",
         "alg": [
             "HS256"
         ],
         "jwkurl": "",
-        "secret": "70f17e1abcef8bd2a0899c52edcf3393",
+        "secret": "d051c56a37ecd1eb89a9412ed5912dc9",
         "key": "",
         "signvar": "token",
         "storetoken": "token",
@@ -149,19 +175,19 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 4",
-        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip) {\n    return [null,msg]\n}\n// token varsa tokeni al user olarak döndrü\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nreturn msg;",
+        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip) {\n    msg.payload = {\n        refreshToken : msg.refresh\n    }\n    return [null,msg]\n}\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\ndelete  msg.refresh\ndelete msg.token\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
+        "x": 620,
         "y": 120,
         "wires": [
             [],
             [
-                "84b734fd759f0b7f"
+                "566d6dcd7935c4ef"
             ]
         ]
     },
@@ -170,7 +196,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 5",
-        "func": "// tokeni isteği yapan kullanıcının cookieslerinden çektik\nmsg.token = msg.req.cookies.accessToken || \"\"\n\nreturn msg;",
+        "func": "// tokeni isteği yapan kullanıcının cookieslerinden çektik\nmsg.token = msg.req.cookies.accessToken || \"\"\nmsg.refresh = msg.req.cookies.refreshToken || \"\"\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -194,8 +220,8 @@
         "headers": {
             "location": "/login"
         },
-        "x": 780,
-        "y": 160,
+        "x": 1320,
+        "y": 660,
         "wires": []
     },
     {
@@ -214,6 +240,157 @@
                 "c7500ef4fb4169e6"
             ]
         ]
+    },
+    {
+        "id": "cccc0d8ea15e66be",
+        "type": "http request",
+        "z": "85ff2d8e203f5bb5",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:1880/api/refresh-token",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1010,
+        "y": 120,
+        "wires": [
+            [
+                "f54ff9463b83b265"
+            ]
+        ]
+    },
+    {
+        "id": "566d6dcd7935c4ef",
+        "type": "function",
+        "z": "85ff2d8e203f5bb5",
+        "name": "function 26",
+        "func": "if (!msg.refresh){\n    return [null,msg]\n}\n\nmsg.method = \"POST\"\nmsg.headers = {\n    \"Content-Type\" : \"application/json\"\n};\n\n\nreturn [msg,null]",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 180,
+        "wires": [
+            [
+                "cccc0d8ea15e66be"
+            ],
+            [
+                "30ee7439f70f7074"
+            ]
+        ]
+    },
+    {
+        "id": "f54ff9463b83b265",
+        "type": "function",
+        "z": "85ff2d8e203f5bb5",
+        "name": "function 30",
+        "func": "\nif (!msg.payload){\n    return [null,msg]\n}\n\nmsg.token = msg.payload.token\n\n\n\n\nreturn [msg,null]",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1190,
+        "y": 120,
+        "wires": [
+            [
+                "ba7e037b552eb0ed"
+            ],
+            [
+                "a3c1e8a32f4d8736"
+            ]
+        ]
+    },
+    {
+        "id": "30ee7439f70f7074",
+        "type": "http response",
+        "z": "85ff2d8e203f5bb5",
+        "name": "",
+        "statusCode": "302",
+        "headers": {
+            "location": "/login"
+        },
+        "x": 980,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "a3c1e8a32f4d8736",
+        "type": "http response",
+        "z": "85ff2d8e203f5bb5",
+        "name": "",
+        "statusCode": "302",
+        "headers": {
+            "location": "/login"
+        },
+        "x": 1360,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "ba7e037b552eb0ed",
+        "type": "jwt verify",
+        "z": "85ff2d8e203f5bb5",
+        "name": "",
+        "alg": [
+            "HS256"
+        ],
+        "jwkurl": "",
+        "secret": "d051c56a37ecd1eb89a9412ed5912dc9",
+        "key": "",
+        "signvar": "token",
+        "storetoken": "token",
+        "x": 1450,
+        "y": 120,
+        "wires": [
+            [
+                "4cdfbb42a913bcc4"
+            ]
+        ]
+    },
+    {
+        "id": "4cdfbb42a913bcc4",
+        "type": "function",
+        "z": "85ff2d8e203f5bb5",
+        "name": "function 31",
+        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip) {\n    return [null,msg]\n}\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1670,
+        "y": 120,
+        "wires": [
+            [],
+            [
+                "d18dece571cb2354"
+            ]
+        ]
+    },
+    {
+        "id": "d18dece571cb2354",
+        "type": "http response",
+        "z": "85ff2d8e203f5bb5",
+        "name": "",
+        "statusCode": "302",
+        "headers": {
+            "location": "/login"
+        },
+        "x": 1860,
+        "y": 180,
+        "wires": []
     },
     {
         "id": "a37416cd213494af",
@@ -258,8 +435,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 110.14288330078125,
-        "y": 243.857186794281,
+        "x": 90,
+        "y": 400,
         "wires": [
             [
                 "04b3861bb193429d"
@@ -273,8 +450,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 650.1428833007812,
-        "y": 243.857186794281,
+        "x": 825.8570938110352,
+        "y": 401.14277839660645,
         "wires": []
     },
     {
@@ -286,115 +463,15 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Yapılacaklar Listesi</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg bg-dark text-white p-2 sticky-top\">\n    <div class=\"container-fluid\">\n      <a class=\"navbar-brand me-3\" href=\"\">TODOFIY</a>\n      <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarContent\"\n              aria-controls=\"navbarContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n      </button>\n\n      <div class=\"collapse navbar-collapse\" id=\"navbarContent\">\n        <div class=\"d-flex flex-grow-1\">\n          <ul class=\"navbar-nav me-auto\">\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-1\"></i>Görev Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-1\"></i>Görevlerim</a>\n            </li>\n            {{#hasAdmin}}\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-1\"></i>Kullanıcı Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-1\"></i>Kullanıcılar</a>\n            </li>\n            {{/hasAdmin}}\n          </ul>\n\n          <div class=\"user-info\">\n            <div class=\"user-avatar\">\n              {{user.displayName | firstLetter}}\n            </div>\n            <span>{{user.displayName}} <small class=\"text-white-50\">| {{user.username}}</small></span>\n            <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n          </div>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <div class=\"container py-4\">\n    <div class=\"row\">\n      <div class=\"col-lg-10 mx-auto\">\n        <div id=\"contentContainer\" class=\"card\">\n          <div class=\"card-body p-4\">\n            <!-- Content will be loaded here -->\n            <div class=\"text-center py-5\">\n              <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n              <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- Admin Button -->\n  {{#hasAdmin}}\n  <a href=\"#admin\" class=\"btn btn-danger admin-btn position-fixed bottom-0 end-0 m-4\" data-bs-toggle=\"tooltip\"\n    data-bs-placement=\"left\" title=\"Admin Paneli\">\n    <i class=\"bi bi-shield-lock\"></i>\n  </a>\n  {{/hasAdmin}}\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Yapılacaklar Listesi</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg bg-dark text-white p-2 sticky-top\">\n    <div class=\"container-fluid\">\n      <a class=\"navbar-brand me-3\" href=\"\">TODO</a>\n      <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarContent\"\n              aria-controls=\"navbarContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n      </button>\n\n      <div class=\"collapse navbar-collapse\" id=\"navbarContent\">\n        <div class=\"d-flex flex-grow-1\">\n          <ul class=\"navbar-nav me-auto\">\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-1\"></i>Görev Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-1\"></i>Görevlerim</a>\n            </li>\n            {{#hasAdmin}}\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-1\"></i>Kullanıcı Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-1\"></i>Kullanıcılar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-people me-1\"></i>Loglar</a>\n            </li>\n            {{/hasAdmin}}\n          </ul>\n\n          <div class=\"user-info\">\n            <span>{{user.displayName}} <small class=\"text-white-50\">| {{user.username}}</small></span>\n            <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n          </div>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <div class=\"container py-4\">\n    <div class=\"row\">\n      <div class=\"col-lg-10 mx-auto\">\n        <div id=\"contentContainer\" class=\"card\">\n          <div class=\"card-body p-4\">\n\n            <div class=\"text-center py-5\">\n              <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n              <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- Admin Button -->\n  {{#hasAdmin}}\n  <a href=\"#admin\" class=\"btn btn-danger admin-btn position-fixed bottom-0 end-0 m-4\" data-bs-toggle=\"tooltip\"\n    data-bs-placement=\"left\" title=\"Admin Paneli\">\n    <i class=\"bi bi-shield-lock\"></i>\n  </a>\n  {{/hasAdmin}}\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
         "output": "str",
-        "x": 480.14288330078125,
-        "y": 243.857186794281,
+        "x": 635.8570938110352,
+        "y": 401.14277839660645,
         "wires": [
             [
                 "1b9146e8d8077382"
             ]
         ]
-    },
-    {
-        "id": "7765fe84dbd1e489",
-        "type": "link in",
-        "z": "d8112b18e3794244",
-        "name": "link in 1",
-        "links": [
-            "577603f3c1a70e7d",
-            "d323447569c80190"
-        ],
-        "x": 155.14288330078125,
-        "y": 203.857186794281,
-        "wires": [
-            [
-                "04b3861bb193429d"
-            ]
-        ]
-    },
-    {
-        "id": "39243cf513b2a85a",
-        "type": "http in",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "url": "/schedule/:id",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 136.00004959106445,
-        "y": 805.9999828338623,
-        "wires": [
-            [
-                "59b1c3369d32e415"
-            ]
-        ]
-    },
-    {
-        "id": "3eb7b4ad9032e7b7",
-        "type": "function",
-        "z": "d8112b18e3794244",
-        "name": "db.todo.scheduleStart()",
-        "func": "const query = {\n    _id : msg.req.params.id\n}\n\n\nif (!msg.user.roles.includes(\"admin\")) query[\"stamp.username\"] = msg.user.username\n\nmsg.payload = [query]\n\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 621.0000534057617,
-        "y": 795.9999847412109,
-        "wires": [
-            [
-                "161e11b2ca64bb47"
-            ]
-        ],
-        "outputLabels": [
-            "Success"
-        ]
-    },
-    {
-        "id": "4c071291f7e1cb3a",
-        "type": "template",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Yapılacaklar Listesi</title>\n\n    <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n\n</head>\n\n<body>\n    <div class=\"container mt-5\">\n        <div class=\"row\">\n\n            <div class=\"col-md-8 offset-md-2\">\n                {{#error}}\n                <div class=\"alert alert-danger p-1 text-center\">\n                    <h4>{{message}}</h4>\n                </div>\n\n                {{/error}}\n                {{#message}}<p class=\"text-danger\">{{.}}</p>{{/message}}\n                <form action=\"/operation/schedule\" method=\"POST\">\n                    <input type=\"hidden\" name=\"id\" value=\"{{payload._id}}\"/>\n                    <div class=\"mb-3\">\n                        <input required type=\"datetime-local\" name=\"datetime\" value=\"{{payload.schedule.formData.datetime}}\" class=\"form-control form-control-lg {{#error}}border-danger{{/error}}{{^error}}border-info{{/error}}\" placeholder=\"gg.aa.yyyy ss:dd\" />\n                    </div>\n                    <div class=\"mb-3 text-end\">\n                        <a class=\"btn btn-danger\" href=\"/\" type=\"submit\">Vazgeç</a>\n                        <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n                        <button class=\"btn btn-warning px-4\" type=\"submit\">Planla</button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n\n\n    <script src=\"/js/bootstrap.bundle.min.js\"></script>\n    <script>\n        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle=\"tooltip\"]')\n        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))\n    </script>\n</body>\n\n</html>",
-        "output": "str",
-        "x": 1291.0000534057617,
-        "y": 715.9999847412109,
-        "wires": [
-            [
-                "650ff6140aa91dc2"
-            ]
-        ]
-    },
-    {
-        "id": "d323447569c80190",
-        "type": "link out",
-        "z": "d8112b18e3794244",
-        "name": "link out 2",
-        "mode": "link",
-        "links": [
-            "7765fe84dbd1e489"
-        ],
-        "x": 1246.0000534057617,
-        "y": 775.9999847412109,
-        "wires": []
-    },
-    {
-        "id": "650ff6140aa91dc2",
-        "type": "http response",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 1461.0000534057617,
-        "y": 715.9999847412109,
-        "wires": []
     },
     {
         "id": "4345a911bceedd8a",
@@ -412,8 +489,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 690.9999656677246,
-        "y": 151.00002098083496,
+        "x": 110.99996948242188,
+        "y": 175.0000467300415,
         "wires": [
             [
                 "9c7170ee9629c746"
@@ -429,146 +506,23 @@
         "links": [
             "76e21d0b94ca381e"
         ],
-        "x": 1525.9999656677246,
-        "y": 151.00002098083496,
+        "x": 945.9999694824219,
+        "y": 175.0000467300415,
         "wires": []
-    },
-    {
-        "id": "aeb96d498776cf84",
-        "type": "http in",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "url": "/user-edit/:id",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 140,
-        "y": 940,
-        "wires": [
-            [
-                "9446aab10379b614"
-            ]
-        ]
-    },
-    {
-        "id": "70783cd0be579d67",
-        "type": "function",
-        "z": "d8112b18e3794244",
-        "name": "db.user.findOne()",
-        "func": "msg.formData = msg.payload\nlet options = {\n    projection: {\n        password: 0\n    }\n}\nlet query = {\n    _id : parseInt(msg.req.params.id)\n}\n\nmsg.payload = [query, options];\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 698.0000286102295,
-        "y": 930.9999599456787,
-        "wires": [
-            [
-                "51217707a67ee8b8"
-            ]
-        ],
-        "outputLabels": [
-            "Success"
-        ]
-    },
-    {
-        "id": "e8e746187451589d",
-        "type": "template",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Kullanıcı Güncelleme</title>\n\n    <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n\n</head>\n\n<body>\n    <div class=\"container mt-5\">\n        <div class=\"row\">\n\n            <div class=\"col-md-8 offset-md-2\">\n                {{#error}}\n                <div class=\"alert alert-danger p-1 text-center\">\n                    <h4>{{message}}</h4>\n                </div>\n\n                {{/error}}\n                {{#message}}<p class=\"text-danger\">{{.}}</p>{{/message}}\n                <form action=\"/user-operation/update\" method=\"POST\">\n                    \n                    <div class=\"mb-3\">\n                        <label for=\"username\" class=\"form-label\">Kullanıcı Adı</label>\n                        <div class=\"form-control form-control-lg {{#error}}border-danger{{/error}}{{^error}}border-info{{/error}}\"> {{payload.username}} </div>                    \n                    </div>\n                    <div class=\"mb-3\">\n                        <label for=\"displayName\" class=\"form-label\">İsim Soyisim</label>\n                        <input type=\"text\" name=\"displayName\" value=\"{{payload.displayName}}\" class=\"form-control form-control-lg {{#error}}border-danger{{/error}}{{^error}}border-info{{/error}}\" placeholder=\"İsim Soyisim\" />\n                    </div>\n                    <div class=\"mb-3\">\n                        <label for=\"email\" class=\"form-label\">* E-Posta Adresi</label>\n                        <input required type=\"email\" name=\"email\" value=\"{{payload.email}}\" class=\"form-control form-control-lg {{#error}}border-danger{{/error}}{{^error}}border-info{{/error}}\" placeholder=\"İsim Soyisim\" />\n                    </div>\n                    <div class=\"mb-3\">\n                        <label for=\"password\" class=\"form-label\">Parola</label>\n                        <input type=\"password\" name=\"password\" class=\"form-control form-control-lg {{#error}}border-danger{{/error}}{{^error}}border-info{{/error}}\" placeholder=\"parola\" />\n                    </div>\n                    <div class=\"mb-3\">\n                        <div class=\"form-check form-check-inline\">\n                            <input {{#payload.active}}checked{{/payload.active}} class=\"form-check-input\" type=\"radio\" name=\"status\" id=\"active\" value=\"active\">\n                            <label class=\"form-check-label\" for=\"active\">Aktif</label>\n                        </div>\n                        <div class=\"form-check form-check-inline\">\n                            <input {{^payload.active}}checked{{/payload.active}} class=\"form-check-input\" type=\"radio\" name=\"status\" id=\"pasive\" value=\"pasive\">\n                            <label class=\"form-check-label\" for=\"pasive\" >Pasif</label>\n                        </div>\n                    </div>\n                    <div class=\"mb-3\">\n                        <div class=\"form-check form-check-inline\">\n                            <input {{#hasUser}} checked {{/hasUser}} class=\"form-check-input\" type=\"checkbox\" id=\"user\" name=\"roles\" value=\"user\">\n                            <label class=\"form-check-label\" for=\"user\">Standart Kullanıcı</label>\n                        </div>\n                        <div class=\"form-check form-check-inline\">\n                            <input {{#hasAdmin}} checked {{/hasAdmin}} class=\"form-check-input\" type=\"checkbox\" name=\"roles\" id=\"admin\" value=\"admin\">\n                            <label class=\"form-check-label\" for=\"admin\">Yetkili Kullanıcı</label>\n                        </div>\n                    </div>\n                    <div class=\"mb-3 text-end\">\n                        <a class=\"btn btn-danger\"   href=\"/user-list\" type=\"submit\">Vazgeç</a>\n                        <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n                        <button class=\"btn btn-warning px-4\" type=\"submit\">Güncelle</button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n\n\n    <script src=\"/js/bootstrap.bundle.min.js\"></script>\n    <script>\n        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle=\"tooltip\"]')\n        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))\n    </script>\n</body>\n\n</html>",
-        "output": "str",
-        "x": 1220,
-        "y": 900,
-        "wires": [
-            [
-                "8760132cf8aeaf29"
-            ]
-        ]
-    },
-    {
-        "id": "8760132cf8aeaf29",
-        "type": "http response",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 1418.0000286102295,
-        "y": 890.9999599456787,
-        "wires": []
-    },
-    {
-        "id": "8a034a93ce3b9ea0",
-        "type": "link in",
-        "z": "d8112b18e3794244",
-        "name": "link in 4",
-        "links": [
-            "bcc710c783cbf49d",
-            "4eefc06104115057"
-        ],
-        "x": 228.00002479553223,
-        "y": 1020.9999580383301,
-        "wires": [
-            [
-                "9446aab10379b614"
-            ]
-        ]
     },
     {
         "id": "04b3861bb193429d",
         "type": "subflow:85ff2d8e203f5bb5",
         "z": "d8112b18e3794244",
         "name": "",
-        "x": 290.14288330078125,
-        "y": 243.857186794281,
+        "x": 425.85709381103516,
+        "y": 401.14277839660645,
         "wires": [
             [
                 "cdb2acd15c941da3"
-            ]
-        ]
-    },
-    {
-        "id": "59b1c3369d32e415",
-        "type": "subflow:85ff2d8e203f5bb5",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "x": 366.00004959106445,
-        "y": 805.9999828338623,
-        "wires": [
+            ],
             [
-                "3eb7b4ad9032e7b7"
-            ]
-        ]
-    },
-    {
-        "id": "9446aab10379b614",
-        "type": "subflow:85ff2d8e203f5bb5",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "x": 343.0000247955322,
-        "y": 940.9999580383301,
-        "wires": [
-            [
-                "f57203d89cf961cc"
-            ]
-        ]
-    },
-    {
-        "id": "f57203d89cf961cc",
-        "type": "subflow:db78b07eb18119f0",
-        "z": "d8112b18e3794244",
-        "name": "",
-        "x": 513.0000247955322,
-        "y": 940.9999580383301,
-        "wires": [
-            [
-                "70783cd0be579d67"
+                "cdb2acd15c941da3"
             ]
         ]
     },
@@ -639,7 +593,7 @@
         "type": "function",
         "z": "d8112b18e3794244",
         "name": "function 8",
-        "func": "if (msg.payload) return\nmsg.payload = {\n    \"active\": true,\n    \"roles\": [\n        \"admin\"\n    ],\n    \"stamp\": {\n        \"createdAt\": 1751898167501,\n        \"ip\": \"127.0.0.1\",\n        \"username\": \"Ereans\",\n        \"email\": \"erencit55@gmail.com\"\n    },\n    \"username\": \"Ereans\",\n    \"password\": \"$2y$10$NvX/HC/DyIwnlR5PwgosIeR1JQbkG3zgb5aR1WIAoclrd.BQT3aum\",\n    \"email\": \"erencit55@gmail.com\",\n    \"displayName\": \"Eren Çit\"\n}\nreturn msg;",
+        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload) return\nmsg.payload = {\n    \"_id\" : now,\n    \"active\": true,\n    \"roles\": [\n        \"admin\"\n    ],\n    \"stamp\": {\n        \"createdAt\": 1751898167501,\n        \"ip\": \"127.0.0.1\",\n        \"username\": \"Ereans\",\n        \"email\": \"erencit55@gmail.com\"\n    },\n    \"username\": \"Ereans\",\n    \"password\": \"$2y$10$NvX/HC/DyIwnlR5PwgosIeR1JQbkG3zgb5aR1WIAoclrd.BQT3aum\",\n    \"email\": \"erencit55@gmail.com\",\n    \"displayName\": \"Eren Çit\"\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -675,49 +629,6 @@
         ]
     },
     {
-        "id": "161e11b2ca64bb47",
-        "type": "mongodb4",
-        "z": "d8112b18e3794244",
-        "clientNode": "eb3bb1a5b4cedf9b",
-        "mode": "collection",
-        "collection": "todo",
-        "operation": "findOne",
-        "output": "toArray",
-        "maxTimeMS": "0",
-        "handleDocId": true,
-        "name": "",
-        "x": 851.0000534057617,
-        "y": 755.9999847412109,
-        "wires": [
-            [
-                "d59bcc18081f390e"
-            ]
-        ]
-    },
-    {
-        "id": "d59bcc18081f390e",
-        "type": "function",
-        "z": "d8112b18e3794244",
-        "name": "function 11",
-        "func": "if (!msg.payload) {\n    msg.payload = {\n        message: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg]\n}\n\nif (msg.req.params.type === \"schedule\" && msg.payload.done) {\n    msg.error = {\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\nreturn msg;",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1081.0000534057617,
-        "y": 755.9999847412109,
-        "wires": [
-            [
-                "4c071291f7e1cb3a"
-            ],
-            [
-                "d323447569c80190"
-            ]
-        ]
-    },
-    {
         "id": "272298e2863c7120",
         "type": "mongodb4",
         "z": "d8112b18e3794244",
@@ -729,8 +640,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1070.9999656677246,
-        "y": 151.00002098083496,
+        "x": 490.9999694824219,
+        "y": 175.0000467300415,
         "wires": [
             [
                 "fb078a267fd993bc"
@@ -749,8 +660,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890.9999656677246,
-        "y": 151.00002098083496,
+        "x": 310.9999694824219,
+        "y": 175.0000467300415,
         "wires": [
             [
                 "272298e2863c7120"
@@ -776,8 +687,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1310.9999656677246,
-        "y": 151.00002098083496,
+        "x": 730.9999694824219,
+        "y": 175.0000467300415,
         "wires": [
             [
                 "076fdfc277051bda"
@@ -785,84 +696,13 @@
         ]
     },
     {
-        "id": "51217707a67ee8b8",
-        "type": "mongodb4",
-        "z": "d8112b18e3794244",
-        "clientNode": "eb3bb1a5b4cedf9b",
-        "mode": "collection",
-        "collection": "user",
-        "operation": "findOne",
-        "output": "toArray",
-        "maxTimeMS": "0",
-        "handleDocId": true,
-        "name": "",
-        "x": 888.0000286102295,
-        "y": 930.9999599456787,
-        "wires": [
-            [
-                "9ae9803073956904"
-            ]
-        ]
-    },
-    {
-        "id": "9ae9803073956904",
-        "type": "function",
-        "z": "d8112b18e3794244",
-        "name": "function 15",
-        "func": "if (!msg.payload) {\n    msg.payload = {\n        message: \"Id ile eşleşen bir kayıt bulunamadı.\",\n        formData: msg.formData\n    }\n    return [null, msg]\n}\n\n\nmsg.hasUser = msg.payload.roles.includes(\"user\")\nmsg.hasAdmin = msg.payload.roles.includes(\"admin\")\n\nmsg.payload = { ...msg.payload, ...msg.formData,}\n\nreturn msg;",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1058.0000286102295,
-        "y": 930.9999599456787,
-        "wires": [
-            [
-                "e8e746187451589d"
-            ],
-            [
-                "cf0ece735708bb54",
-                "10298fff3ee93242"
-            ]
-        ]
-    },
-    {
-        "id": "cf0ece735708bb54",
-        "type": "link out",
-        "z": "d8112b18e3794244",
-        "name": "link out 8",
-        "mode": "link",
-        "links": [],
-        "x": 1183.0000286102295,
-        "y": 950.9999599456787,
-        "wires": []
-    },
-    {
-        "id": "10298fff3ee93242",
-        "type": "debug",
-        "z": "d8112b18e3794244",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1160,
-        "y": 980,
-        "wires": []
-    },
-    {
         "id": "0ac019b8f42518dc",
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "302",
         "headers": {},
-        "x": 510.99999618530273,
+        "x": 520.9999961853027,
         "y": 104.99999809265137,
         "wires": []
     },
@@ -871,8 +711,8 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 20",
-        "func": "// tüm cookiesleri temizle\nmsg.cookies = {\n    accessToken : null,\n    refreshToken : null\n};\nreturn msg;",
-        "outputs": 1,
+        "func": "msg.headers =  msg.headers || {};\n\nmsg.headers[\"Set-Cookie\"] = [\n    'accessToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n    'refreshToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n]\nconst logData = {\n    action : \"logout\",\n    user : msg.user?.email || \"\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"bilinmiyor\"\n}\n\nconst logResponse = {\n    payload : logData\n}\n\n\nreturn [msg,logResponse]",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -883,6 +723,9 @@
         "wires": [
             [
                 "0ac019b8f42518dc"
+            ],
+            [
+                "af35d8e71f95fd4b"
             ]
         ]
     },
@@ -993,6 +836,9 @@
         "wires": [
             [
                 "b786d864f0108b86"
+            ],
+            [
+                "b786d864f0108b86"
             ]
         ]
     },
@@ -1015,12 +861,11 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 210,
-        "y": 540,
+        "x": 207.00001525878906,
+        "y": 563.9999904632568,
         "wires": [
             [
-                "740bd08d424da0d9",
-                "8bda43dd52b2aa3c"
+                "740bd08d424da0d9"
             ]
         ]
     },
@@ -1029,12 +874,14 @@
         "type": "subflow:85ff2d8e203f5bb5",
         "z": "7357fc440e36aebb",
         "name": "",
-        "x": 464.57141876220703,
-        "y": 546.2857093811035,
+        "x": 461.5714340209961,
+        "y": 570.2856998443604,
         "wires": [
             [
-                "2cf1c9ccf564e8d6",
-                "f8aad0265381b776"
+                "2cf1c9ccf564e8d6"
+            ],
+            [
+                "2cf1c9ccf564e8d6"
             ]
         ]
     },
@@ -1043,23 +890,22 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "validation",
-        "func": "const typeLookup = {\n    trash: {\n        text: \"Silmek\",\n        requireArgs : [\"id\"]\n    },\n    complete: {\n        text : \"Tamamlamak\",\n        requireArgs : [\"id\"]\n    },\n    open: {\n        text : \"Açmak\",\n        requireArgs : [\"id\"]\n    },\n    add : {\n        text : \"Eklemek\",\n        requireArgs : [\"name\"]\n    },\n    update : {\n        text : \"Güncellemek\",\n        requireArgs : [\"_id\",\"name\"]\n    },\n    schedule: {\n        text: \"Hatırlatma Kurmak\",\n        requireArgs: [\"id\"]\n    },\n}\n// Typlerimizi Mapledik burada \n\n\n// typelookup objesinin keylerine gidicek keylerde bu type var mi diye bakacak\nif (!Object.keys(typeLookup).includes(msg.req.params.type)) {\n    msg.payload = {\n        success : false,\n        error: `${msg.req.params.type} geçersiz bir parametredir `\n    }\n    // eğer bulamazsak 2. çıkışıtan msgyi içinde error olacak şekilde fırlattık\n    return [null, msg]\n}\n\n\n// burada ise typeLookup[type].requireArgslerin hepsinin içinde döngüyle geeziyoruz every olduğu için hepsi olmak zorunda \nif (!typeLookup[msg.req.params.type].requireArgs.every(arg => msg.payload[arg])) {\n    msg.payload = {\n        success :false,\n        error: \"Lütfen Tüm alanları eksiksiz doldurunuz\"\n    }\n    // eğer bir tanesi bile yoksa 2. çıkıştan msg ile error döner\n    return [null, msg]\n}\n\nreturn msg;",
+        "func": "const typeLookup = {\n    trash: {\n        text: \"Silmek\",\n        requireArgs : [\"_id\"]\n    },\n    complete: {\n        text : \"Tamamlamak\",\n        requireArgs : [\"_id\"]\n    },\n    open: {\n        text : \"Açmak\",\n        requireArgs : [\"_id\"]\n    },\n    add : {\n        text : \"Eklemek\",\n        requireArgs : [\"name\",\"priority\",\"due_date\"]\n    },\n    update : {\n        text : \"Güncellemek\",\n        requireArgs : [\"_id\",\"name\"]\n    },\n    schedule: {\n        text: \"Hatırlatma Kurmak\",\n        requireArgs: [\"_id\"]\n    },\n}\n// Typlerimizi Mapledik burada \n\n\n// typelookup objesinin keylerine gidicek keylerde bu type var mi diye bakacak\nif (!Object.keys(typeLookup).includes(msg.req.params.type)) {\n    msg.payload = {\n        success : false,\n        error: `${msg.req.params.type} geçersiz bir parametredir `\n    }\n    // eğer bulamazsak 2. çıkışıtan msgyi içinde error olacak şekilde fırlattık\n    return [null, msg]\n}\n\n\n// burada ise typeLookup[type].requireArgslerin hepsinin içinde döngüyle geeziyoruz every olduğu için hepsi olmak zorunda \nif (!typeLookup[msg.req.params.type].requireArgs.every(arg => msg.payload[arg])) {\n    msg.payload = {\n        success :false,\n        error: \"Lütfen Tüm alanları eksiksiz doldurunuz\"\n    }\n    // eğer bir tanesi bile yoksa 2. çıkıştan msg ile error döner\n    return [null, msg]\n}\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 540,
+        "x": 657.0000152587891,
+        "y": 563.9999904632568,
         "wires": [
             [
                 "cf0ab06fa2e1711d",
-                "1cd1ca658d5b3b9f"
+                "3e648320e8d6686c"
             ],
             [
-                "4f89f5bfbc63161c",
-                "6faab5be9398084a"
+                "4f89f5bfbc63161c"
             ]
         ],
         "outputLabels": [
@@ -1072,27 +918,31 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "db.todo.opt()",
-        "func": "const date = new Date()\nconst now = date.getTime()\n\n\nmsg.formData = msg.payload\n\nconst insertQuery = {\n    id : now,\n    name : msg.formData.name,\n    done : false,\n    stamp : {\n        createdAt : now,\n        ip : msg.req.ip,\n        username : msg.user.username || \"\",\n        email : msg.user.email || \"\",\n    },\n    date : date.toLocaleDateString(\"TR\"),\n    time : date.toLocaleTimeString(\"TR\")\n}\n\n\nif (msg.req.params.type === \"add\") {\n    msg.payload = insertQuery\n    return msg\n}\nlet query = {\n    _id : msg.payload._id\n}\nmsg.payload = [query];\n\nreturn [null,msg]\n\n\n\n\n",
-        "outputs": 2,
+        "func": "const date = new Date()\nconst now = date.getTime()\n\n\nmsg.formData = msg.payload\n\nconst insertQuery = {\n    id : now,\n    name : msg.formData.name,\n    done : false,\n    priority : msg.formData.priority,\n    due_date : msg.formData.due_date,\n    stamp : {\n        createdAt : now,\n        ip : msg.req.ip,\n        username : msg.user.username || \"\",\n        email : msg.user.email || \"\",\n    },\n    date : date.toLocaleDateString(\"TR\"),\n    time : date.toLocaleTimeString(\"TR\")\n}\n\nconst logData = {\n    action : msg.req?.params.type || \"boş\",\n    user : msg.user?.email || \"\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"bilinmiyor\"\n}\nconst msgForLog = {\n    payload: logData\n}\n\nif (msg.req.params.type === \"add\") {\n    msg.payload = insertQuery\n    return [msg,null,msgForLog]\n}\nlet query = {\n    _id : msg.payload._id\n}\nmsg.payload = [query];\n\n\n\nreturn [null,msg,msgForLog]\n\n\n\n\n",
+        "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 924.571418762207,
-        "y": 506.2857093811035,
+        "x": 890,
+        "y": 540,
         "wires": [
             [
                 "a31da0fe609e8a3e"
             ],
             [
-                "d39bd054e0ace37e",
-                "5adbb56de7c1f376"
+                "d39bd054e0ace37e"
+            ],
+            [
+                "461c351409a6d868",
+                "0b0e42b8fc861836"
             ]
         ],
         "outputLabels": [
             "Succ",
-            "Err"
+            "Err",
+            ""
         ]
     },
     {
@@ -1107,8 +957,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1104.5713653564453,
-        "y": 361.2856044769287,
+        "x": 1101.5713806152344,
+        "y": 385.28559494018555,
         "wires": [
             [
                 "d695a57c02f4c794"
@@ -1127,12 +977,11 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 1124.5713653564453,
-        "y": 501.2856044769287,
+        "x": 1121.5713806152344,
+        "y": 525.2855949401855,
         "wires": [
             [
-                "c1039dd81e56699e",
-                "322b1ed607267b5b"
+                "c1039dd81e56699e"
             ]
         ]
     },
@@ -1146,8 +995,8 @@
             "location": "/",
             "content-type": "application/json"
         },
-        "x": 1254.5713653564453,
-        "y": 361.2856044769287,
+        "x": 1251.5713806152344,
+        "y": 385.28559494018555,
         "wires": []
     },
     {
@@ -1162,12 +1011,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1290,
-        "y": 500,
+        "x": 1287.000015258789,
+        "y": 523.9999904632568,
         "wires": [
             [
-                "3f6932f99e2dab32",
-                "4541e668fee7d250"
+                "3f6932f99e2dab32"
             ],
             [
                 "cbc9619dada1ac64"
@@ -1189,12 +1037,11 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 1494.5713653564453,
-        "y": 401.2856044769287,
+        "x": 1491.5713806152344,
+        "y": 425.28559494018555,
         "wires": [
             [
-                "116d4707fcf4d9ee",
-                "b7288fc1cf218bc6"
+                "116d4707fcf4d9ee"
             ]
         ]
     },
@@ -1217,8 +1064,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1584.5713653564453,
-        "y": 501.2856044769287,
+        "x": 1581.5713806152344,
+        "y": 525.2855949401855,
         "wires": [
             [
                 "9021f4cae42c7ec3"
@@ -1232,11 +1079,10 @@
         "name": "",
         "statusCode": "",
         "headers": {
-            "location": "/",
-            "content-type": "application/json"
+            "location": "/"
         },
-        "x": 1870,
-        "y": 400,
+        "x": 1867.000015258789,
+        "y": 423.99999046325684,
         "wires": []
     },
     {
@@ -1251,8 +1097,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1086.0001945495605,
-        "y": 688.8571453094482,
+        "x": 1083.5002670288086,
+        "y": 818.8571338653564,
         "wires": [
             [
                 "78af2c8cdc7c7b6e"
@@ -1268,8 +1114,8 @@
             "076fdfc277051bda",
             "9021f4cae42c7ec3"
         ],
-        "x": 971.0001945495605,
-        "y": 628.8571453094482,
+        "x": 968.5002670288086,
+        "y": 758.8571338653564,
         "wires": [
             [
                 "ee0df47755e6b9c8",
@@ -1302,8 +1148,8 @@
         "crontiArgs": "[]",
         "inputs": 1,
         "hasButton": false,
-        "x": 1266.0001945495605,
-        "y": 688.8571453094482,
+        "x": 1263.5002670288086,
+        "y": 818.8571338653564,
         "wires": [
             []
         ]
@@ -1333,8 +1179,8 @@
         "crontiArgs": "[]",
         "inputs": 1,
         "hasButton": false,
-        "x": 1106.0001945495605,
-        "y": 588.8571453094482,
+        "x": 1103.5002670288086,
+        "y": 718.8571338653564,
         "wires": [
             [
                 "c87badb39970cdda"
@@ -1346,15 +1192,15 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "header",
-        "func": "if (msg.schedule) {\n    msg.payload  = [\n        {\n            _id : msg.formData.id\n        },\n        {\n            $set : {\n                schedule: msg.response\n            }\n        }\n    ]\n    return [null,msg]\n}\n\n\nmsg.from = \"noreply <noreply@todo.com\"\nmsg.to = \"citeren28@gmail.com\"\nreturn msg;",
+        "func": "if (msg.schedule) {\n    msg.payload  = [\n        {\n            _id : msg.formData._id\n        },\n        {\n            $set : {\n                schedule: msg.response\n            }\n        }\n    ]\n    return [null,msg]\n}\n\n\nmsg.from = \"noreply <noreply@todo.com\"\nmsg.to = msg.user.email\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1306.0001945495605,
-        "y": 588.8571453094482,
+        "x": 1303.5002670288086,
+        "y": 718.8571338653564,
         "wires": [
             [
                 "fd96d20ef43a1609"
@@ -1375,8 +1221,8 @@
         "syntax": "mustache",
         "template": "<p>Merhaba {{todo.stamp.username}}</p>\n<p></p>\n{{todo.name}} işiniz için hatırlatmak istiyoruz :)\n<p></p>\n<p>Bilginizw</p>",
         "output": "str",
-        "x": 1466.0001945495605,
-        "y": 568.8571453094482,
+        "x": 1517.500072479248,
+        "y": 709.9999885559082,
         "wires": [
             [
                 "30aeea0760851db7"
@@ -1395,8 +1241,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 1475.1112785339355,
-        "y": 620.0793743133545,
+        "x": 1472.6113510131836,
+        "y": 750.0793628692627,
         "wires": [
             []
         ]
@@ -1414,8 +1260,8 @@
         "tls": true,
         "name": "",
         "dname": "",
-        "x": 1716.0001945495605,
-        "y": 568.8571453094482,
+        "x": 1767.500072479248,
+        "y": 709.9999885559082,
         "wires": []
     },
     {
@@ -1699,7 +1545,7 @@
         "type": "http in",
         "z": "7357fc440e36aebb",
         "name": "",
-        "url": "api/user-operation/:type",
+        "url": "/api/user-operation/:type",
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
@@ -1719,6 +1565,9 @@
         "x": 425.71429443359375,
         "y": 1285.7143173217773,
         "wires": [
+            [
+                "76bccbdb518ec93c"
+            ],
             [
                 "76bccbdb518ec93c"
             ]
@@ -1742,30 +1591,26 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "validation",
-        "func": "\n\nconst typeLookup = {\n    add: {\n        text: \"Eklemek\",\n        requireArgs: [\"username\", \"password\",\"email\"],\n        validation: {\n            email(data, formData) { return /^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/.test(data)}\n        }\n    },\n    update: {\n        text: \"Güncellemek\",\n        requireArgs: [\"id\", \"!username\", \"password\", \"email\",\"roles\"],\n        validation: {\n            email(data,formData) { return /^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/.test(data)  }\n        }\n    }\n}\n\n// burda yine typelookup objesinin key kontrolünü yapıyoruz\nif (!Object.keys(typeLookup).includes(msg.req.params.type)) {\n    msg.error = {\n        message: `${msg.req.params.type} geçersiz bir parametredir `,\n        formData: msg.formData\n    }\n    // eğer geldiğimiz site user-edit ise 3. çıkıştan devam ediyoruz\n    return msg.req.headers.referer.includes(\"user-edit\") || msg.req.headers.referer.includes(\"user-operation/update\") ? [null, null, msg] : [null, msg]\n}\n\n\n// fields e atama işlemi yaptık\nlet fields = Object.keys(msg.payload)\n// burda gene requireargslara girdik ve baktık her bir arga validasyon varsa ve validasyonun içinde argın ismi varsa\n// o fonksiyonu çalıştır yoksa true çevir çık sağ taraftada !username kısmını username olarak döndürücek\nif (!typeLookup[msg.req.params.type].requireArgs.every(arg => {\n    return ((typeLookup[msg.req.params.type].validation && typeLookup[msg.req.params.type].validation[arg]) \n        ? typeLookup[msg.req.params.type].validation[arg](msg.payload[arg],msg.payload) \n        : true) && (arg.startsWith(\"!\") ? !fields.includes(arg.substr(1)) : fields.includes(arg))\n    })) {\n    msg.error = {\n        message : \"Lütfen Tüm Alanları Eksiksiz Doldurunuz!\",\n        formData: msg.formData\n    }\n    return msg.req.headers.referer.includes(\"user-edit\") || msg.req.headers.referer.includes(\"user-operation/update\") ? [null, null, msg] : [null, msg]\n}\n\n// roles kısmı array mi arraysa böyle döndür değilse array yap\nmsg.payload.roles = Array.isArray(msg.payload.roles) ? msg.payload.roles : [msg.payload.roles]\nmsg.formData = msg.payload\nreturn msg;",
-        "outputs": 3,
+        "func": "\n\nconst typeLookup = {\n    add: {\n        text: \"Eklemek\",\n        requireArgs: [\"username\", \"password\",\"email\"],\n        validation: {\n            email(data, formData) { return /^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/.test(data)}\n        }\n    },\n    update: {\n        text: \"Güncellemek\",\n        requireArgs: [\"_id\", \"username\", \"password\", \"email\"],\n        validation: {\n            email(data,formData) { return /^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/.test(data)  }\n        }\n    }\n}\n\n// burda yine typelookup objesinin key kontrolünü yapıyoruz\nif (!Object.keys(typeLookup).includes(msg.req.params.type)) {\n    msg.payload = {\n        success : false,\n        error: `${msg.req.params.type} geçersiz bir parametredir `,\n        formData: msg.formData\n    }\n    // eğer geldiğimiz site user-edit ise 3. çıkıştan devam ediyoruz\n    return [null,msg]\n}\n\n\n// burda gene requireargslara girdik ve baktık her bir arga validasyon varsa ve validasyonun içinde argın ismi varsa\n// o fonksiyonu çalıştır yoksa true çevir çık sağ taraftada !username kısmını username olarak döndürücek\nif (!typeLookup[msg.req.params.type].requireArgs.some(arg => msg.payload[arg])){\n\n    msg.payload = {\n        success : false,\n        error : \"Lütfen Tüm Alanları Eksiksiz Doldurunuz!\",\n        formData: msg.formData\n    }\n    return [null,msg]\n    }\n\n// roles kısmı array mi arraysa böyle döndür değilse array yap\nmsg.payload.roles = Array.isArray(msg.payload.roles) ? msg.payload.roles : [msg.payload.roles]\nmsg.formData = msg.payload\nreturn msg;",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 758.7143211364746,
-        "y": 1273.7143096923828,
+        "x": 760,
+        "y": 1280,
         "wires": [
             [
                 "6775b57c1a373355"
             ],
             [
-                "8d7c7a0442d1afa6"
-            ],
-            [
-                "bcc710c783cbf49d"
+                "e380c2908312604a"
             ]
         ],
         "outputLabels": [
             "Valid",
-            "Invalid",
-            ""
+            "Invalid"
         ]
     },
     {
@@ -1773,44 +1618,20 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 17",
-        "func": "msg.payload  = [{\n    _id : {\n        $ne : msg.formData.id\n    },\n    email : msg.formData.email\n}]\nreturn msg;",
+        "func": "if (msg.req.params.type === \"add\") {\n    msg.payload = [{\n        _id: {\n            $ne: msg.formData._id\n        },\n        email: msg.formData.email\n    }]\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 928.7143211364746,
-        "y": 1193.7143096923828,
+        "x": 910,
+        "y": 1200,
         "wires": [
             [
                 "bdb18612e0aa95f5"
             ]
         ]
-    },
-    {
-        "id": "8d7c7a0442d1afa6",
-        "type": "link out",
-        "z": "7357fc440e36aebb",
-        "name": "link out 4",
-        "mode": "link",
-        "links": [],
-        "x": 950.7142944335938,
-        "y": 1285.7143173217773,
-        "wires": []
-    },
-    {
-        "id": "bcc710c783cbf49d",
-        "type": "link out",
-        "z": "7357fc440e36aebb",
-        "name": "link out 9",
-        "mode": "link",
-        "links": [
-            "8a034a93ce3b9ea0"
-        ],
-        "x": 885.7142295837402,
-        "y": 1323.7143335342407,
-        "wires": []
     },
     {
         "id": "bdb18612e0aa95f5",
@@ -1837,8 +1658,8 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 18",
-        "func": "if (msg.payload){\n    msg.error = {\n        message: `Bu eposta adresi kullanılmaktadır.`,\n        formData : msg.formData\n    }\n    msg.payload = msg.formData\n    return msg.req.headers.referer.includes(\"user-edit\") || msg.req.headers.referer.includes(\"user-operation/update\") ? [null,null,msg] : [null, msg]    \n}\n\nreturn msg",
-        "outputs": 3,
+        "func": "if (msg.payload){\n    msg.payload = {\n        success :false,\n        error: `Bu eposta adresi kullanılmaktadır.`,\n        formData : msg.formData\n    }\n    msg.payload = msg.formData\n    return [null,msg]  \n}\n\nreturn msg",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -1851,10 +1672,7 @@
                 "a2299d8e95d6b8a2"
             ],
             [
-                "da0700dd0cc352fa"
-            ],
-            [
-                "4eefc06104115057"
+                "ab1b3b51ff35c3e7"
             ]
         ]
     },
@@ -1863,15 +1681,15 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 1",
-        "func": "\nif(msg.formData.password) return msg;\ndelete msg.formData.password\n\nreturn [null,msg];  ",
+        "func": "if(msg.formData.password) return msg;\ndelete msg.formData.password\n\nreturn [null,msg];  ",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1450.7143898010254,
-        "y": 1125.7143182754517,
+        "x": 1460,
+        "y": 1120,
         "wires": [
             [
                 "9063219a388572d5"
@@ -1880,30 +1698,6 @@
                 "a5da7d1f17305a54"
             ]
         ]
-    },
-    {
-        "id": "da0700dd0cc352fa",
-        "type": "link out",
-        "z": "7357fc440e36aebb",
-        "name": "link out 14",
-        "mode": "link",
-        "links": [],
-        "x": 1393.7143211364746,
-        "y": 1213.7143096923828,
-        "wires": []
-    },
-    {
-        "id": "4eefc06104115057",
-        "type": "link out",
-        "z": "7357fc440e36aebb",
-        "name": "link out 15",
-        "mode": "link",
-        "links": [
-            "8a034a93ce3b9ea0"
-        ],
-        "x": 1383.7143211364746,
-        "y": 1273.7143096923828,
-        "wires": []
     },
     {
         "id": "9063219a388572d5",
@@ -1931,8 +1725,8 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "db.user.opt()",
-        "func": "const date = new Date()\nconst now = date.getTime()\n\n\nif (msg.req.params.type === \"add\") {\n    msg.payload = {\n        _id: now,\n        active: true,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: \"\",\n            email: \"\",\n        },\n        roles : [\"user\"],\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\"),\n        // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n        ...msg.formData // destructing\n    };\n    return msg\n}\n\nmsg.payload = [{    \n    _id : msg.formData.id\n}] \n\nreturn [null,msg]\n\n\n\n\n\n",
-        "outputs": 2,
+        "func": "const date = new Date()\nconst now = date.getTime()\n\n\nconst logData = {\n    action : msg.req.params?.type || \"bilinmiyor\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req.ip ||\"bilinmiyor\"   \n}\nconst msgForLog = {\n    payload : logData\n}\n\nif (msg.req.params.type === \"add\") {\n    msg.payload = {\n        _id: now,\n        active: true,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: \"\",\n            email: \"\",\n        },\n        roles : [\"user\"],\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\"),\n        // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n        ...msg.formData // destructing\n    };\n    return [msg,msgForLog]\n}\nmsg.payload = [{    \n    _id : parseInt(msg.formData._id)\n}] \n\nreturn [null,msg,msgForLog]\n\n\n\n\n\n",
+        "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -1946,11 +1740,15 @@
             ],
             [
                 "deb2b10fd04bd591"
+            ],
+            [
+                "4fc3fb7cb280308d"
             ]
         ],
         "outputLabels": [
             "Succ",
-            "Err"
+            "Err",
+            null
         ]
     },
     {
@@ -1998,11 +1796,9 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "302",
-        "headers": {
-            "location": "/user-list"
-        },
-        "x": 2186.71431350708,
+        "statusCode": "",
+        "headers": {},
+        "x": 2176.71431350708,
         "y": 1118.7143125534058,
         "wires": []
     },
@@ -2011,15 +1807,15 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 14",
-        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (!msg.payload) {\n    msg.error = {\n        message: \"Id ile eşleşen bir kayıt bulunamadı.\",\n        formData: msg.formData\n    }\n    return [null, msg];\n}\nif (msg.formData.username) {\n    msg.error = {\n        message: \"Kullanıcı Adı Güncellenemez\",\n        formData: msg.payload\n    }\n    return [null, msg]\n}\n\nmsg.formData.active  = msg.formData.status === \"active\"\ndelete msg.formData.status\nmsg.user = msg.payload\nmsg.payload = [\n    {\n        _id : msg.formData.id\n    },\n    {\n        $set: {\n            ...msg.formData,\n            stamp : {\n                createdAt : now,\n                ip : msg.req.ip,\n                username : msg.user.username || \"\",\n                email: msg.user.email || \"\"\n            },\n            date : date.toLocaleDateString(\"TR\"),\n            time : date.toLocaleTimeString(\"TR\")\n        }\n    }\n]\n\nreturn msg;",
+        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (!msg.payload) {\n    msg.payload = {\n        success : false,\n        error: \"Id ile eşleşen bir kayıt bulunamadı.\",\n        formData: msg.formData\n    }\n    return [null, msg];\n}\n\n\nmsg.formData.active  = msg.formData.status === \"active\"\ndelete msg.formData.status\n\nconst recordId = msg.formData._id\ndelete msg.formData._id\n\nmsg.user = msg.payload\nmsg.payload = [\n    {\n        _id : parseInt(recordId)\n    },\n    {\n        $set: {\n            ...msg.formData,\n            stamp : {\n                createdAt : now,\n                ip : msg.req.ip,\n                username : msg.user.username || \"\",\n                email: msg.user.email || \"\"\n            },\n            date : date.toLocaleDateString(\"TR\"),\n            time : date.toLocaleTimeString(\"TR\")\n        }\n    }\n]\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2148.7143211364746,
-        "y": 1193.7143096923828,
+        "x": 2150,
+        "y": 1200,
         "wires": [
             [
                 "7003096b0bf05686"
@@ -2065,11 +1861,9 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "302",
-        "headers": {
-            "location": "/user-list"
-        },
-        "x": 2526.71431350708,
+        "statusCode": "",
+        "headers": {},
+        "x": 2516.71431350708,
         "y": 1158.7143125534058,
         "wires": []
     },
@@ -2105,12 +1899,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1710,
-        "y": 400,
+        "x": 1707.000015258789,
+        "y": 423.99999046325684,
         "wires": [
             [
-                "e34bf97f96bd77ce",
-                "588e23847e029e10"
+                "e34bf97f96bd77ce"
             ]
         ]
     },
@@ -2123,8 +1916,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 820,
-        "y": 580,
+        "x": 817.0000152587891,
+        "y": 603.9999904632568,
         "wires": []
     },
     {
@@ -2136,127 +1929,8 @@
         "links": [
             "76e21d0b94ca381e"
         ],
-        "x": 1769.5713653564453,
-        "y": 501.2856044769287,
-        "wires": []
-    },
-    {
-        "id": "6faab5be9398084a",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 739.9332885742188,
-        "y": 632.9332885742188,
-        "wires": []
-    },
-    {
-        "id": "8bda43dd52b2aa3c",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 390,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "1cd1ca658d5b3b9f",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 760,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "5adbb56de7c1f376",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1000,
-        "y": 560,
-        "wires": []
-    },
-    {
-        "id": "4541e668fee7d250",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1460,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "f8aad0265381b776",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 7",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 570,
-        "y": 480,
-        "wires": []
-    },
-    {
-        "id": "322b1ed607267b5b",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 8",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1240,
-        "y": 440,
+        "x": 1766.5713806152344,
+        "y": 525.2855949401855,
         "wires": []
     },
     {
@@ -2268,15 +1942,144 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1490,
-        "y": 460,
+        "x": 1487.000015258789,
+        "y": 483.99999046325684,
         "wires": []
     },
     {
-        "id": "b7288fc1cf218bc6",
+        "id": "6ec72e95d05f1554",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 890,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "e380c2908312604a",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 930,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "ab1b3b51ff35c3e7",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1420,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "4337f707373ced95",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/logs",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 1660,
+        "wires": [
+            [
+                "f78c4da52dbb84c8",
+                "22389cf0a10a0f39"
+            ]
+        ]
+    },
+    {
+        "id": "f78c4da52dbb84c8",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "x": 350,
+        "y": 1660,
+        "wires": [
+            [
+                "d0fddc2988667b6e",
+                "ddef01c3098287aa"
+            ],
+            [
+                "d0fddc2988667b6e"
+            ]
+        ]
+    },
+    {
+        "id": "d0fddc2988667b6e",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "db.logs.find()",
+        "func": "msg.payload = {}\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1660,
+        "wires": [
+            [
+                "8f786c815763cb25",
+                "271196f17d7be24f"
+            ]
+        ]
+    },
+    {
+        "id": "8f786c815763cb25",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "logs",
+        "operation": "find",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 740,
+        "y": 1660,
+        "wires": [
+            [
+                "932ef563800a4a22",
+                "4fc32f73a173132a"
+            ]
+        ]
+    },
+    {
+        "id": "932ef563800a4a22",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 900,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "22389cf0a10a0f39",
         "type": "debug",
         "z": "7357fc440e36aebb",
-        "name": "debug 9",
+        "name": "debug 5",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -2285,15 +2088,15 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1670,
-        "y": 340,
+        "x": 370,
+        "y": 1600,
         "wires": []
     },
     {
-        "id": "588e23847e029e10",
+        "id": "ddef01c3098287aa",
         "type": "debug",
         "z": "7357fc440e36aebb",
-        "name": "debug 10",
+        "name": "debug 6",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -2302,9 +2105,131 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1880,
-        "y": 340,
+        "x": 534.199951171875,
+        "y": 1608.9332275390625,
         "wires": []
+    },
+    {
+        "id": "271196f17d7be24f",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "4fc32f73a173132a",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 864.199951171875,
+        "y": 1611.9332275390625,
+        "wires": []
+    },
+    {
+        "id": "af35d8e71f95fd4b",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "logs",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 490,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "461c351409a6d868",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "logs",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1060,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0b0e42b8fc861836",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "3e648320e8d6686c",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "4fc3fb7cb280308d",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "logs",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1850,
+        "y": 1260,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "ea92999f30f3cd81",
@@ -2505,8 +2430,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 96,
-        "y": 373.0000762939453,
+        "x": 111.99999618530273,
+        "y": 450.0001029968262,
         "wires": [
             [
                 "68fc941b50b09f07"
@@ -2518,12 +2443,13 @@
         "type": "subflow:85ff2d8e203f5bb5",
         "z": "9a024a21c0703f56",
         "name": "",
-        "x": 356,
-        "y": 373.0000762939453,
+        "x": 371.99999618530273,
+        "y": 450.0001029968262,
         "wires": [
             [
                 "afb4034377d9af0a"
-            ]
+            ],
+            []
         ]
     },
     {
@@ -2538,8 +2464,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 617.9999809265137,
-        "y": 363.0000295639038,
+        "x": 633.9999771118164,
+        "y": 440.00005626678467,
         "wires": [
             [
                 "e75b99079b04948b"
@@ -2561,8 +2487,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 800,
-        "y": 320,
+        "x": 815.9999961853027,
+        "y": 397.00002670288086,
         "wires": [
             [
                 "56ad4649d1fcdf3c"
@@ -2574,15 +2500,15 @@
         "type": "function",
         "z": "9a024a21c0703f56",
         "name": "function 10",
-        "func": "if (!msg.payload) {\n    msg.payload = {\n        success: false,\n        message: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg]\n}\n\nif (msg.req.params.type === \"update\" && msg.payload.done) {\n    msg.payload = {\n        success: false,\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\nreturn msg;",
+        "func": "if (!msg.payload) {\n    msg.payload = {\n        success: false,\n        message: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg]\n}\n\nif (msg.req.params.type === \"update\" && msg.payload.done) {\n    msg.payload = {\n        success: false,\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\nmsg.prefillDataSTR = JSON.stringify(msg.payload)\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1030,
-        "y": 320,
+        "x": 1045.9999961853027,
+        "y": 397.00002670288086,
         "wires": [
             [
                 "7c99d5ae6806d6c9"
@@ -2601,10 +2527,10 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n\n  <h2>Güncelle</h2>\n  <div id=\"surveyContainer\"></div>\n</body>\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"editTodo-form\");\n  })();\n</script>\n\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n\n  <h2>Güncelle</h2>\n  <div id=\"surveyContainer\"></div>\n</body>\n\n<script> \n  window.prefillData = JSON.parse('{{{prefillDataSTR}}}')\n</script>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"editTodo-form\",window.prefillData);\n  })();\n</script>\n\n</html>",
         "output": "str",
-        "x": 1221.0000038146973,
-        "y": 283.00007820129395,
+        "x": 1237,
+        "y": 360.0001049041748,
         "wires": [
             [
                 "63a30b5a157b51ba"
@@ -2620,8 +2546,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1210,
-        "y": 360,
+        "x": 1225.9999961853027,
+        "y": 437.00002670288086,
         "wires": []
     },
     {
@@ -2631,8 +2557,333 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1391.0000038146973,
-        "y": 283.00007820129395,
+        "x": 1407,
+        "y": 360.0001049041748,
+        "wires": []
+    },
+    {
+        "id": "aeb96d498776cf84",
+        "type": "http in",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "url": "/user-edit/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 580,
+        "wires": [
+            [
+                "9446aab10379b614"
+            ]
+        ]
+    },
+    {
+        "id": "9446aab10379b614",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "x": 303.0000247955322,
+        "y": 580.9999580383301,
+        "wires": [
+            [
+                "f57203d89cf961cc"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f57203d89cf961cc",
+        "type": "subflow:db78b07eb18119f0",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "x": 473.0000247955322,
+        "y": 580.9999580383301,
+        "wires": [
+            [
+                "70783cd0be579d67"
+            ]
+        ]
+    },
+    {
+        "id": "70783cd0be579d67",
+        "type": "function",
+        "z": "9a024a21c0703f56",
+        "name": "db.user.findOne()",
+        "func": "msg.formData = msg.payload\nlet options = {\n    projection: {\n        password: 0\n    }\n}\n\nlet query = {\n    _id : parseInt(msg.req.params.id)\n}\n\n\n\n\nmsg.payload = [query, options];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 658.0000286102295,
+        "y": 570.9999599456787,
+        "wires": [
+            [
+                "51217707a67ee8b8"
+            ]
+        ],
+        "outputLabels": [
+            "Success"
+        ]
+    },
+    {
+        "id": "51217707a67ee8b8",
+        "type": "mongodb4",
+        "z": "9a024a21c0703f56",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 840,
+        "y": 560,
+        "wires": [
+            [
+                "9ae9803073956904"
+            ]
+        ]
+    },
+    {
+        "id": "9ae9803073956904",
+        "type": "function",
+        "z": "9a024a21c0703f56",
+        "name": "function 15",
+        "func": "if (!msg.payload) {\n    msg.payload = {\n        success : false,\n        error : \"Id ile eşleşen bir kayıt bulunamadı.\",\n        formData: msg.formData\n    }\n    return [null, msg]\n}\n\n\nmsg.hasUser = msg.payload.roles.includes(\"user\")\nmsg.hasAdmin = msg.payload.roles.includes(\"admin\")\nmsg.prefillDataSTR = JSON.stringify(msg.payload)\nmsg.payload = { ...msg.payload, ...msg.formData,}\n\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1018.0000286102295,
+        "y": 570.9999599456787,
+        "wires": [
+            [
+                "e8e746187451589d"
+            ],
+            [
+                "b676bc7f8d8fdb2f"
+            ]
+        ]
+    },
+    {
+        "id": "e8e746187451589d",
+        "type": "template",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n\n  <h2>Güncelle</h2>\n  <div id=\"surveyContainer\"></div>\n</body>\n<script>\n  window.prefillData = JSON.parse('{{{prefillDataSTR}}}')\n</script>\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"editUser-form\",window.prefillData);\n  })();\n</script>\n\n</html>",
+        "output": "str",
+        "x": 1180,
+        "y": 540,
+        "wires": [
+            [
+                "8760132cf8aeaf29"
+            ]
+        ]
+    },
+    {
+        "id": "b676bc7f8d8fdb2f",
+        "type": "http response",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1190,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "8760132cf8aeaf29",
+        "type": "http response",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1378.0000286102295,
+        "y": 530.9999599456787,
+        "wires": []
+    },
+    {
+        "id": "39243cf513b2a85a",
+        "type": "http in",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "url": "/schedule/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 760,
+        "wires": [
+            [
+                "59b1c3369d32e415"
+            ]
+        ]
+    },
+    {
+        "id": "59b1c3369d32e415",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "x": 330,
+        "y": 760,
+        "wires": [
+            [
+                "3eb7b4ad9032e7b7"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "3eb7b4ad9032e7b7",
+        "type": "function",
+        "z": "9a024a21c0703f56",
+        "name": "db.todo.scheduleStart()",
+        "func": "const query = {\n    _id : msg.req.params.id\n}\n\n\nif (!msg.user.roles.includes(\"admin\")) query[\"stamp.username\"] = msg.user.username\n\nmsg.payload = [query]\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 585.0000038146973,
+        "y": 750.0000019073486,
+        "wires": [
+            [
+                "161e11b2ca64bb47"
+            ]
+        ],
+        "outputLabels": [
+            "Success"
+        ]
+    },
+    {
+        "id": "161e11b2ca64bb47",
+        "type": "mongodb4",
+        "z": "9a024a21c0703f56",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 815.0000038146973,
+        "y": 710.0000019073486,
+        "wires": [
+            [
+                "d59bcc18081f390e"
+            ]
+        ]
+    },
+    {
+        "id": "d59bcc18081f390e",
+        "type": "function",
+        "z": "9a024a21c0703f56",
+        "name": "function 11",
+        "func": "if (!msg.payload) {\n    msg.payload = {\n        message: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg]\n}\n\nif (msg.req.params.type === \"schedule\" && msg.payload.done) {\n    msg.error = {\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1045.0000038146973,
+        "y": 710.0000019073486,
+        "wires": [
+            [
+                "4c071291f7e1cb3a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4c071291f7e1cb3a",
+        "type": "template",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Yapılacaklar Listesi</title>\n\n    <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n\n</head>\n\n<body>\n    <div class=\"container mt-5\">\n        <div class=\"row\">\n\n            <div class=\"col-md-8 offset-md-2\">\n                {{#error}}\n                <div class=\"alert alert-danger p-1 text-center\">\n                    <h4>{{message}}</h4>\n                </div>\n\n                {{/error}}\n                {{#message}}<p class=\"text-danger\">{{.}}</p>{{/message}}\n                <form action=\"/api/operation/schedule\" method=\"POST\">\n                    <input type=\"hidden\" name=\"_id\" value=\"{{payload._id}}\"/>\n                    <div class=\"mb-3\">\n                        <input required type=\"datetime-local\" name=\"datetime\" value=\"{{payload.schedule.formData.datetime}}\" class=\"form-control form-control-lg {{#error}}border-danger{{/error}}{{^error}}border-info{{/error}}\" placeholder=\"gg.aa.yyyy ss:dd\" />\n                    </div>\n                    <div class=\"mb-3 text-end\">\n                        <a class=\"btn btn-danger\" href=\"/\" type=\"submit\">Vazgeç</a>\n                        <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n                        <button class=\"btn btn-warning px-4\" type=\"submit\">Planla</button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n\n\n    <script src=\"/js/bootstrap.bundle.min.js\"></script>\n    <script>\n        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle=\"tooltip\"]')\n        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))\n    </script>\n</body>\n\n</html>",
+        "output": "str",
+        "x": 1255.0000038146973,
+        "y": 670.0000019073486,
+        "wires": [
+            [
+                "650ff6140aa91dc2"
+            ]
+        ]
+    },
+    {
+        "id": "650ff6140aa91dc2",
+        "type": "http response",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1425.0000038146973,
+        "y": 670.0000019073486,
+        "wires": []
+    },
+    {
+        "id": "9ea057def023fd76",
+        "type": "http in",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "url": "/logs",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 92,
+        "y": 291.00000762939453,
+        "wires": [
+            [
+                "3a0e93769048e3b4"
+            ]
+        ]
+    },
+    {
+        "id": "3a0e93769048e3b4",
+        "type": "template",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n</head>\n<body>\n    \n    <div id=\"demo\" class=\"display\" style=\"width:100%\">\n    <table id=\"logTable\" class=\"display\" style=\"width:100%\">\n        <thead>\n            <tr>\n            </tr>\n        </thead>\n        <tbody>\n            <!-- Veriler JS ile yüklenecek -->\n        </tbody>\n    </table>\n</div>\n\n\n\n</body>\n</html>",
+        "output": "str",
+        "x": 305.33333587646484,
+        "y": 290.9999990463257,
+        "wires": [
+            [
+                "5ef79f63a3164caa"
+            ]
+        ]
+    },
+    {
+        "id": "5ef79f63a3164caa",
+        "type": "http response",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 512,
+        "y": 291.00000762939453,
         "wires": []
     },
     {
@@ -2703,12 +2954,12 @@
         "id": "4756f073169aced8",
         "type": "jwt sign",
         "z": "a494dcc6cc32ec33",
-        "name": "",
+        "name": "access",
         "alg": "HS256",
         "exp": 3600,
         "jwkurl": "",
         "jwkkid": "",
-        "secret": "70f17e1abcef8bd2a0899c52edcf3393",
+        "secret": "d051c56a37ecd1eb89a9412ed5912dc9",
         "key": "",
         "signvar": "payload",
         "storetoken": "payload",
@@ -2792,8 +3043,8 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 3",
-        "func": "const refresh = msg.payload\nmsg.payload = {\n    success: true,\n    accessToken : msg.token,\n    refreshToken : refresh\n    \n};\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.accessToken}; HttpOnly; Secure; Path=/; Max-age=3600`,\n    `refreshToken=${msg.payload.refreshToken}; HttpOnly; Secure; Path=/; Max-Age=604800`\n    ]\n\nreturn msg;\n",
-        "outputs": 1,
+        "func": "const refresh = msg.payload\nmsg.payload = {\n    success: true,\n    accessToken : msg.token,\n    refreshToken : refresh\n    \n};\n\nconst logData = {\n    action : \"login\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"ip yok\"\n}\nconst msgForLog = {\n    payload : logData\n};\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.accessToken}; HttpOnly; Secure; Path=/; Max-age=3600`,\n    `refreshToken=${msg.payload.refreshToken}; HttpOnly; Secure; Path=/; Max-Age=604800`\n    ]\n\nreturn [msg,msgForLog];\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -2804,6 +3055,9 @@
         "wires": [
             [
                 "217bc89602452b4d"
+            ],
+            [
+                "197ec5ed892e127a"
             ]
         ]
     },
@@ -2816,8 +3070,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 2010,
-        "y": 180,
+        "x": 2070,
+        "y": 120,
         "wires": []
     },
     {
@@ -2975,8 +3229,8 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 19",
-        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload){\n    msg.payload = {\n        success:false,\n        error : \"Kullanıcı Adı veya email zaten kullanılıyor\"\n    }\n    return [null, msg];  // hata çıkışı\n}\n\nmsg.payload = {\n    _id: now,\n    username : msg.formData.username,\n    email : msg.formData.email,\n    displayName : msg.formData.displayName,\n    password : msg.formData.password,\n    active: true,\n    stamp: {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.formData.username || \"\",\n        email: msg.formData.email || \"\",\n    },\n    roles: [\"user\"],\n    date: date.toLocaleDateString(\"TR\"),\n    time: date.toLocaleTimeString(\"TR\"),\n    // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n};\nreturn msg;",
-        "outputs": 2,
+        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload){\n    msg.payload = {\n        success:false,\n        error : \"Kullanıcı Adı veya email zaten kullanılıyor\"\n    }\n    return [null, msg];  // hata çıkışı\n}\n\nconst logData = {\n    action : \"register\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString,\n    ip : msg.req?.ip || \"\"\n}\n\nmsg.payload = {\n    _id: now,\n    username : msg.formData.username,\n    email : msg.formData.email,\n    displayName : msg.formData.displayName,\n    password : msg.formData.password,\n    active: true,\n    stamp: {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.formData.username || \"\",\n        email: msg.formData.email || \"\",\n    },\n    roles: [\"user\"],\n    date: date.toLocaleDateString(\"TR\"),\n    time: date.toLocaleTimeString(\"TR\"),\n    // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n};\n\nconst msgForLog = {\n    payload : logData\n}\n\nreturn [msg,null,msgForLog];",
+        "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -2990,6 +3244,9 @@
             ],
             [
                 "9ccbb62efea89182"
+            ],
+            [
+                "5072ed37a8752a0a"
             ]
         ]
     },
@@ -3000,10 +3257,9 @@
         "name": "",
         "statusCode": "",
         "headers": {
-            "location": "/login",
             "content-type": "application/json"
         },
-        "x": 1350,
+        "x": 1330,
         "y": 560,
         "wires": []
     },
@@ -3037,8 +3293,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1120,
-        "y": 640,
+        "x": 1190,
+        "y": 620,
         "wires": []
     },
     {
@@ -3117,12 +3373,12 @@
         "id": "4ba3f9c3fa97b4fc",
         "type": "jwt sign",
         "z": "a494dcc6cc32ec33",
-        "name": "",
+        "name": "refresh",
         "alg": "HS256",
         "exp": 3600,
         "jwkurl": "",
         "jwkkid": "",
-        "secret": "177d5db2c14e3b299cd4a171bf7e734c",
+        "secret": "21821f287ef6747b1d9161b29e52c1ed",
         "key": "",
         "signvar": "payload",
         "storetoken": "payload",
@@ -3159,15 +3415,15 @@
         "type": "http in",
         "z": "a494dcc6cc32ec33",
         "name": "",
-        "url": "/api/refreshToken",
-        "method": "get",
+        "url": "/api/refresh-token",
+        "method": "post",
         "upload": false,
         "swaggerDoc": "",
         "x": 230,
         "y": 920,
         "wires": [
             [
-                "935848df4c5f3aff"
+                "78b4e530ccb81d0d"
             ]
         ]
     },
@@ -3178,44 +3434,24 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1250,
+        "x": 1350,
         "y": 920,
         "wires": []
-    },
-    {
-        "id": "935848df4c5f3aff",
-        "type": "function",
-        "z": "a494dcc6cc32ec33",
-        "name": "function 26",
-        "func": "msg.token = msg.req.cookies.refreshToken || \"\"\n\n\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 460,
-        "y": 920,
-        "wires": [
-            [
-                "a308166d35578658"
-            ]
-        ]
     },
     {
         "id": "a308166d35578658",
         "type": "jwt verify",
         "z": "a494dcc6cc32ec33",
-        "name": "",
+        "name": "refreshverify",
         "alg": [
             "HS256"
         ],
         "jwkurl": "",
-        "secret": "177d5db2c14e3b299cd4a171bf7e734c",
+        "secret": "21821f287ef6747b1d9161b29e52c1ed",
         "key": "",
         "signvar": "token",
         "storetoken": "token",
-        "x": 670,
+        "x": 590,
         "y": 920,
         "wires": [
             [
@@ -3228,14 +3464,14 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 27",
-        "func": "msg.payload = {\n    username : msg.user.email,\n    email: msg.user.email,\n    ip : msg.req.ip,\n\n}\n\nreturn msg;",
+        "func": "msg.user = msg.token\nmsg.payload = {\n    username: msg.user.username,\n    displayName: msg.user.displayName,\n    roles: msg.user.roles,\n    ip: msg.req.ip\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
+        "x": 790,
         "y": 920,
         "wires": [
             [
@@ -3252,16 +3488,439 @@
         "exp": 3600,
         "jwkurl": "",
         "jwkkid": "",
-        "secret": "70f17e1abcef8bd2a0899c52edcf3393",
+        "secret": "d051c56a37ecd1eb89a9412ed5912dc9",
         "key": "",
         "signvar": "payload",
-        "storetoken": "payload",
-        "x": 1070,
+        "storetoken": "token",
+        "x": 990,
+        "y": 920,
+        "wires": [
+            [
+                "96f6f26210ec81f5"
+            ]
+        ]
+    },
+    {
+        "id": "96f6f26210ec81f5",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 28",
+        "func": "msg.payload = {\n    success: true,\n    token: msg.token,\n};\n\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1190,
         "y": 920,
         "wires": [
             [
                 "db5a54ef18e5e7d3"
             ]
         ]
+    },
+    {
+        "id": "78b4e530ccb81d0d",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 29",
+        "func": "msg.token = msg.payload.refreshToken\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 920,
+        "wires": [
+            [
+                "a308166d35578658"
+            ]
+        ]
+    },
+    {
+        "id": "197ec5ed892e127a",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "logs",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 2060,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5072ed37a8752a0a",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "logs",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1070,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a74d907a106e924b",
+        "type": "inject",
+        "z": "b3c1ef86c9e1d050",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 09 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 140,
+        "wires": [
+            [
+                "fb9a6a9d168cc291"
+            ]
+        ]
+    },
+    {
+        "id": "fb9a6a9d168cc291",
+        "type": "function",
+        "z": "b3c1ef86c9e1d050",
+        "name": "function 32",
+        "func": "msg.payload = {}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 140,
+        "wires": [
+            [
+                "d11840883418051f"
+            ]
+        ]
+    },
+    {
+        "id": "d11840883418051f",
+        "type": "mongodb4",
+        "z": "b3c1ef86c9e1d050",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "find",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 620,
+        "y": 140,
+        "wires": [
+            [
+                "11b8110c1ea7e906"
+            ]
+        ]
+    },
+    {
+        "id": "11b8110c1ea7e906",
+        "type": "function",
+        "z": "b3c1ef86c9e1d050",
+        "name": "function 33",
+        "func": "const date = new Date();\nconst threeDaysLater = new Date(date);\n\nthreeDaysLater.setDate(date.getDate() + 3);\n\nmsg.payload = msg.payload.filter(todo =>{\n    const due = new Date(todo.due_date);\n    return due.toDateString() === threeDaysLater.toDateString()\n} )\n\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 140,
+        "wires": [
+            [
+                "efacfe50450f264d"
+            ]
+        ]
+    },
+    {
+        "id": "efacfe50450f264d",
+        "type": "split",
+        "z": "b3c1ef86c9e1d050",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 1060,
+        "y": 140,
+        "wires": [
+            [
+                "7699960a7e081580",
+                "18610c648bdeb780"
+            ]
+        ]
+    },
+    {
+        "id": "7699960a7e081580",
+        "type": "debug",
+        "z": "b3c1ef86c9e1d050",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "18610c648bdeb780",
+        "type": "function",
+        "z": "b3c1ef86c9e1d050",
+        "name": "function 34",
+        "func": "msg.to = msg.payload.stamp?.email || \"\";\nmsg.subject = \"Görev Hatırlatma\";\nmsg.payload = `Merhaba ${msg.payload.name} adlı görevinizin bitmesine 3 gün kaldı`\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1250,
+        "y": 140,
+        "wires": [
+            [
+                "5c9db1794fd08d68"
+            ]
+        ]
+    },
+    {
+        "id": "5c9db1794fd08d68",
+        "type": "e-mail",
+        "z": "b3c1ef86c9e1d050",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "authtype": "BASIC",
+        "saslformat": true,
+        "token": "oauth2Response.access_token",
+        "secure": true,
+        "tls": true,
+        "name": "",
+        "dname": "",
+        "x": 1410,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "a5693f68bbcb48ce",
+        "type": "comment",
+        "z": "b3c1ef86c9e1d050",
+        "name": "Her sabah 9 da bitime 3 gün kalan görevleri bulur mail atar",
+        "info": "",
+        "x": 350,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "962dad44f67d8b20",
+        "type": "inject",
+        "z": "b3c1ef86c9e1d050",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 09 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 211.9999656677246,
+        "y": 317.0000066757202,
+        "wires": [
+            [
+                "bf404fed420b9b2c"
+            ]
+        ]
+    },
+    {
+        "id": "bf404fed420b9b2c",
+        "type": "function",
+        "z": "b3c1ef86c9e1d050",
+        "name": "function 35",
+        "func": "msg.payload = {}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 411.9999656677246,
+        "y": 317.0000066757202,
+        "wires": [
+            [
+                "fa1d0f54a435b5df"
+            ]
+        ]
+    },
+    {
+        "id": "fa1d0f54a435b5df",
+        "type": "mongodb4",
+        "z": "b3c1ef86c9e1d050",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "find",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 611.9999656677246,
+        "y": 317.0000066757202,
+        "wires": [
+            [
+                "b6dc9691aeb46455"
+            ]
+        ]
+    },
+    {
+        "id": "b6dc9691aeb46455",
+        "type": "function",
+        "z": "b3c1ef86c9e1d050",
+        "name": "function 36",
+        "func": "const date = new Date();\n\nmsg.payload = msg.payload.filter(todo => {\n    const dueDate = new Date(todo.due_date);\n    return dueDate.toDateString() < date.toDateString()\n})\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 791.9999656677246,
+        "y": 317.0000066757202,
+        "wires": [
+            [
+                "2088b76e4166b254",
+                "fc510dc0c20f406f"
+            ]
+        ]
+    },
+    {
+        "id": "2088b76e4166b254",
+        "type": "debug",
+        "z": "b3c1ef86c9e1d050",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 971.9999656677246,
+        "y": 277.0000066757202,
+        "wires": []
+    },
+    {
+        "id": "fc510dc0c20f406f",
+        "type": "split",
+        "z": "b3c1ef86c9e1d050",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 971.9999656677246,
+        "y": 317.0000066757202,
+        "wires": [
+            [
+                "635174db67be01ab"
+            ]
+        ]
+    },
+    {
+        "id": "635174db67be01ab",
+        "type": "function",
+        "z": "b3c1ef86c9e1d050",
+        "name": "function 37",
+        "func": "msg.to = msg.payload.stamp?.email || \"\";\nmsg.subject = \"Görevin Süresi Doldu\";\nmsg.payload = `${msg.payload.name} isimli görevinizin süresi doldu`\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1141.9999656677246,
+        "y": 317.0000066757202,
+        "wires": [
+            [
+                "4dabb7ef4563a924"
+            ]
+        ]
+    },
+    {
+        "id": "4dabb7ef4563a924",
+        "type": "e-mail",
+        "z": "b3c1ef86c9e1d050",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "authtype": "BASIC",
+        "saslformat": true,
+        "token": "oauth2Response.access_token",
+        "secure": true,
+        "tls": true,
+        "name": "",
+        "dname": "",
+        "x": 1330,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "368f834c8e74e777",
+        "type": "comment",
+        "z": "b3c1ef86c9e1d050",
+        "name": "Her sabah 9 da biten görevleri çeker mail atar",
+        "info": "",
+        "x": 290,
+        "y": 260,
+        "wires": []
     }
 ]
