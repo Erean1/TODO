@@ -16,14 +16,6 @@
         "env": []
     },
     {
-        "id": "c97b21956f467bbb",
-        "type": "tab",
-        "label": "Flow 2",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "9a024a21c0703f56",
         "type": "tab",
         "label": "Partials",
@@ -389,6 +381,17 @@
             "location": "/login"
         },
         "x": 1860,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "3cf7393ea873395d",
+        "type": "http response",
+        "z": "85ff2d8e203f5bb5",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 640,
         "y": 180,
         "wires": []
     },
@@ -768,7 +771,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
+        "x": 570,
         "y": 280,
         "wires": [
             [
@@ -818,29 +821,13 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "200",
         "headers": {
             "content-type": "application/json"
         },
-        "x": 910,
+        "x": 920,
         "y": 280,
         "wires": []
-    },
-    {
-        "id": "dd5b89efb68f0694",
-        "type": "subflow:85ff2d8e203f5bb5",
-        "z": "7357fc440e36aebb",
-        "name": "",
-        "x": 390,
-        "y": 280,
-        "wires": [
-            [
-                "b786d864f0108b86"
-            ],
-            [
-                "b786d864f0108b86"
-            ]
-        ]
     },
     {
         "id": "b338ea1c68456de5",
@@ -988,12 +975,12 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "201",
         "headers": {
             "location": "/",
             "content-type": "application/json"
         },
-        "x": 1251.5713806152344,
+        "x": 1261.5713806152344,
         "y": 385.28559494018555,
         "wires": []
     },
@@ -1075,11 +1062,11 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "200",
         "headers": {
             "location": "/"
         },
-        "x": 1867.000015258789,
+        "x": 1877.000015258789,
         "y": 423.99999046325684,
         "wires": []
     },
@@ -1277,9 +1264,9 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "200",
         "headers": {},
-        "x": 894,
+        "x": 904,
         "y": 873.9999809265137,
         "wires": []
     },
@@ -1402,9 +1389,9 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "200",
         "headers": {},
-        "x": 1092.8571472167969,
+        "x": 1102.8571472167969,
         "y": 1082.857192993164,
         "wires": []
     },
@@ -1530,11 +1517,11 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "200",
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1332.8571701049805,
+        "x": 1342.8571701049805,
         "y": 107.14285469055176,
         "wires": []
     },
@@ -1746,7 +1733,7 @@
         "outputLabels": [
             "Succ",
             "Err",
-            null
+            ""
         ]
     },
     {
@@ -1794,9 +1781,9 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "201",
         "headers": {},
-        "x": 2170,
+        "x": 2180,
         "y": 1040,
         "wires": []
     },
@@ -1859,9 +1846,9 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "200",
         "headers": {},
-        "x": 2530,
+        "x": 2540,
         "y": 1100,
         "wires": []
     },
@@ -1910,11 +1897,11 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "400",
         "headers": {
             "content-type": "application/json"
         },
-        "x": 817.0000152587891,
+        "x": 827.0000152587891,
         "y": 603.9999904632568,
         "wires": []
     },
@@ -1945,28 +1932,15 @@
         "wires": []
     },
     {
-        "id": "6ec72e95d05f1554",
-        "type": "http response",
-        "z": "7357fc440e36aebb",
-        "name": "",
-        "statusCode": "",
-        "headers": {
-            "content-type": "application/json"
-        },
-        "x": 890,
-        "y": 1400,
-        "wires": []
-    },
-    {
         "id": "e380c2908312604a",
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "400",
         "headers": {
             "content-type": "application/json"
         },
-        "x": 930,
+        "x": 940,
         "y": 1280,
         "wires": []
     },
@@ -1975,11 +1949,11 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "400",
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1420,
+        "x": 1430,
         "y": 1220,
         "wires": []
     },
@@ -2061,11 +2035,11 @@
         "type": "http response",
         "z": "7357fc440e36aebb",
         "name": "",
-        "statusCode": "",
+        "statusCode": "200",
         "headers": {
             "content-type": "application/json"
         },
-        "x": 900,
+        "x": 910,
         "y": 1660,
         "wires": []
     },
@@ -2121,6 +2095,22 @@
         "y": 1240,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "dd5b89efb68f0694",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "x": 390,
+        "y": 280,
+        "wires": [
+            [
+                "b786d864f0108b86"
+            ],
+            [
+                "b786d864f0108b86"
+            ]
         ]
     },
     {
@@ -2785,53 +2775,6 @@
         "wires": []
     },
     {
-        "id": "8175bf4ebd5367b8",
-        "type": "http in",
-        "z": "a494dcc6cc32ec33",
-        "name": "",
-        "url": "/login",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 200,
-        "y": 140,
-        "wires": [
-            [
-                "5def0389f768f659"
-            ]
-        ]
-    },
-    {
-        "id": "5def0389f768f659",
-        "type": "template",
-        "z": "a494dcc6cc32ec33",
-        "name": "",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Giriş Yap</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"login-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
-        "output": "str",
-        "x": 500,
-        "y": 140,
-        "wires": [
-            [
-                "f14c8c94a08c8887"
-            ]
-        ]
-    },
-    {
-        "id": "f14c8c94a08c8887",
-        "type": "http response",
-        "z": "a494dcc6cc32ec33",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 740,
-        "y": 140,
-        "wires": []
-    },
-    {
         "id": "a4154678a5e0e0cc",
         "type": "http in",
         "z": "a494dcc6cc32ec33",
@@ -2840,8 +2783,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 200,
-        "y": 260,
+        "x": 140,
+        "y": 279,
         "wires": [
             [
                 "5380ed06d4a4abbe"
@@ -2861,8 +2804,8 @@
         "key": "",
         "signvar": "payload",
         "storetoken": "payload",
-        "x": 1320,
-        "y": 180,
+        "x": 1260,
+        "y": 199,
         "wires": [
             [
                 "8889a5b0ba094e5b"
@@ -2881,8 +2824,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1120,
-        "y": 180,
+        "x": 1060,
+        "y": 199,
         "wires": [
             [
                 "4756f073169aced8"
@@ -2904,8 +2847,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 260,
+        "x": 340,
+        "y": 279,
         "wires": [
             [
                 "1764bdb17ea320fd"
@@ -2928,8 +2871,8 @@
         "match": "match",
         "outputs": 1,
         "rounds": 10,
-        "x": 960,
-        "y": 180,
+        "x": 900,
+        "y": 199,
         "wires": [
             [
                 "05709afef941f875"
@@ -2948,8 +2891,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1840,
-        "y": 180,
+        "x": 1780,
+        "y": 199,
         "wires": [
             [
                 "217bc89602452b4d"
@@ -2968,8 +2911,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 2070,
-        "y": 120,
+        "x": 2010,
+        "y": 139,
         "wires": []
     },
     {
@@ -2984,8 +2927,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 607,
-        "y": 224.00001907348633,
+        "x": 547,
+        "y": 243.00001907348633,
         "wires": [
             [
                 "dbc31bfaf90b0f0d"
@@ -3004,8 +2947,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 767.9999771118164,
-        "y": 224.00003242492676,
+        "x": 707.9999771118164,
+        "y": 243.00003242492676,
         "wires": [
             [
                 "2bea920614622cf1"
@@ -3024,8 +2967,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 150,
-        "y": 460,
+        "x": 130,
+        "y": 441,
         "wires": [
             [
                 "40efb4d3281ae5f4"
@@ -3043,8 +2986,8 @@
         "syntax": "mustache",
         "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>SIGNUP</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n\n    .form-wrapper {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .form-card {\n      background: rgba(255, 255, 255, 0.8);\n      padding: 2rem;\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);\n      width: 100%;\n      max-width: 500px;\n      backdrop-filter: blur(10px);\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 1rem;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <div class=\"form-wrapper\">\n    <div class=\"form-card\">\n      <h2>Kayıt Ol</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"register-form\");\n  })();\n</script>\n\n</body>\n\n</html>\n",
         "output": "str",
-        "x": 400,
-        "y": 460,
+        "x": 380,
+        "y": 441,
         "wires": [
             [
                 "401206913da407bd"
@@ -3058,8 +3001,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 670,
-        "y": 460,
+        "x": 650,
+        "y": 441,
         "wires": []
     },
     {
@@ -3071,8 +3014,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 168.25,
-        "y": 609.0000228881836,
+        "x": 150.25,
+        "y": 577,
         "wires": [
             [
                 "b41224b290d09dec"
@@ -3091,8 +3034,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 338.25,
-        "y": 609.0000228881836,
+        "x": 320.25,
+        "y": 577,
         "wires": [
             [
                 "7589e350539a0ace"
@@ -3114,8 +3057,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 568.25,
-        "y": 589.0000228881836,
+        "x": 550.25,
+        "y": 557,
         "wires": [
             [
                 "76e20a3f4101d050"
@@ -3134,8 +3077,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 921.25,
-        "y": 585.0000038146973,
+        "x": 903.25,
+        "y": 552.9999809265137,
         "wires": [
             [
                 "d9cbac2404fe6a7a"
@@ -3157,8 +3100,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1301.25,
-        "y": 565.0000038146973,
+        "x": 1283.25,
+        "y": 532.9999809265137,
         "wires": []
     },
     {
@@ -3174,8 +3117,8 @@
         "match": "match",
         "outputs": 1,
         "rounds": 10,
-        "x": 728.25,
-        "y": 589.0000228881836,
+        "x": 710.25,
+        "y": 557,
         "wires": [
             [
                 "10ed3dc0692b9af7"
@@ -3191,8 +3134,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1161.25,
-        "y": 625.0000038146973,
+        "x": 1143.25,
+        "y": 592.9999809265137,
         "wires": []
     },
     {
@@ -3204,8 +3147,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 541.25,
-        "y": 665.0000038146973,
+        "x": 523.25,
+        "y": 632.9999809265137,
         "wires": []
     },
     {
@@ -3217,8 +3160,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 550,
-        "y": 300,
+        "x": 490,
+        "y": 319,
         "wires": []
     },
     {
@@ -3230,8 +3173,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 912.9332885742188,
-        "y": 263.9333190917969,
+        "x": 852.9332885742188,
+        "y": 282.9333190917969,
         "wires": []
     },
     {
@@ -3243,8 +3186,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1290,
-        "y": 240,
+        "x": 1230,
+        "y": 259,
         "wires": []
     },
     {
@@ -3259,8 +3202,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1131.25,
-        "y": 565.0000038146973,
+        "x": 1113.25,
+        "y": 532.9999809265137,
         "wires": [
             [
                 "5e99b1bb4e1f9782"
@@ -3280,8 +3223,8 @@
         "key": "",
         "signvar": "payload",
         "storetoken": "payload",
-        "x": 1660,
-        "y": 180,
+        "x": 1600,
+        "y": 199,
         "wires": [
             [
                 "32f2dacd509a22a8"
@@ -3293,15 +3236,15 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 25",
-        "func": "msg.token = msg.payload\nmsg.payload = {\n    username : msg.user.username,\n    displayName : msg.user.displayName,\n    roles : msg.user.roles,\n    ip : msg.req.ip\n}\nreturn msg;",
+        "func": "msg.token = msg.payload\nmsg.payload = {\n    _id : msg.user._id,\n    ip : msg.req.ip\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1490,
-        "y": 180,
+        "x": 1430,
+        "y": 199,
         "wires": [
             [
                 "4ba3f9c3fa97b4fc"
@@ -3317,8 +3260,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 180,
-        "y": 921.250020980835,
+        "x": 159,
+        "y": 779,
         "wires": [
             [
                 "78b4e530ccb81d0d"
@@ -3334,8 +3277,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1300,
-        "y": 921.250020980835,
+        "x": 1669,
+        "y": 779,
         "wires": []
     },
     {
@@ -3351,8 +3294,8 @@
         "key": "",
         "signvar": "payload",
         "storetoken": "payload",
-        "x": 540,
-        "y": 921.250020980835,
+        "x": 589,
+        "y": 779,
         "wires": [
             [
                 "aa3047f4a0c61364"
@@ -3364,18 +3307,18 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 27",
-        "func": "msg.user = msg.payload\nmsg.payload = {\n    username: msg.user.username,\n    displayName: msg.user.displayName,\n    roles: msg.user.roles,\n    ip: msg.req.ip\n}\n\nreturn msg;",
+        "func": "msg.payload = {\n    _id : msg.payload._id\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
-        "y": 920,
+        "x": 809,
+        "y": 779,
         "wires": [
             [
-                "cb098f21c287e8cf"
+                "a22be95315ef3494"
             ]
         ]
     },
@@ -3392,8 +3335,8 @@
         "key": "",
         "signvar": "payload",
         "storetoken": "payload",
-        "x": 940,
-        "y": 921.250020980835,
+        "x": 1329,
+        "y": 779,
         "wires": [
             [
                 "96f6f26210ec81f5"
@@ -3412,8 +3355,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1140,
-        "y": 921.250020980835,
+        "x": 1509,
+        "y": 779,
         "wires": [
             [
                 "db5a54ef18e5e7d3"
@@ -3432,8 +3375,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
-        "y": 921.250020980835,
+        "x": 369,
+        "y": 779,
         "wires": [
             [
                 "a308166d35578658"
@@ -3452,8 +3395,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 2060,
-        "y": 240,
+        "x": 2000,
+        "y": 259,
         "wires": [
             []
         ]
@@ -3470,10 +3413,734 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1041.25,
-        "y": 685.0000038146973,
+        "x": 1023.25,
+        "y": 652.9999809265137,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "a22be95315ef3494",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 979,
+        "y": 779,
+        "wires": [
+            [
+                "d7abbc50bd1d71bb"
+            ]
+        ]
+    },
+    {
+        "id": "d7abbc50bd1d71bb",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 38",
+        "func": "msg.user = msg.payload\nmsg.payload = {\n    username : msg.user.username,\n    email : msg.user.email,\n    displayName : msg.user.displayName,\n    roles : msg.user.roles,\n    ip : msg.req.ip\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1129,
+        "y": 779,
+        "wires": [
+            [
+                "cb098f21c287e8cf"
+            ]
+        ]
+    },
+    {
+        "id": "8175bf4ebd5367b8",
+        "type": "http in",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "url": "/login",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 122,
+        "y": 137,
+        "wires": [
+            [
+                "5def0389f768f659"
+            ]
+        ]
+    },
+    {
+        "id": "5def0389f768f659",
+        "type": "template",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Giriş Yap</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n\n    <p><a href=\"/resetpw\">Şifremi Unuttum </a> </p>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"login-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
+        "output": "str",
+        "x": 422,
+        "y": 137,
+        "wires": [
+            [
+                "f14c8c94a08c8887"
+            ]
+        ]
+    },
+    {
+        "id": "f14c8c94a08c8887",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 662,
+        "y": 137,
+        "wires": []
+    },
+    {
+        "id": "502b8b2e5e4a4a38",
+        "type": "http in",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "url": "/resetpw",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 196,
+        "y": 1003.0000486373901,
+        "wires": [
+            [
+                "fa9023dcf36ff206"
+            ]
+        ]
+    },
+    {
+        "id": "fa9023dcf36ff206",
+        "type": "template",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Şifre Sıfırla</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"resetpw-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
+        "output": "str",
+        "x": 486,
+        "y": 1003.0000486373901,
+        "wires": [
+            [
+                "086703bec6ca2ec8"
+            ]
+        ]
+    },
+    {
+        "id": "086703bec6ca2ec8",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 726,
+        "y": 1003.0000486373901,
+        "wires": []
+    },
+    {
+        "id": "9cdb5ea964d02ca3",
+        "type": "http in",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "url": "/api/resetpw",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 1120,
+        "wires": [
+            [
+                "dedc7f759e7b3fdf"
+            ]
+        ]
+    },
+    {
+        "id": "dedc7f759e7b3fdf",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 39",
+        "func": "msg.payload = {\n    email : msg.payload.email\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1120,
+        "wires": [
+            [
+                "a7c279ceb379c8aa"
+            ]
+        ]
+    },
+    {
+        "id": "a7c279ceb379c8aa",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 630,
+        "y": 1120,
+        "wires": [
+            [
+                "bb59cafd8a2e7db2"
+            ]
+        ]
+    },
+    {
+        "id": "bb59cafd8a2e7db2",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 40",
+        "func": "if (!msg.payload) {\n    msg.payload = {\n        success : false,\n        error : \"User Not Found\"\n    }\n    return [null,msg]\n}\nmsg.userInf = msg.payload\n\nconst resetToken = Math.floor(Math.random() * (+99999 + 1 - +10000)) + +10000\nconst expireAt = new Date(Date.now() + 3 * 60 * 1000)\nmsg.payload = {\n    user_id : msg.userInf._id,\n    token : resetToken,\n    createdAt : new Date(),\n    expireAt : expireAt\n}\nmsg.token = resetToken\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 1120,
+        "wires": [
+            [
+                "996578d42527cf1d"
+            ],
+            [
+                "71f8bc87329ca394"
+            ]
+        ]
+    },
+    {
+        "id": "71f8bc87329ca394",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 950,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "996578d42527cf1d",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "reset_token",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1020,
+        "y": 1080,
+        "wires": [
+            [
+                "6e6557dedd81d4fd"
+            ]
+        ]
+    },
+    {
+        "id": "6e6557dedd81d4fd",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 41",
+        "func": "msg.to = msg.userInf?.email || \"\";\nmsg.subject = \"PAROLA SIFIRLAMA\";\nconst token = msg.token\nconst link = \"http://127.0.0.1:1880/verifytoken\"\nmsg.payload = `${token} kodunuzu bu linke tıklayarak yazabilirsiniz ${link}` \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1190,
+        "y": 1080,
+        "wires": [
+            [
+                "1df336b3487f16c4"
+            ]
+        ]
+    },
+    {
+        "id": "1df336b3487f16c4",
+        "type": "e-mail",
+        "z": "a494dcc6cc32ec33",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "authtype": "BASIC",
+        "saslformat": true,
+        "token": "oauth2Response.access_token",
+        "secure": true,
+        "tls": true,
+        "name": "",
+        "dname": "",
+        "x": 1350,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "6f0fb235b0189683",
+        "type": "http in",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "url": "/newpassword",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 1560,
+        "wires": [
+            [
+                "518d2f9a8ca6ea5a"
+            ]
+        ]
+    },
+    {
+        "id": "518d2f9a8ca6ea5a",
+        "type": "template",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Şifre Sıfırla</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"newpw-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
+        "output": "str",
+        "x": 500,
+        "y": 1560,
+        "wires": [
+            [
+                "8be552b5028a6573"
+            ]
+        ]
+    },
+    {
+        "id": "8be552b5028a6573",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 670,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "79ab328f8f8dcfb0",
+        "type": "http in",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "url": "/verifytoken",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 202.00009155273438,
+        "y": 1266.0000705718994,
+        "wires": [
+            [
+                "1be529e8152283b8"
+            ]
+        ]
+    },
+    {
+        "id": "1be529e8152283b8",
+        "type": "template",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Şifre Sıfırla</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"verifytoken-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
+        "output": "str",
+        "x": 482.0000915527344,
+        "y": 1266.0000705718994,
+        "wires": [
+            [
+                "6ee8bcb4196d839e"
+            ]
+        ]
+    },
+    {
+        "id": "6ee8bcb4196d839e",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 722.0000915527344,
+        "y": 1266.0000705718994,
+        "wires": []
+    },
+    {
+        "id": "07408db4fe79f4f0",
+        "type": "http in",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "url": "/api/verifytoken",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 233.0000991821289,
+        "y": 1381.0000801086426,
+        "wires": [
+            [
+                "86158023925fd360"
+            ]
+        ]
+    },
+    {
+        "id": "86158023925fd360",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 43",
+        "func": "const resetToken = msg.payload.token;\nmsg.payload = {\n    token : parseInt(resetToken.trim())\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 433.0000991821289,
+        "y": 1381.0000801086426,
+        "wires": [
+            [
+                "582aca408e422a71"
+            ]
+        ]
+    },
+    {
+        "id": "582aca408e422a71",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "reset_token",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 610,
+        "y": 1380,
+        "wires": [
+            [
+                "c28c754d12209e8b"
+            ]
+        ]
+    },
+    {
+        "id": "c28c754d12209e8b",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 44",
+        "func": "if (!msg.payload) {\n    msg.payload = {\n        success : false,\n        error : \"Invalid Code\"\n    }\n    return [null,msg]\n}   \nmsg.payload = {\n    _id : msg.payload.user_id\n}\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 1380,
+        "wires": [
+            [
+                "d4c97345613e26bb"
+            ],
+            [
+                "5652ce8551f5dd17"
+            ]
+        ]
+    },
+    {
+        "id": "5652ce8551f5dd17",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "400",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 970,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "d4c97345613e26bb",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1010,
+        "y": 1340,
+        "wires": [
+            [
+                "ec38abd0103aa86d"
+            ]
+        ]
+    },
+    {
+        "id": "ec38abd0103aa86d",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 45",
+        "func": "if (!msg.payload){\n    msg.payload = {\n        success : false,\n        error : \"User Not Found\"\n    }\n    return [null,msg]\n}\nflow.set(\"userInfo\",msg.payload)\nreturn [msg,null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1200,
+        "y": 1340,
+        "wires": [
+            [
+                "96ff8553b78047c4"
+            ],
+            [
+                "5a7d289fa3e80124"
+            ]
+        ]
+    },
+    {
+        "id": "5a7d289fa3e80124",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "404",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1390,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "96ff8553b78047c4",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1370,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "a22f83d02dcb7d48",
+        "type": "http in",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "url": "/api/newpassword",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 1740,
+        "wires": [
+            [
+                "edbbf7599079d643"
+            ]
+        ]
+    },
+    {
+        "id": "edbbf7599079d643",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 42",
+        "func": "msg.userInfo = flow.get(\"userInfo\")\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1740,
+        "wires": [
+            [
+                "c02243c2459ca1dc"
+            ]
+        ]
+    },
+    {
+        "id": "7de912001bb2a4a2",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1990,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "c02243c2459ca1dc",
+        "type": "bcrypt",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "action": "verify",
+        "field": "payload.oldpassword",
+        "hash": "userInfo.password",
+        "target": "payload",
+        "assignment": "replace",
+        "match": "match",
+        "outputs": 1,
+        "rounds": 10,
+        "x": 740,
+        "y": 1740,
+        "wires": [
+            [
+                "5ef257317d4c9b29"
+            ]
+        ]
+    },
+    {
+        "id": "5ef257317d4c9b29",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 46",
+        "func": "if (!msg.match){\n    msg.paylaod = {\n        success : false,\n        error : \"Old password incorrect!\"\n    }\n    return [null,msg]\n}\n\nif(!msg.payload.password === msg.payload.confirmpassword){\n    msg.payload = {\n        succes: false,\n        error : \"Confirming Password Failed\"\n    }\n}\nmsg.newpw = msg.payload.password\nmsg.payload = {\n    _id : msg.userInfo._id\n}\n\n\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 1740,
+        "wires": [
+            [
+                "69d4a94adf317681"
+            ],
+            [
+                "0a1f35dcbc51baf3"
+            ]
+        ]
+    },
+    {
+        "id": "0a1f35dcbc51baf3",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1050,
+        "y": 1820,
+        "wires": []
+    },
+    {
+        "id": "e060365df75d0369",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1380,
+        "y": 1680,
+        "wires": [
+            [
+                "90e69514d5d3c17c"
+            ]
+        ]
+    },
+    {
+        "id": "90e69514d5d3c17c",
+        "type": "function",
+        "z": "a494dcc6cc32ec33",
+        "name": "function 48",
+        "func": "msg.payload = [{\n    _id : msg.payload._id,\n}]\n\nmsg.payload.push({\n    $set : {\n        password : msg.newpw\n    }\n})\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1570,
+        "y": 1680,
+        "wires": [
+            [
+                "a50d99e8ce604c03"
+            ]
+        ]
+    },
+    {
+        "id": "a50d99e8ce604c03",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "updateOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 1770,
+        "y": 1680,
+        "wires": [
+            [
+                "7de912001bb2a4a2"
+            ]
+        ]
+    },
+    {
+        "id": "69d4a94adf317681",
+        "type": "bcrypt",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "action": "encrypt",
+        "field": "newpw",
+        "hash": "payload",
+        "target": "newpw",
+        "assignment": "replace",
+        "match": "match",
+        "outputs": 1,
+        "rounds": 10,
+        "x": 1150,
+        "y": 1680,
+        "wires": [
+            [
+                "e060365df75d0369"
+            ]
         ]
     },
     {
@@ -3491,7 +4158,7 @@
             }
         ],
         "repeat": "",
-        "crontab": "00 09 * * *",
+        "crontab": "20 10 * * *",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
@@ -3647,7 +4314,7 @@
             }
         ],
         "repeat": "",
-        "crontab": "00 09 * * *",
+        "crontab": "20 10 * * *",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",

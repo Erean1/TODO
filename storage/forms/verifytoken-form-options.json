@@ -1,0 +1,10 @@
+{
+  "elements": [
+    {
+      "type": "text",
+      "name": "token",
+      "title": "Token",
+      "isRequired": true
+    }
+  ]
+}

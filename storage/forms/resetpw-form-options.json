@@ -1,0 +1,10 @@
+{
+  "elements": [
+    {
+      "type": "text",
+      "name": "email",
+      "title": "Email",
+      "isRequired": true
+    }
+  ]
+}

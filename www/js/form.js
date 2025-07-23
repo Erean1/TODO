@@ -69,6 +69,9 @@ class FormController {
       "login-form": "/api/login",
       "editUser-form" : "/api/user-operation/update",
       "register-form": "/api/register",
+      "resetpw-form" : "/api/resetpw",
+      "verifytoken-form" : "/api/verifytoken",
+      "newpw-form" : "/api/newpassword"
     };
 
     survey.onComplete.add(async (sender) => {
@@ -122,6 +125,12 @@ class FormController {
             break;
           case "addUser-form":
             window.location = "#userList";
+            break;
+          case "verifytoken-form" :
+            window.location = "/newpassword"
+            break;
+          case "newpw-form" : 
+            window.location = "/login";
             break;
         }
       } catch (err) {

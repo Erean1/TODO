@@ -13,7 +13,7 @@ export async function fetchWithAuth(url,options= {}){
             window.location.href = "/login";
             return null;
         }
-        return fetch(url,{
+        return await fetch(url,{
             ...options,
             credentials : "include"
         })
