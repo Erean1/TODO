@@ -3,14 +3,14 @@ import { loadTable } from "./tables.js";
 
 class SPAController {
   constructor() {
-    this.formLoader = new FormController();
-    this.tableLoader = loadTable;
-    this.content = document.getElementById("contentContainer");
+    this.formLoader = new FormController(); // formları yükler
+    this.tableLoader = loadTable; // tabloları yükler
+    this.content = document.getElementById("contentContainer"); // ana sayfadaki içerik divini alır 
   }
   // Sayfa içeriğini yükler
   async loadContent(type, kind, tableId) {
     try {
-      const res = await fetch("/" + type); // partialsdaki type göre istek attık
+      const res = await fetch("/" + type); // partialsdaki type göre istek attık /addTodo
       const html = await res.text(); // o typenin htmlsini text olarak aldık
       this.content.innerHTML = html; // main pagedeki div altına yerlestirdik
       if (kind === "form") {
@@ -32,7 +32,8 @@ class SPAController {
       addTodo: ["addTodo", "form"],
       addUser: ["addUser", "form"],
       userList: ["userList", "table", "user-table"],
-      logs : ["logs","table","log-table"]
+      logs : ["logs","table","log-table"],
+      completedTodos : ["completedTodos","table","completedTodos-table"]
     };
     // ! burdaki karışıklılığı düzelt
     try {
@@ -60,6 +61,18 @@ class SPAController {
       if (hash === "userList") {
         await this.loadContent(...routes[hash]);
         return;
+      }
+      if (hash === "completedTodos"){
+        await this.loadContent(...routes[hash])
+        return;
+      }
+      if (hash === "dashboard"){
+        const res = await fetch("/"+hash)
+        const html = await res.text()
+        this.content.innerHTML = html
+        const module = await import("./dashboard.js");
+        const dashboard = new module.default(this.content);
+        dashboard.init()  
       }
     } catch (err) {
       throw new Error(err);

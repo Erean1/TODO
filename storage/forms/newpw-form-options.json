@@ -2,12 +2,6 @@
   "elements": [
     {
       "type": "text",
-      "name": "oldpassword",
-      "title": "old password",
-      "isRequired": true
-    },
-    {
-      "type": "text",
       "name": "password",
       "title": "password",
       "isRequired": true

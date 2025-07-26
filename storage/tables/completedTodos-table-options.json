@@ -1,0 +1,29 @@
+{
+  "tableName": "todoList",
+  "columns": [
+    {
+      "name": "name",
+      "data": "name",
+      "title": "Görev",
+      "visible": true,
+      "orderable": true,
+      "searchable": true
+    },
+    {
+      "name": "stamp.username",
+      "data": "stamp.username",
+      "title": "Kullanıcı",
+      "visible": true,
+      "orderable": true,
+      "searchable": true
+    },
+        {
+      "name": "completedDate",
+      "data": "completedDate",
+      "title": "Tamamlanma Tarihi",
+      "visible": true,
+      "orderable": true,
+      "searchable": true
+    }
+  ]
+}

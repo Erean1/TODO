@@ -40,6 +40,14 @@
         "env": []
     },
     {
+        "id": "d3c4fb0cefa46834",
+        "type": "tab",
+        "label": "Dashboard",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "85ff2d8e203f5bb5",
         "type": "subflow",
         "name": "Check User",
@@ -47,7 +55,7 @@
         "category": "",
         "in": [
             {
-                "x": 100,
+                "x": 40,
                 "y": 120,
                 "wires": [
                     {
@@ -188,33 +196,20 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 5",
-        "func": "// tokeni isteği yapan kullanıcının cookieslerinden çektik\nmsg.token = msg.req.cookies.accessToken || \"\"\nmsg.refresh = msg.req.cookies.refreshToken || \"\"\nreturn msg;",
+        "func": "// tokeni isteği yapan kullanıcının cookieslerinden çektik\nmsg.token = msg.req.cookies.accessToken || \"\"\nmsg.refresh = msg.req.cookies.refreshToken || \"\"\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 240,
+        "x": 180,
         "y": 120,
         "wires": [
             [
                 "13b56b3e9d46889f"
             ]
         ]
-    },
-    {
-        "id": "84b734fd759f0b7f",
-        "type": "http response",
-        "z": "85ff2d8e203f5bb5",
-        "name": "",
-        "statusCode": "302",
-        "headers": {
-            "location": "/login"
-        },
-        "x": 1320,
-        "y": 660,
-        "wires": []
     },
     {
         "id": "205280b5f8799cc4",
@@ -262,7 +257,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 26",
-        "func": "if (!msg.payload.refreshToken){\n    return [null,msg]\n}\n\nmsg.method = \"POST\"\nmsg.headers = {\n    \"Content-Type\" : \"application/json\"\n};\n\n\nreturn [msg,null]",
+        "func": "if (msg.payload.refreshToken === \"\"){\n    delete msg.payload.refreshToken\n}\nif (!msg.payload.refreshToken) {\n    return [null,msg]\n}\n\n\nmsg.method = \"POST\"\nmsg.headers = {\n    \"Content-Type\" : \"application/json\"\n};\n\n\n\n\n\nreturn [msg,null]",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -321,7 +316,7 @@
         "type": "http response",
         "z": "85ff2d8e203f5bb5",
         "name": "",
-        "statusCode": "302",
+        "statusCode": "401",
         "headers": {
             "location": "/login"
         },
@@ -355,7 +350,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 31",
-        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip) {\n    return [null,msg]\n}\n\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.token}; HttpOnly; Secure; Path=/; Max-age=60`,]\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.statusCode =302\nmsg.headers.location = \"/\"\n\nreturn msg;",
+        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip || msg.error) {\n    return [null,msg]\n}\n\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.token}; HttpOnly; Secure; Path=/; Max-age=60`,]\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.statusCode =302\nmsg.headers.location = \"/\"\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -376,7 +371,7 @@
         "type": "http response",
         "z": "85ff2d8e203f5bb5",
         "name": "",
-        "statusCode": "302",
+        "statusCode": "401",
         "headers": {
             "location": "/login"
         },
@@ -385,14 +380,34 @@
         "wires": []
     },
     {
-        "id": "3cf7393ea873395d",
+        "id": "9b5faa8c12735b00",
+        "type": "catch",
+        "z": "85ff2d8e203f5bb5",
+        "name": "",
+        "scope": [
+            "cccc0d8ea15e66be"
+        ],
+        "uncaught": false,
+        "x": 1010,
+        "y": 160,
+        "wires": [
+            [
+                "f54ff9463b83b265",
+                "a51d3941115ef544"
+            ]
+        ]
+    },
+    {
+        "id": "a51d3941115ef544",
         "type": "http response",
         "z": "85ff2d8e203f5bb5",
         "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 640,
-        "y": 180,
+        "statusCode": "401",
+        "headers": {
+            "location": "/login"
+        },
+        "x": 1220,
+        "y": 280,
         "wires": []
     },
     {
@@ -466,10 +481,10 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Yapılacaklar Listesi</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg bg-dark text-white p-2 sticky-top\">\n    <div class=\"container-fluid\">\n      <a class=\"navbar-brand me-3\" href=\"\">TODO</a>\n      <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarContent\"\n              aria-controls=\"navbarContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n      </button>\n\n      <div class=\"collapse navbar-collapse\" id=\"navbarContent\">\n        <div class=\"d-flex flex-grow-1\">\n          <ul class=\"navbar-nav me-auto\">\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-1\"></i>Görev Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-1\"></i>Görevlerim</a>\n            </li>\n            {{#hasAdmin}}\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-1\"></i>Kullanıcı Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-1\"></i>Kullanıcılar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-people me-1\"></i>Loglar</a>\n            </li>\n            {{/hasAdmin}}\n          </ul>\n\n          <div class=\"user-info\">\n            <span>{{user.displayName}} <small class=\"text-white-50\">| {{user.username}}</small></span>\n            <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n          </div>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <div class=\"container py-4\">\n    <div class=\"row\">\n      <div class=\"col-lg-10 mx-auto\">\n        <div id=\"contentContainer\" class=\"card\">\n          <div class=\"card-body p-4\">\n\n            <div class=\"text-center py-5\">\n              <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n              <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- Admin Button -->\n  {{#hasAdmin}}\n  <a href=\"#admin\" class=\"btn btn-danger admin-btn position-fixed bottom-0 end-0 m-4\" data-bs-toggle=\"tooltip\"\n    data-bs-placement=\"left\" title=\"Admin Paneli\">\n    <i class=\"bi bi-shield-lock\"></i>\n  </a>\n  {{/hasAdmin}}\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Yapılacaklar Listesi</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg bg-dark text-white p-2 sticky-top\">\n    <div class=\"container-fluid\">\n      <a class=\"navbar-brand me-3\" href=\"\">TODO</a>\n      <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarContent\"\n              aria-controls=\"navbarContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n      </button>\n\n      <div class=\"collapse navbar-collapse\" id=\"navbarContent\">\n        <div class=\"d-flex flex-grow-1\">\n          <ul class=\"navbar-nav me-auto\">\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-1\"></i>Görev Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-1\"></i>Görevlerim</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-people me-1\"></i>Biten Görevlerim</a>\n            </li>\n            {{#hasAdmin}}\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-1\"></i>Kullanıcı Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-1\"></i>Kullanıcılar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-people me-1\"></i>Loglar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-people me-1\"></i>Dashboard</a>\n            </li>\n\n            {{/hasAdmin}}\n          </ul>\n\n          <div class=\"user-info\">\n            <span>{{user.displayName}} <small class=\"text-white-50\">| {{user.username}}</small></span>\n            <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n          </div>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <div class=\"container py-4\">\n    <div class=\"row\">\n      <div class=\"col-lg-10 mx-auto\">\n        <div id=\"contentContainer\" class=\"card\">\n          <div class=\"card-body p-4\">\n\n            <div class=\"text-center py-5\">\n              <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n              <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n      <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
         "output": "str",
-        "x": 635.8570938110352,
-        "y": 401.14277839660645,
+        "x": 640,
+        "y": 400,
         "wires": [
             [
                 "1b9146e8d8077382"
@@ -596,7 +611,7 @@
         "type": "function",
         "z": "d8112b18e3794244",
         "name": "function 8",
-        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload) return\nmsg.payload = {\n    \"_id\" : now,\n    \"active\": true,\n    \"roles\": [\n        \"admin\"\n    ],\n    \"stamp\": {\n        \"createdAt\": 1751898167501,\n        \"ip\": \"127.0.0.1\",\n        \"username\": \"Ereans\",\n        \"email\": \"erencit55@gmail.com\"\n    },\n    \"username\": \"Ereans\",\n    \"password\": \"$2y$10$NvX/HC/DyIwnlR5PwgosIeR1JQbkG3zgb5aR1WIAoclrd.BQT3aum\",\n    \"email\": \"erencit55@gmail.com\",\n    \"displayName\": \"Eren Çit\"\n}\nreturn msg;",
+        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload) return\nmsg.payload = {\n    \"_id\" : now,\n    \"active\": true,\n    \"roles\": [\n        \"admin\"\n    ],\n    \"stamp\": {\n        \"createdAt\": 1751898167501,\n        \"ip\": \"127.0.0.1\",\n        \"username\": \"Ereans\",\n        \"email\": \"erencit55@gmail.com\"\n    },\n    \"date\": date.toLocaleDateString(\"TR\"),\n    \"time\": date.toLocaleTimeString(\"TR\"),\n    \"username\": \"Ereans\",\n    \"password\": \"$2y$10$NvX/HC/DyIwnlR5PwgosIeR1JQbkG3zgb5aR1WIAoclrd.BQT3aum\",\n    \"email\": \"erencit55@gmail.com\",\n    \"displayName\": \"Eren Çit\"\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -714,7 +729,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 20",
-        "func": "msg.headers =  msg.headers || {};\n\nmsg.headers[\"Set-Cookie\"] = [\n    'accessToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n    'refreshToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n]\nconst logData = {\n    action : \"logout\",\n    user : msg.user?.email || \"\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"bilinmiyor\"\n}\n\nconst logResponse = {\n    payload : logData\n}\n\n\nreturn [msg,logResponse]",
+        "func": "msg.headers =  msg.headers || {};\n\nmsg.headers[\"Set-Cookie\"] = [\n    'accessToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n    'refreshToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n]\nconst logData = {\n    action : \"logout\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"bilinmiyor\"\n}\n\nconst logResponse = {\n    payload : logData\n}\n\n\nreturn [msg,logResponse]",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -764,18 +779,19 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "db.todo.find()",
-        "func": "let query = msg.user.roles.includes(\"admin\") ? {} : {\n    \"stamp.username\" : msg.user.username\n}\nmsg.payload = [[\n    {\n        $match : query\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    },\n]]\n\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\n\n\nreturn msg;",
+        "func": "let query = msg.user.roles.includes(\"admin\") ? {\"done\" : false} : {\n    \"stamp.username\" : msg.user.username,\n    \"done\" : false\n    \n}\nmsg.payload = [[\n    {\n        $match : query\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    },\n]]\n\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 570,
-        "y": 280,
+        "x": 588.9999923706055,
+        "y": 259.0000066757202,
         "wires": [
             [
-                "40507340f6e543cc"
+                "40507340f6e543cc",
+                "b8d3307eeaa1c1f4"
             ]
         ]
     },
@@ -791,11 +807,12 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 760,
-        "y": 280,
+        "x": 778.9999923706055,
+        "y": 259.0000066757202,
         "wires": [
             [
-                "959d5fb4a0851a8b"
+                "4e0ab450b8131636",
+                "3605e5f5619f8070"
             ]
         ]
     },
@@ -808,8 +825,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 160,
-        "y": 280,
+        "x": 178.99999237060547,
+        "y": 259.0000066757202,
         "wires": [
             [
                 "dd5b89efb68f0694"
@@ -825,8 +842,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 920,
-        "y": 280,
+        "x": 1200,
+        "y": 260,
         "wires": []
     },
     {
@@ -835,8 +852,8 @@
         "z": "7357fc440e36aebb",
         "name": "TODO LIST",
         "info": "",
-        "x": 150,
-        "y": 240,
+        "x": 166,
+        "y": 204.00002098083496,
         "wires": []
     },
     {
@@ -966,7 +983,8 @@
         "y": 525.2855949401855,
         "wires": [
             [
-                "c1039dd81e56699e"
+                "c1039dd81e56699e",
+                "4cbef38c457bbfb3"
             ]
         ]
     },
@@ -989,7 +1007,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 12",
-        "func": "const date = new Date()\nconst now = date.getTime()\nmsg.todo = msg.payload\nif (!msg.todo) {\n    msg.payload = {\n        success: false,\n        error: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg];\n}\n\nif (msg.todo.stamp.username !== msg.user.username && !msg.user.roles.includes(\"admin\")) {\n    msg.payload = {\n        success :false,\n        error: \"Yetkisiz Erişim\"\n    }\n}\n\nif (msg.req.params.type === \"update\" && msg.todo.done) {\n    msg.payload = {\n        success: false,\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\nmsg.payload = [\n    {\n        _id: msg.formData._id\n    },\n]\n\n\nif (msg.req.params.type === \"trash\") {\n    msg.operation = \"deleteOne\"\n} else if (msg.req.params.type === \"schedule\") {\n    let scheduleOptions = msg.scheduleOptions = {\n        \"crontiMethod\": \"onIntervalTime\",\n        \"crontiArgs\": [\n            msg.formData.datetime,\n            msg.formData.datetime\n        ]\n    }\n    msg.payload.push({\n        $set: {\n            schedule: {\n                formData: msg.formData,\n                options: scheduleOptions\n            },\n        }\n    })\n    msg.operation = \"updateOne\"\n} else {\n    msg.operation = \"updateOne\"\n    switch (msg.req.params.type) {\n        case \"complete\":\n            msg.payload.push({\n                $set: {\n                    done: true\n                }\n            })\n            break;\n        case \"open\":\n            msg.payload.push({\n                $set: {\n                    done: false\n                }\n            })\n            break;\n        case \"update\":\n            msg.payload.push({\n                $set: {\n                    name: msg.formData.name\n                }\n            })\n            break;\n    }\n    msg.payload[1].$set.stamp = {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.user.username || \"\",\n        email: msg.user.email || \"\"\n    }\n    msg.payload[1].$set.date = date.toLocaleDateString(\"TR\"),\n        msg.payload[1].$set.time = date.toLocaleTimeString(\"TR\")\n}\n\n\nreturn msg.scheduleOptions ? [msg, null, msg] : msg;",
+        "func": "const date = new Date()\nconst now = date.getTime()\nmsg.todo = msg.payload\nif (!msg.todo) {\n    msg.payload = {\n        success: false,\n        error: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg];\n}\n\nif (msg.todo.stamp.username !== msg.user.username && !msg.user.roles.includes(\"admin\")) {\n    msg.payload = {\n        success :false,\n        error: \"Yetkisiz Erişim\"\n    }\n}\n\nif (msg.req.params.type === \"update\" && msg.todo.done) {\n    msg.payload = {\n        success: false,\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\nmsg.payload = [\n    {\n        _id: msg.formData._id\n    },\n]\n\n\nif (msg.req.params.type === \"trash\") {\n    msg.operation = \"deleteOne\"\n} else if (msg.req.params.type === \"schedule\") {\n    let scheduleOptions = msg.scheduleOptions = {\n        \"crontiMethod\": \"onIntervalTime\",\n        \"crontiArgs\": [\n            msg.formData.datetime,\n            msg.formData.datetime\n        ]\n    }\n    msg.payload.push({\n        $set: {\n            schedule: {\n                formData: msg.formData,\n                options: scheduleOptions\n            },\n        }\n    })\n    msg.operation = \"updateOne\"\n} else {\n    msg.operation = \"updateOne\"\n    switch (msg.req.params.type) {\n        case \"complete\":\n            msg.payload.push({\n                $set: {\n                    completedDate : new Date().toLocaleDateString(\"TR\"),\n                    done: true\n                }\n            })\n            break;\n        case \"open\":\n            msg.payload.push({\n                $set: {\n                    done: false\n                }\n            })\n            break;\n        case \"update\":\n            msg.payload.push({\n                $set: {\n                    name: msg.formData.name\n                }\n            })\n            break;\n    }\n    msg.payload[1].$set.stamp = {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.user.username || \"\",\n        email: msg.user.email || \"\"\n    }\n    msg.payload[1].$set.date = date.toLocaleDateString(\"TR\"),\n        msg.payload[1].$set.time = date.toLocaleTimeString(\"TR\")\n}\n\n\nreturn msg.scheduleOptions ? [msg, null, msg] : msg;",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -1464,8 +1482,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 752.8571701049805,
-        "y": 107.14285469055176,
+        "x": 740,
+        "y": 120,
         "wires": [
             [
                 "ed9d327073f4c7aa"
@@ -1477,15 +1495,15 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "db.user.find()",
-        "func": "msg.payload = [[\n    {\n        $match : {\n\n        }\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    },\n    {\n        $addFields : {\n            hasAdmin : {\n                $in : [\"admin\",\"$roles\"]\n            }\n        }\n    }\n]]\n\n\nreturn msg;\n\n\n\n\n\n\n\n",
+        "func": "msg.payload = [[\n    {\n        $match : {}\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    },\n    {\n        $addFields : {\n            hasAdmin : {\n                $in : [\"admin\",\"$roles\"]\n            }\n        }\n    }\n]]\n\n\nreturn msg;\n\n\n\n\n\n\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 982.8571701049805,
-        "y": 107.14285469055176,
+        "x": 990,
+        "y": 120,
         "wires": [
             [
                 "1667c475e2d07947"
@@ -1504,8 +1522,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 1172.8571701049805,
-        "y": 107.14285469055176,
+        "x": 1180,
+        "y": 120,
         "wires": [
             [
                 "9d7b859d91d432c0"
@@ -1521,8 +1539,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1342.8571701049805,
-        "y": 107.14285469055176,
+        "x": 1340,
+        "y": 120,
         "wires": []
     },
     {
@@ -1966,8 +1984,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 130,
-        "y": 1660,
+        "x": 150,
+        "y": 1360,
         "wires": [
             [
                 "f78c4da52dbb84c8"
@@ -1979,8 +1997,8 @@
         "type": "subflow:85ff2d8e203f5bb5",
         "z": "7357fc440e36aebb",
         "name": "",
-        "x": 350,
-        "y": 1660,
+        "x": 370,
+        "y": 1360,
         "wires": [
             [
                 "d0fddc2988667b6e"
@@ -2002,8 +2020,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 1660,
+        "x": 570,
+        "y": 1360,
         "wires": [
             [
                 "8f786c815763cb25"
@@ -2022,8 +2040,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 740,
-        "y": 1660,
+        "x": 770,
+        "y": 1360,
         "wires": [
             [
                 "932ef563800a4a22"
@@ -2039,8 +2057,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 910,
-        "y": 1660,
+        "x": 960,
+        "y": 1360,
         "wires": []
     },
     {
@@ -2102,8 +2120,8 @@
         "type": "subflow:85ff2d8e203f5bb5",
         "z": "7357fc440e36aebb",
         "name": "",
-        "x": 390,
-        "y": 280,
+        "x": 388.99999237060547,
+        "y": 259.0000066757202,
         "wires": [
             [
                 "b786d864f0108b86"
@@ -2112,6 +2130,179 @@
                 "b786d864f0108b86"
             ]
         ]
+    },
+    {
+        "id": "41569919654fd413",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/completedTodos",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 1460,
+        "wires": [
+            [
+                "2dbb4ee959c26b47"
+            ]
+        ]
+    },
+    {
+        "id": "5d2c3d0d147598f0",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 52",
+        "func": "let query = msg.user.roles.includes(\"admin\") ? {\"done\" : true} : {\n    \"stamp.username\" : msg.user.username\n}\n\nmsg.payload = [[\n    {\n        $match : query\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    }\n]]\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1460,
+        "wires": [
+            [
+                "e1ccaf59dabac0ed"
+            ]
+        ]
+    },
+    {
+        "id": "e1ccaf59dabac0ed",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "aggregate",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 880,
+        "y": 1460,
+        "wires": [
+            [
+                "e3bc21342d81a4e8"
+            ]
+        ]
+    },
+    {
+        "id": "2dbb4ee959c26b47",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "x": 450,
+        "y": 1460,
+        "wires": [
+            [
+                "5d2c3d0d147598f0"
+            ],
+            [
+                "5d2c3d0d147598f0"
+            ]
+        ]
+    },
+    {
+        "id": "e3bc21342d81a4e8",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1050,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "4cbef38c457bbfb3",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1230,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "b8d3307eeaa1c1f4",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "4e0ab450b8131636",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 926.7999267578125,
+        "y": 206.93331909179688,
+        "wires": []
+    },
+    {
+        "id": "3605e5f5619f8070",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 58",
+        "func": "msg.payload = {\n    data : msg.payload,\n    count : msg.payload.length\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 260,
+        "wires": [
+            [
+                "959d5fb4a0851a8b",
+                "a02ef6e4e26cf53f"
+            ]
+        ]
+    },
+    {
+        "id": "a02ef6e4e26cf53f",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 200,
+        "wires": []
     },
     {
         "id": "ea92999f30f3cd81",
@@ -2188,7 +2379,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n</head>\n<body>\n    \n    <div id=\"demo\" class=\"display\" style=\"width:100%\">\n    <table id=\"todoTable\" class=\"display\" style=\"width:100%\">\n        <thead>\n            <tr>\n            </tr>\n        </thead>\n        <tbody>\n            <!-- Veriler JS ile yüklenecek -->\n        </tbody>\n    </table>\n    <div id=\"yazdir\">YAZDIR</div>\n</div>\n\n    \n    <script>\n        const document.getElementById(\"yazdir\");\n        \n    </script>\n\n</body>\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n</head>\n<body>\n    <p id=\"countTodos\"> </p>\n    <div id=\"demo\" class=\"display\" style=\"width:100%\">\n    \n    <table id=\"todoTable\" class=\"display\" style=\"width:100%\">\n        <thead>\n            <tr>\n            </tr>\n        </thead>\n        <tbody>\n            <!-- Veriler JS ile yüklenecek -->\n        </tbody>\n    </table>\n    <div id=\"yazdir\">YAZDIR</div>\n</div>\n\n    \n    <script>\n        const document.getElementById(\"yazdir\");\n        \n    </script>\n\n</body>\n</html>",
         "output": "str",
         "x": 305.7142868041992,
         "y": 179.9999861717224,
@@ -2313,7 +2504,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 111.99999618530273,
-        "y": 450.0001029968262,
+        "y": 630.0001029968262,
         "wires": [
             [
                 "68fc941b50b09f07"
@@ -2326,7 +2517,7 @@
         "z": "9a024a21c0703f56",
         "name": "",
         "x": 371.99999618530273,
-        "y": 450.0001029968262,
+        "y": 630.0001029968262,
         "wires": [
             [
                 "afb4034377d9af0a"
@@ -2349,7 +2540,7 @@
         "finalize": "",
         "libs": [],
         "x": 633.9999771118164,
-        "y": 440.00005626678467,
+        "y": 620.0000562667847,
         "wires": [
             [
                 "e75b99079b04948b"
@@ -2372,7 +2563,7 @@
         "handleDocId": true,
         "name": "",
         "x": 815.9999961853027,
-        "y": 397.00002670288086,
+        "y": 577.0000267028809,
         "wires": [
             [
                 "56ad4649d1fcdf3c"
@@ -2392,7 +2583,7 @@
         "finalize": "",
         "libs": [],
         "x": 1045.9999961853027,
-        "y": 397.00002670288086,
+        "y": 577.0000267028809,
         "wires": [
             [
                 "7c99d5ae6806d6c9"
@@ -2414,7 +2605,7 @@
         "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n\n  <h2>Güncelle</h2>\n  <div id=\"surveyContainer\"></div>\n</body>\n\n<script> \n  window.prefillData = JSON.parse('{{{prefillDataSTR}}}')\n</script>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"editTodo-form\",window.prefillData);\n  })();\n</script>\n\n</html>",
         "output": "str",
         "x": 1237,
-        "y": 360.0001049041748,
+        "y": 540.0001049041748,
         "wires": [
             [
                 "63a30b5a157b51ba"
@@ -2431,7 +2622,7 @@
             "content-type": "application/json"
         },
         "x": 1225.9999961853027,
-        "y": 437.00002670288086,
+        "y": 617.0000267028809,
         "wires": []
     },
     {
@@ -2442,7 +2633,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1407,
-        "y": 360.0001049041748,
+        "y": 540.0001049041748,
         "wires": []
     },
     {
@@ -2455,7 +2646,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 100,
-        "y": 580,
+        "y": 760,
         "wires": [
             [
                 "9446aab10379b614"
@@ -2468,7 +2659,7 @@
         "z": "9a024a21c0703f56",
         "name": "",
         "x": 303.0000247955322,
-        "y": 580.9999580383301,
+        "y": 760.9999580383301,
         "wires": [
             [
                 "f57203d89cf961cc"
@@ -2484,7 +2675,7 @@
         "z": "9a024a21c0703f56",
         "name": "",
         "x": 473.0000247955322,
-        "y": 580.9999580383301,
+        "y": 760.9999580383301,
         "wires": [
             [
                 "70783cd0be579d67"
@@ -2504,7 +2695,7 @@
         "finalize": "",
         "libs": [],
         "x": 658.0000286102295,
-        "y": 570.9999599456787,
+        "y": 750.9999599456787,
         "wires": [
             [
                 "51217707a67ee8b8"
@@ -2527,7 +2718,7 @@
         "handleDocId": true,
         "name": "",
         "x": 840,
-        "y": 560,
+        "y": 740,
         "wires": [
             [
                 "9ae9803073956904"
@@ -2547,7 +2738,7 @@
         "finalize": "",
         "libs": [],
         "x": 1018.0000286102295,
-        "y": 570.9999599456787,
+        "y": 750.9999599456787,
         "wires": [
             [
                 "e8e746187451589d"
@@ -2569,7 +2760,7 @@
         "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n\n  <h2>Güncelle</h2>\n  <div id=\"surveyContainer\"></div>\n</body>\n<script>\n  window.prefillData = JSON.parse('{{{prefillDataSTR}}}')\n</script>\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"editUser-form\",window.prefillData);\n  })();\n</script>\n\n</html>",
         "output": "str",
         "x": 1180,
-        "y": 540,
+        "y": 720,
         "wires": [
             [
                 "8760132cf8aeaf29"
@@ -2586,7 +2777,7 @@
             "content-type": "application/json"
         },
         "x": 1190,
-        "y": 600,
+        "y": 780,
         "wires": []
     },
     {
@@ -2597,7 +2788,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1378.0000286102295,
-        "y": 530.9999599456787,
+        "y": 710.9999599456787,
         "wires": []
     },
     {
@@ -2610,7 +2801,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 100,
-        "y": 760,
+        "y": 940,
         "wires": [
             [
                 "59b1c3369d32e415"
@@ -2623,7 +2814,7 @@
         "z": "9a024a21c0703f56",
         "name": "",
         "x": 330,
-        "y": 760,
+        "y": 940,
         "wires": [
             [
                 "3eb7b4ad9032e7b7"
@@ -2646,7 +2837,7 @@
         "finalize": "",
         "libs": [],
         "x": 585.0000038146973,
-        "y": 750.0000019073486,
+        "y": 930.0000019073486,
         "wires": [
             [
                 "161e11b2ca64bb47"
@@ -2669,7 +2860,7 @@
         "handleDocId": true,
         "name": "",
         "x": 815.0000038146973,
-        "y": 710.0000019073486,
+        "y": 890.0000019073486,
         "wires": [
             [
                 "d59bcc18081f390e"
@@ -2689,7 +2880,7 @@
         "finalize": "",
         "libs": [],
         "x": 1045.0000038146973,
-        "y": 710.0000019073486,
+        "y": 890.0000019073486,
         "wires": [
             [
                 "4c071291f7e1cb3a"
@@ -2709,7 +2900,7 @@
         "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Yapılacaklar Listesi</title>\n\n    <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n\n</head>\n\n<body>\n    <div class=\"container mt-5\">\n        <div class=\"row\">\n\n            <div class=\"col-md-8 offset-md-2\">\n                {{#error}}\n                <div class=\"alert alert-danger p-1 text-center\">\n                    <h4>{{message}}</h4>\n                </div>\n\n                {{/error}}\n                {{#message}}<p class=\"text-danger\">{{.}}</p>{{/message}}\n                <form action=\"/api/operation/schedule\" method=\"POST\">\n                    <input type=\"hidden\" name=\"_id\" value=\"{{payload._id}}\"/>\n                    <div class=\"mb-3\">\n                        <input required type=\"datetime-local\" name=\"datetime\" value=\"{{payload.schedule.formData.datetime}}\" class=\"form-control form-control-lg {{#error}}border-danger{{/error}}{{^error}}border-info{{/error}}\" placeholder=\"gg.aa.yyyy ss:dd\" />\n                    </div>\n                    <div class=\"mb-3 text-end\">\n                        <a class=\"btn btn-danger\" href=\"/\" type=\"submit\">Vazgeç</a>\n                        <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n                        <button class=\"btn btn-warning px-4\" type=\"submit\">Planla</button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n\n\n    <script src=\"/js/bootstrap.bundle.min.js\"></script>\n    <script>\n        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle=\"tooltip\"]')\n        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))\n    </script>\n</body>\n\n</html>",
         "output": "str",
         "x": 1255.0000038146973,
-        "y": 670.0000019073486,
+        "y": 850.0000019073486,
         "wires": [
             [
                 "650ff6140aa91dc2"
@@ -2724,7 +2915,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1425.0000038146973,
-        "y": 670.0000019073486,
+        "y": 850.0000019073486,
         "wires": []
     },
     {
@@ -2772,6 +2963,100 @@
         "headers": {},
         "x": 512,
         "y": 291.00000762939453,
+        "wires": []
+    },
+    {
+        "id": "f89407cbf14620ab",
+        "type": "http in",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "url": "/completedTodos",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 720,
+        "y": 280,
+        "wires": [
+            [
+                "77d9a434f059806e"
+            ]
+        ]
+    },
+    {
+        "id": "77d9a434f059806e",
+        "type": "template",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n</head>\n<body>\n    \n    <div id=\"demo\" class=\"display\" style=\"width:100%\">\n    <table id=\"completedTodos\" class=\"display\" style=\"width:100%\">\n        <thead>\n            <tr>\n            </tr>\n        </thead>\n        <tbody>\n            <!-- Veriler JS ile yüklenecek -->\n        </tbody>\n    </table>\n</div>\n\n\n</body>\n</html>",
+        "output": "str",
+        "x": 893.3333358764648,
+        "y": 279.99999141693115,
+        "wires": [
+            [
+                "f12405fd7f3f0965"
+            ]
+        ]
+    },
+    {
+        "id": "f12405fd7f3f0965",
+        "type": "http response",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1100,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "c28bfaceefde05c4",
+        "type": "http in",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "url": "/dashboard",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 380,
+        "wires": [
+            [
+                "9826835d2357aa8a"
+            ]
+        ]
+    },
+    {
+        "id": "9826835d2357aa8a",
+        "type": "template",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n    <style>\n        :root {\n            --primary-color: #4361ee;\n            --secondary-color: #3f37c9;\n            --accent-color: #4895ef;\n            --success-color: #4cc9f0;\n            --light-color: #f8f9fa;\n            --dark-color: #212529;\n        }\n        \n        body {\n            background-color: #f5f7fb;\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            color: var(--dark-color);\n        }\n        \n        #dashboard {\n            max-width: 1200px;\n            margin: 2rem auto;\n            padding: 0 1rem;\n        }\n        \n        .card {\n            border: none;\n            border-radius: 12px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);\n            transition: transform 0.3s ease, box-shadow 0.3s ease;\n            height: 100%;\n        }\n        \n        .card:hover {\n            transform: translateY(-5px);\n            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);\n        }\n        \n        .card-header {\n            background-color: white;\n            border-bottom: 1px solid rgba(0, 0, 0, 0.05);\n            border-radius: 12px 12px 0 0 !important;\n            padding: 1.25rem 1.5rem;\n        }\n        \n        .card-title {\n            font-weight: 600;\n            color: var(--primary-color);\n            margin-bottom: 0;\n            font-size: 1.1rem;\n            display: flex;\n            align-items: center;\n        }\n        \n        .card-title i {\n            margin-right: 0.5rem;\n            font-size: 1.2rem;\n        }\n        \n        .stat-card {\n            text-align: center;\n            padding: 1.5rem;\n        }\n        \n        .stat-value {\n            font-weight: 700;\n            font-size: 2rem;\n            color: var(--primary-color);\n            margin: 0.5rem 0;\n        }\n        \n        .stat-label {\n            color: #6c757d;\n            font-size: 0.9rem;\n        }\n        \n        .progress {\n            height: 8px;\n            border-radius: 4px;\n            margin-top: 0.5rem;\n        }\n        \n        .chart-container {\n            position: relative;\n            height: 250px;\n            padding: 1rem;\n        }\n        \n        .badge {\n            font-weight: 500;\n            padding: 0.35em 0.65em;\n        }\n        \n        .user-avatar {\n            width: 40px;\n            height: 40px;\n            border-radius: 50%;\n            background-color: var(--accent-color);\n            color: white;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-weight: 600;\n            margin-right: 0.75rem;\n        }\n        \n        .recent-activity {\n            list-style: none;\n            padding-left: 0;\n        }\n        \n        .recent-activity li {\n            padding: 0.75rem 0;\n            border-bottom: 1px solid rgba(0, 0, 0, 0.05);\n        }\n        \n        .recent-activity li:last-child {\n            border-bottom: none;\n        }\n        \n        .activity-time {\n            font-size: 0.75rem;\n            color: #6c757d;\n        }\n        \n        @media (max-width: 768px) {\n            .stat-value {\n                font-size: 1.5rem;\n            }\n        }\n    </style>\n</head>\n<body>\n    \n<section id=\"dashboard\">\n    <div class=\"row mb-4\">\n        <div class=\"col-12\">\n            <h2 class=\"fw-bold\">Dashboard</h2>\n        </div>\n    </div>\n\n    <div class=\"row g-4 mb-4\">\n        <!-- User Stats Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-people-fill\"></i> Total Users\n                </div>\n                <div class=\"stat-value\" id=\"totalUsers\"></div>\n\n            </div>\n        </div>\n\n        <!-- Active Users Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-person-check-fill\"></i> Active Users\n                </div>\n                <div class=\"stat-value\" id=\"activeUsers\"></div>\n            </div>\n        </div>\n        \n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-person-check-fill\"></i> Passive Users\n                </div>\n                <div class=\"stat-value\" id=\"passiveUsers\"></div>\n            </div>\n        </div>\n\n        <!-- Todo Stats Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-list-check\"></i> Total Todos\n                </div>\n                <div class=\"stat-value\" id=\"totalTodos\"></div>\n            </div>\n        </div>\n\n        <!-- Completed Todos Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-check-circle-fill\"></i> Completed Todos\n                </div>\n                <div class=\"stat-value\" id=\"completedTodos\"></div>\n            </div>\n        </div>\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-check-circle-fill\"></i> UnCompleted Todos\n                </div>\n                <div class=\"stat-value\" id=\"uncompletedTodos\"></div>\n            </div>\n        </div>\n    </div>\n\n</section>\n\n\n\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n</body>\n</html>",
+        "output": "str",
+        "x": 300,
+        "y": 380,
+        "wires": [
+            [
+                "53ea5be91a6fa5d1"
+            ]
+        ]
+    },
+    {
+        "id": "53ea5be91a6fa5d1",
+        "type": "http response",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 530,
+        "y": 380,
         "wires": []
     },
     {
@@ -2872,7 +3157,7 @@
         "outputs": 1,
         "rounds": 10,
         "x": 900,
-        "y": 199,
+        "y": 200,
         "wires": [
             [
                 "05709afef941f875"
@@ -2884,7 +3169,7 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 3",
-        "func": "const refresh = msg.payload\nmsg.payload = {\n    success: true,\n    accessToken : msg.token,\n    refreshToken : refresh\n    \n};\n\nconst logData = {\n    action : \"login\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"ip yok\"\n}\nconst msgForLog = {\n    payload : logData\n};\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.accessToken}; HttpOnly; Secure; Path=/; Max-age=60`,\n    `refreshToken=${msg.payload.refreshToken}; HttpOnly; Secure; Path=/; Max-Age=604800`\n    ]\n\nreturn [msg,msgForLog];\n",
+        "func": "const refresh = msg.payload\nmsg.payload = {\n    success: true,\n    accessToken : msg.token,\n    refreshToken : refresh\n    \n};\n\nconst logData = {\n    action : \"login\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"ip yok\"\n}\nconst msgForLog = {\n    payload : logData\n};\n\nmsg.headers = msg.headers || {}; // headers yoksa boş obje atadik \nmsg.headers['Set-Cookie'] = [     // headers içine set-cookie koyduk\n    `accessToken=${msg.payload.accessToken}; HttpOnly; Secure; Path=/; Max-age=60`,\n    `refreshToken=${msg.payload.refreshToken}; HttpOnly; Secure; Path=/; Max-Age=604800`\n    ]\n// HTTPonly olarak saklanır javascript kodları ile erişilemez\n// Secure : cookienin saedece https üzerinden gönderilmesini sağlar\n// path : =/ sitenin ana sayfası ve alt sayfalarında geçerli\n// max age geçerlilik süresi \n\nreturn [msg,msgForLog];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -2892,7 +3177,7 @@
         "finalize": "",
         "libs": [],
         "x": 1780,
-        "y": 199,
+        "y": 200,
         "wires": [
             [
                 "217bc89602452b4d"
@@ -2940,15 +3225,15 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 16",
-        "func": "if (!msg.payload) {    \n    msg.payload = {\n        success : false,\n        error: \"Kullanıcı Adı Veya Parola Hatalı\"\n    }\n    return [null, msg]\n}\n\nmsg.user = msg.payload\n\nreturn msg;",
+        "func": "if (!msg.payload) {    \n    msg.payload = {\n        success : false,\n        error: \"Kullanıcı Adı Veya Parola Hatalı\"\n    }\n    return [null, msg]\n}\nif (msg.payload.active === false) {\n    msg.payload = {\n        success: false,\n        error: \"Hesap BANLANMIŞ\"\n    }\n    return [null,msg]\n}\n\nmsg.user = msg.payload\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 707.9999771118164,
-        "y": 243.00003242492676,
+        "x": 710,
+        "y": 240,
         "wires": [
             [
                 "2bea920614622cf1"
@@ -3070,7 +3355,7 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 19",
-        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload){\n    msg.payload = {\n        success:false,\n        error : \"Kullanıcı Adı veya email zaten kullanılıyor\"\n    }\n    return [null, msg];  // hata çıkışı\n}\n\nconst logData = {\n    action : \"register\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString,\n    ip : msg.req?.ip || \"\"\n}\n\nmsg.payload = {\n    _id: now,\n    username : msg.formData.username,\n    email : msg.formData.email,\n    displayName : msg.formData.displayName,\n    password : msg.formData.password,\n    active: true,\n    stamp: {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.formData.username || \"\",\n        email: msg.formData.email || \"\",\n    },\n    roles: [\"user\"],\n    date: date.toLocaleDateString(\"TR\"),\n    time: date.toLocaleTimeString(\"TR\"),\n    // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n};\n\nconst msgForLog = {\n    payload : logData\n}\n\nreturn [msg,null,msgForLog];",
+        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload){\n    msg.payload = {\n        success:false,\n        error : \"Kullanıcı Adı veya email zaten kullanılıyor\"\n    }\n    return [null, msg];  // hata çıkışı\n}\n\nconst logData = {\n    action : \"register\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"\"\n}\n\nmsg.payload = {\n    _id: now,\n    username : msg.formData.username,\n    email : msg.formData.email,\n    displayName : msg.formData.displayName,\n    password : msg.formData.password,\n    active: true,\n    stamp: {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.formData.username || \"\",\n        email: msg.formData.email || \"\",\n    },\n    roles: [\"user\"],\n    date: date.toLocaleDateString(\"TR\"),\n    time: date.toLocaleTimeString(\"TR\"),\n    // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n};\n\nconst msgForLog = {\n    payload : logData\n}\n\nreturn [msg,null,msgForLog];",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -3314,11 +3599,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 809,
-        "y": 779,
+        "x": 770,
+        "y": 780,
         "wires": [
             [
-                "a22be95315ef3494"
+                "a22be95315ef3494",
+                "6e4a35c827d6bbb1"
             ]
         ]
     },
@@ -3368,8 +3654,8 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 29",
-        "func": "msg.payload = msg.payload.refreshToken\nreturn msg;",
-        "outputs": 1,
+        "func": "msg.payload = msg.payload.refreshToken\nif(!msg.payload){\n    return [null,msg]\n}\nreturn msg;",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -3380,6 +3666,9 @@
         "wires": [
             [
                 "a308166d35578658"
+            ],
+            [
+                "bcad4adbc7952db0"
             ]
         ]
     },
@@ -3431,11 +3720,12 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 979,
-        "y": 779,
+        "x": 960,
+        "y": 780,
         "wires": [
             [
-                "d7abbc50bd1d71bb"
+                "d7abbc50bd1d71bb",
+                "04c2ca53f74c2b0f"
             ]
         ]
     },
@@ -3485,7 +3775,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Giriş Yap</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n\n    <p><a href=\"/resetpw\">Şifremi Unuttum </a> </p>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"login-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Giriş Yap</h2>\n      <div id=\"surveyContainer\"></div>\n      \n    <p><a href=\"/resetpw\">Şifremi Unuttum </a> </p>\n    </div>\n\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"login-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
         "output": "str",
         "x": 422,
         "y": 137,
@@ -3622,7 +3912,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
+        "x": 810,
         "y": 1120,
         "wires": [
             [
@@ -3712,7 +4002,7 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 200,
+        "x": 230,
         "y": 1560,
         "wires": [
             [
@@ -3731,7 +4021,7 @@
         "syntax": "mustache",
         "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Şifre Sıfırla</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"newpw-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
         "output": "str",
-        "x": 500,
+        "x": 480,
         "y": 1560,
         "wires": [
             [
@@ -3746,7 +4036,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 670,
+        "x": 630,
         "y": 1560,
         "wires": []
     },
@@ -3915,7 +4205,7 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 45",
-        "func": "if (!msg.payload){\n    msg.payload = {\n        success : false,\n        error : \"User Not Found\"\n    }\n    return [null,msg]\n}\nflow.set(\"userInfo\",msg.payload)\nreturn [msg,null];",
+        "func": "if (!msg.payload){\n    msg.payload = {\n        success : false,\n        error : \"User Not Found\"\n    }\n    return [null,msg]\n}\nflow.set(\"userInfo\",msg.payload) // userinfoyu flow bazında set ediyoz \nreturn [msg,null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -3966,7 +4256,7 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 190,
+        "x": 240,
         "y": 1740,
         "wires": [
             [
@@ -3990,7 +4280,7 @@
         "y": 1740,
         "wires": [
             [
-                "c02243c2459ca1dc"
+                "5ef257317d4c9b29"
             ]
         ]
     },
@@ -4001,44 +4291,23 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1990,
-        "y": 1680,
+        "x": 1650,
+        "y": 1700,
         "wires": []
-    },
-    {
-        "id": "c02243c2459ca1dc",
-        "type": "bcrypt",
-        "z": "a494dcc6cc32ec33",
-        "name": "",
-        "action": "verify",
-        "field": "payload.oldpassword",
-        "hash": "userInfo.password",
-        "target": "payload",
-        "assignment": "replace",
-        "match": "match",
-        "outputs": 1,
-        "rounds": 10,
-        "x": 740,
-        "y": 1740,
-        "wires": [
-            [
-                "5ef257317d4c9b29"
-            ]
-        ]
     },
     {
         "id": "5ef257317d4c9b29",
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 46",
-        "func": "if (!msg.match){\n    msg.paylaod = {\n        success : false,\n        error : \"Old password incorrect!\"\n    }\n    return [null,msg]\n}\n\nif(!msg.payload.password === msg.payload.confirmpassword){\n    msg.payload = {\n        succes: false,\n        error : \"Confirming Password Failed\"\n    }\n}\nmsg.newpw = msg.payload.password\nmsg.payload = {\n    _id : msg.userInfo._id\n}\n\n\nreturn msg;",
+        "func": "if(msg.payload.password !== msg.payload.confirmpassword){\n    msg.payload = {\n        succes: false,\n        error : \"Confirming Password Failed\"\n    }\n    return [null,msg]\n}\nmsg.newpw = msg.payload.password\nmsg.payload = {\n    _id : msg.userInfo._id\n}\n\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 910,
+        "x": 690,
         "y": 1740,
         "wires": [
             [
@@ -4058,8 +4327,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1050,
-        "y": 1820,
+        "x": 910,
+        "y": 1780,
         "wires": []
     },
     {
@@ -4074,8 +4343,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1380,
-        "y": 1680,
+        "x": 1100,
+        "y": 1700,
         "wires": [
             [
                 "90e69514d5d3c17c"
@@ -4094,8 +4363,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1570,
-        "y": 1680,
+        "x": 1290,
+        "y": 1700,
         "wires": [
             [
                 "a50d99e8ce604c03"
@@ -4114,8 +4383,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 1770,
-        "y": 1680,
+        "x": 1490,
+        "y": 1700,
         "wires": [
             [
                 "7de912001bb2a4a2"
@@ -4135,13 +4404,70 @@
         "match": "match",
         "outputs": 1,
         "rounds": 10,
-        "x": 1150,
-        "y": 1680,
+        "x": 910,
+        "y": 1700,
         "wires": [
             [
                 "e060365df75d0369"
             ]
         ]
+    },
+    {
+        "id": "b0892d8de4fa1ba6",
+        "type": "comment",
+        "z": "a494dcc6cc32ec33",
+        "name": "BURDAKİ KARIŞIKLILIĞI DÜZELT",
+        "info": "",
+        "x": 884,
+        "y": 919.0000767707825,
+        "wires": []
+    },
+    {
+        "id": "bcad4adbc7952db0",
+        "type": "http response",
+        "z": "a494dcc6cc32ec33",
+        "name": "",
+        "statusCode": "401",
+        "headers": {
+            "location": "/login"
+        },
+        "x": 550,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "04c2ca53f74c2b0f",
+        "type": "debug",
+        "z": "a494dcc6cc32ec33",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "6e4a35c827d6bbb1",
+        "type": "debug",
+        "z": "a494dcc6cc32ec33",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 720,
+        "wires": []
     },
     {
         "id": "a74d907a106e924b",
@@ -4295,8 +4621,8 @@
         "z": "b3c1ef86c9e1d050",
         "name": "Her sabah 9 da bitime 3 gün kalan görevleri bulur mail atar",
         "info": "",
-        "x": 350,
-        "y": 100,
+        "x": 310,
+        "y": 40,
         "wires": []
     },
     {
@@ -4314,13 +4640,13 @@
             }
         ],
         "repeat": "",
-        "crontab": "20 10 * * *",
+        "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 211.9999656677246,
+        "x": 201.9999656677246,
         "y": 317.0000066757202,
         "wires": [
             [
@@ -4373,7 +4699,7 @@
         "type": "function",
         "z": "b3c1ef86c9e1d050",
         "name": "function 36",
-        "func": "const date = new Date();\n\nmsg.payload = msg.payload.filter(todo => {\n    const dueDate = new Date(todo.due_date);\n    return dueDate.toDateString() < date.toDateString()\n})\n\n\nreturn msg;",
+        "func": "const date = new Date();\n\nmsg.payload = msg.payload.filter(todo => {\n    const dueDate = new Date(todo.due_date);\n    return todo.completed === true || dueDate.getTime() < date.getTime()\n})\n\nmsg.date = date.getTime()\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4453,6 +4779,448 @@
         "info": "",
         "x": 290,
         "y": 260,
+        "wires": []
+    },
+    {
+        "id": "9a09c95bf6cd415b",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 47",
+        "func": "msg.payload = {\n    \"active\" : true\n}\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 300,
+        "wires": [
+            [
+                "8923dc971e3f110b"
+            ]
+        ]
+    },
+    {
+        "id": "8923dc971e3f110b",
+        "type": "mongodb4",
+        "z": "d3c4fb0cefa46834",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "count",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 590,
+        "y": 300,
+        "wires": [
+            [
+                "87d1cec469bcce36"
+            ]
+        ]
+    },
+    {
+        "id": "87d1cec469bcce36",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 49",
+        "func": "msg.activeUserCount = msg.payload\nmsg.payload = {\n    \"active\" : false\n}\n    \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 300,
+        "wires": [
+            [
+                "4920633003715d91"
+            ]
+        ]
+    },
+    {
+        "id": "4920633003715d91",
+        "type": "mongodb4",
+        "z": "d3c4fb0cefa46834",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "count",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 970,
+        "y": 300,
+        "wires": [
+            [
+                "488d12abf1447f17"
+            ]
+        ]
+    },
+    {
+        "id": "04c07ee21ee37e67",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 50",
+        "func": "const now = new Date();\nconst threeDaysBefore = new Date(now)\nthreeDaysBefore.setDate(now.getDate() - 3)\nthreeDaysBefore.setHours(0,0,0,0); // saati sıfırladık\n\nmsg.payload = msg.payload.filter(user => {\n    const [day,month,year] = user.date.split(\".\") // userin datesini 3parçaya böldük\n    const fullDateStr = `${year}-${month}-${day}T${user.time}`; // fullDateyi yazdırdık \n    const signDate = new Date(fullDateStr); \n    return signDate > threeDaysBefore && signDate < now\n})\nconst lastthreedaysusers = msg.payload.length\nconst activeUserCount = msg.activeUserCount\nconst passiveUserCount = msg.passiveUserCount\nmsg.payload = {\n    lastthreedaysusers,\n    activeUserCount,\n    passiveUserCount\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1490,
+        "y": 300,
+        "wires": [
+            [
+                "e2cb00ab2ed96569"
+            ]
+        ]
+    },
+    {
+        "id": "7f4b4516876d6638",
+        "type": "comment",
+        "z": "d3c4fb0cefa46834",
+        "name": "inject balğadıgımda hata",
+        "info": "",
+        "x": 230,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "488d12abf1447f17",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 51",
+        "func": "msg.passiveUserCount = msg.payload\nmsg.payload = {}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 300,
+        "wires": [
+            [
+                "a7be7260299548d6"
+            ]
+        ]
+    },
+    {
+        "id": "a7be7260299548d6",
+        "type": "mongodb4",
+        "z": "d3c4fb0cefa46834",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "find",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1310,
+        "y": 300,
+        "wires": [
+            [
+                "04c07ee21ee37e67",
+                "43ab51c53d6182ea"
+            ]
+        ]
+    },
+    {
+        "id": "e2cb00ab2ed96569",
+        "type": "http response",
+        "z": "d3c4fb0cefa46834",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1700,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "1eadae2df7203f9b",
+        "type": "http in",
+        "z": "d3c4fb0cefa46834",
+        "name": "",
+        "url": "/api/userStats",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 300,
+        "wires": [
+            [
+                "9a09c95bf6cd415b"
+            ]
+        ]
+    },
+    {
+        "id": "05488fe851646182",
+        "type": "http in",
+        "z": "d3c4fb0cefa46834",
+        "name": "",
+        "url": "/api/todoStats",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 468.0000305175781,
+        "wires": [
+            [
+                "ada37df688efcc50"
+            ]
+        ]
+    },
+    {
+        "id": "ada37df688efcc50",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 53",
+        "func": "msg.payload = {\n    \"done\" : false \n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 468.0000305175781,
+        "wires": [
+            [
+                "765dc550e103ca38"
+            ]
+        ]
+    },
+    {
+        "id": "765dc550e103ca38",
+        "type": "mongodb4",
+        "z": "d3c4fb0cefa46834",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "count",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 590,
+        "y": 468.0000305175781,
+        "wires": [
+            [
+                "44a46fe0da5f539c",
+                "693abc811d2facab"
+            ]
+        ]
+    },
+    {
+        "id": "44a46fe0da5f539c",
+        "type": "debug",
+        "z": "d3c4fb0cefa46834",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 408.0000305175781,
+        "wires": []
+    },
+    {
+        "id": "5ff1dc9f9dfd6606",
+        "type": "http response",
+        "z": "d3c4fb0cefa46834",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2150,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "693abc811d2facab",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 54",
+        "func": "msg.unCompletedTodos = msg.payload\nmsg.payload = {\n    \"done\" : true\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 468.0000305175781,
+        "wires": [
+            [
+                "1b33696f9e0e8a85"
+            ]
+        ]
+    },
+    {
+        "id": "1b33696f9e0e8a85",
+        "type": "mongodb4",
+        "z": "d3c4fb0cefa46834",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "count",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 960,
+        "y": 468.0000305175781,
+        "wires": [
+            [
+                "f45b976613f31998"
+            ]
+        ]
+    },
+    {
+        "id": "f45b976613f31998",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 55",
+        "func": "msg.completedTodos = msg.payload\nmsg.payload = {}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1140,
+        "y": 468.0000305175781,
+        "wires": [
+            [
+                "03a2ea5d862677ef"
+            ]
+        ]
+    },
+    {
+        "id": "03a2ea5d862677ef",
+        "type": "mongodb4",
+        "z": "d3c4fb0cefa46834",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "count",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1340,
+        "y": 468.0000305175781,
+        "wires": [
+            [
+                "8781c95dddfe7335"
+            ]
+        ]
+    },
+    {
+        "id": "8781c95dddfe7335",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 56",
+        "func": "msg.todos = msg.payload;\nmsg.payload = [[\n    {\n        $group : {\n            _id : \"$stamp.username\",\n            count : {\n                $sum :1\n            }\n        }\n    }\n]]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1500,
+        "y": 468.0000305175781,
+        "wires": [
+            [
+                "5c3669d968da01d6"
+            ]
+        ]
+    },
+    {
+        "id": "5c3669d968da01d6",
+        "type": "mongodb4",
+        "z": "d3c4fb0cefa46834",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "aggregate",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1700,
+        "y": 460,
+        "wires": [
+            [
+                "aba45f9c5c74de7e"
+            ]
+        ]
+    },
+    {
+        "id": "aba45f9c5c74de7e",
+        "type": "function",
+        "z": "d3c4fb0cefa46834",
+        "name": "function 57",
+        "func": "const userStatss = msg.payload\nconst unCompletedTodos = msg.unCompletedTodos;\nconst completedTodos = msg.completedTodos;\nconst todos = msg.todos\nmsg.payload = {\n    userStatss,\n    unCompletedTodos,\n    completedTodos,\n    todos\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1910,
+        "y": 460,
+        "wires": [
+            [
+                "5ff1dc9f9dfd6606",
+                "7d44c3b146971a0f"
+            ]
+        ]
+    },
+    {
+        "id": "7d44c3b146971a0f",
+        "type": "debug",
+        "z": "d3c4fb0cefa46834",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2060,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "43ab51c53d6182ea",
+        "type": "debug",
+        "z": "d3c4fb0cefa46834",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1480,
+        "y": 240,
         "wires": []
     }
 ]
