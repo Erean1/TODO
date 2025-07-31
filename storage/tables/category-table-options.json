@@ -1,0 +1,20 @@
+{
+  "tableName": "todoList",
+  "columns": [
+    {
+        "name" : "_id",
+        "data" : "_id",
+        "title" : "Kategori ID",
+        "visible" : true,
+        "searchable" : true
+    },
+    {
+      "name": "name",
+      "data": "name",
+      "title": "Kategori İsmi",
+      "visible": true,
+      "orderable": true,
+      "searchable": true
+    }
+  ]
+}

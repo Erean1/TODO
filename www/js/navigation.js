@@ -3,51 +3,53 @@ import { loadTable } from "./tables.js";
 
 class SPAController {
   constructor() {
-    this.formLoader = new FormController(); // formları yükler
-    this.tableLoader = loadTable; // tabloları yükler
-    this.content = document.getElementById("contentContainer"); // ana sayfadaki içerik divini alır 
+    this.formLoader = new FormController(); // formloder instancesi oluşturduk formcontroller sınıfından
+    this.tableLoader = loadTable;  // tableloader i çağpırcaz
+    this.content = document.getElementById("contentContainer"); // spa sayfasi içindeki contentContainer divini aldık 
   }
   // Sayfa içeriğini yükler
-  async loadContent(type, kind, tableId) {
+  async loadContent(type, kind, tableId) { 
     try {
-      const res = await fetch("/" + type); // partialsdaki type göre istek attık /addTodo
-      const html = await res.text(); // o typenin htmlsini text olarak aldık
-      this.content.innerHTML = html; // main pagedeki div altına yerlestirdik
-      if (kind === "form") {
-        await this.formLoader.loadForm(`${type}-form`); // loadforma gönderdik
+      const res = await fetch("/" + type);  // partials htmllerime örneğin /myTodos buna istek attık res aldık
+      const html = await res.text();  // gelen isteği text şeklimde htmlye attık
+      this.content.innerHTML = html;  // contentin içine innerHTML ile html yi yazdırdık ardık sayfamız gözüküyor
+      if (kind === "form") { // kind === form ise 
+        await this.formLoader.loadForm(`${type}-form`); // form oluşturuyoz örneğin addTodo-form 
       } else if (kind === "table") {
-        await this.tableLoader(`${tableId}`, `${type}`); // loadtable gönderdik
+        await this.tableLoader(`${tableId}`, `${type}`); // table oluşturuyoz örneğin tdo-table
       }
     } catch (err) {
       console.error("Hata", err);
     }
   }
-  // gelen hashe göre sayfa yönlendirmesini ayarlar
-  async loadPage() {
-    const hash = window.location.hash.substring(1); // #myTodos ---> myTodos
-    this.content.innerHTML = "Yükleniyor...";
 
-    const routes = {
-      myTodos: ["myTodos", "table", "todo-table"], // type = myTodos , kind = table, tableId = todo-table
+  async loadPage() {
+    const hash = window.location.hash.substring(1); // #addTodo yu addTodo yaptik substring ile 1. yi çıkartık hash ile sadece # bundan sonrasını aldık
+    this.content.innerHTML = "Yükleniyor..."; // içerik yüklenene kadar üykleniyor yazcak
+
+    const routes = { // routerlerimi belirledim ve routerlerimde neler göndericem bunları belirledim
+      myTodos: ["myTodos", "table", "todo-table"],
       addTodo: ["addTodo", "form"],
       addUser: ["addUser", "form"],
       userList: ["userList", "table", "user-table"],
       logs : ["logs","table","log-table"],
-      completedTodos : ["completedTodos","table","completedTodos-table"]
+      completedTodos : ["completedTodos","table","completedTodos-table"],
+      addCategory : ["addCategory","form"],
+      categoryList : ["categoryList","table","category-table"]
     };
     // ! burdaki karışıklılığı düzelt
     try {
-      if (hash === "logout") {
-        await fetch("/api/logout");
+      if (hash === "logout") { // gelen hashe göre iflere yolluyuz
+        await fetch("/api/logout"); // logout apisine istek attik
         window.location.href = "/login";
         return;
       }
       if (hash === "myTodos") {
-        await this.loadContent(...routes[hash]); // routese gönder hashe göre
+        await this.loadContent(...routes[hash]);  // key üzerinden routesten loadcontente istek attık
         return;
       }
       if (hash === "logs") {
-        await this.loadContent(...routes[hash]); // routese gönder hashe göre
+        await this.loadContent(...routes[hash]);
         return;
       }
       if (hash === "addTodo") {
@@ -62,40 +64,49 @@ class SPAController {
         await this.loadContent(...routes[hash]);
         return;
       }
+      if (hash === "categoryList"){
+        await this.loadContent(...routes[hash]);
+        return;
+      }
       if (hash === "completedTodos"){
         await this.loadContent(...routes[hash])
         return;
       }
+      if (hash === "addCategory"){
+        await this.loadContent(...routes[hash])
+      }
       if (hash === "dashboard"){
-        const res = await fetch("/"+hash)
-        const html = await res.text()
-        this.content.innerHTML = html
-        const module = await import("./dashboard.js");
-        const dashboard = new module.default(this.content);
-        dashboard.init()  
+        const res = await fetch("/"+hash) // hash sayfasinin getir
+        const html = await res.text() // text olarak al 
+        this.content.innerHTML = html //content içine koy
+        const module = await import("./dashboard.js"); // dashboard.js i import ettik await lie cünkü içindn bir response gelecek
+        const dashboard = new module.default(this.content); // module.default(this.content) bunun ile export defaul yaptığım clasın constructoruna değişken gönderidm
+        dashboard.init()  // dashboardi baslattim
       }
     } catch (err) {
       throw new Error(err);
     }
   }
-  // INIT FUNCTION
+  
   async init() {
-    window.addEventListener("hashchange", this.loadPage.bind(this)); // hashchange deki herhangi bir değişikliği (tarayıcı bunu sağlar) farkedince loadpage çalışıyor
-    // bind(this) loadpage burda callback fonksiyonu olduğu için this.loadPage normalde undefined olur bind kullandık
-    window.addEventListener("DOMContentLoaded", () => {
-      //DOMContentLoaded yani içerik yüklendiğinde
-      if (window.location.hash) {
-        // eğer zaten bir hash varsa onu yükle
+    window.addEventListener("hashchange", this.loadPage.bind(this));  // hashchange dinledim ve this.loadPage.bind(this) ile çalıştıdım
+    // this.loadPage yapsam undefined olacak cünkü bu gidip window içindeki thise odaklanacak ama bind(this) yaparak bu class spacontroller
+    //  içindeki thisi aliriz 
+    
+    window.addEventListener("DOMContentLoaded", () => { // içerik  yüklendiğinde
+      
+      if (window.location.hash) { // hash varsa loadpage çalistir
+        
         this.loadPage();
       } else {
-        // yoksa hashe "" yap
-        window.location.hash = "";
+        
+        window.location.hash = ""; // yoksa boş hash anasayfa devam et
       }
     });
   }
 }
 
-const spa = new SPAController(); // classtan instance oluşturdk
-spa.init(); // initi calistirdik ve başlattık
+const spa = new SPAController();  // spa instance oluştur
+spa.init();  // spa calistir
 
 export default SPAController;

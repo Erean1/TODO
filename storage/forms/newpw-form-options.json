@@ -4,13 +4,31 @@
       "type": "text",
       "name": "password",
       "title": "password",
-      "isRequired": true
+      "isRequired": true,
+      "requiredErrorText" : "Lütfen doldurunuz",
+      "validators" : [
+        {
+          "type" : "text",
+          "minLength" : 8,
+          "maxLength" : 16,
+          "text" : "Şifre Minimum 8 Maximum 16 karakterden oluşmalı"
+        }
+      ]
     },
     {
       "type": "text",
       "name": "confirmpassword",
       "title": "Confirm Passowrd",
-      "isRequired": true
+      "isRequired": true,
+      "requiredErrorText" : "Lütfen doldurunuz",
+      "validators" : [
+        {
+          "type" : "text",
+          "minLength" : 8,
+          "maxLength" : 16,
+          "text" : "Şifre Minimum 8 Maximum 16 karakterden oluşmalı"
+        }
+      ]
     }
   ]
 }

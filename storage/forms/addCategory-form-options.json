@@ -1,0 +1,20 @@
+{
+  "showQuestionNumbers": "off",
+  "elements": [
+    {
+      "type": "text",
+      "name": "name",
+      "title": "Yeni Görev Ekle",
+      "isRequired": true,
+      "placeHolder": "Planın Nedir?",
+      "requiredErrorText" : "Lütfen Doldurunuz",
+      "validators": [
+        {
+          "type": "regex",
+          "regex": "\\S+",
+          "text": "Lütfen geçerli bir görev girin"
+        }
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@
       "title": "Yeni Görev Ekle",
       "isRequired": true,
       "placeHolder": "Planın Nedir?",
+      "requiredErrorText" : "Lütfen Doldurunuz",
       "validators": [
         {
           "type": "regex",
@@ -20,6 +21,7 @@
       "name": "priority",
       "title": "Öncelik Seviyesi",
       "isRequired": true,
+      "requiredErrorText" : "Lütfen Doldurunuz",
       "choices": [
         { "value": "low", "text": "Düşük" },
         { "value": "medium", "text": "Orta" },
@@ -33,6 +35,7 @@
       "title": "Bitiş Tarihi",
       "isRequired": true,
       "inputType" : "date",
+      "requiredErrorText" : "Lütfen Doldurunuz",
       "placeHolder": "Tarih seçiniz"
     }
   ]

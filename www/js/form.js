@@ -34,6 +34,18 @@ class FormController {
         html: `<a href="/" class="px-5 btn btn-danger btn-md">Vazgeç</a>`,
       });
     }
+    if (type === "addTodo-form") {
+      const res = await fetch("/api/categoryList");
+      const data = await res.json();
+      formJson.elements.push({
+        type: "dropdown",
+        name: "categoryId",
+        title: "Kategoriler",
+        isRequired: true,
+        requiredErrorText: "Lütfen Doldurunuz",
+        choices: data.map((cat) => ({ value: cat._id, text: cat.name })),
+      });
+    }
 
     const survey = new Survey.Model(formJson); // formJson bir survey modeli diye tanımlıyoruz
 
@@ -41,7 +53,7 @@ class FormController {
       survey.data = prefillData;
     }
 
-    if (type === "addUser-form" || type === "addTodo-form") {
+    if (type === "addUser-form" ||type === "addTodo-form" ||type === "addCategory-form") {
       (survey.completeText = "Ekle"), (survey.showCompletedPage = false);
     } else if (type === "login-form") {
       survey.completeText = "Giriş yap";
@@ -55,9 +67,9 @@ class FormController {
     } else if (type === "editUser-form") {
       survey.completeText = "Güncelle";
       survey.showCompletedPage = false;
-    } else if (type === "resetpw-form"){
+    } else if (type === "resetpw-form") {
       survey.completeText = "Gönder";
-      survey.showCompletedPage = false
+      survey.showCompletedPage = false;
     }
 
     const endpointMap = {
@@ -70,6 +82,7 @@ class FormController {
       "resetpw-form": "/api/resetpw",
       "verifytoken-form": "/api/verifytoken",
       "newpw-form": "/api/newpassword",
+      "addCategory-form": "/api/category-operation/add",
     };
 
     survey.onComplete.add(async (sender) => {
@@ -95,7 +108,7 @@ class FormController {
         if (!res.ok) {
           throw new Error("HATA", res.statusText);
         }
-        const data = await res.json(); // çıkışlara koyduğumuz msg.payloadı alır
+        const data = await res.json(); 
         if (data.success === false) {
           this.showError(data.error || "Bir şeyler yalnış gitti");
           setTimeout(() => {
@@ -103,6 +116,7 @@ class FormController {
           }, 1000);
           return;
         }
+
         switch (type) {
           case "login-form":
             window.location.href = "/";
@@ -122,8 +136,11 @@ class FormController {
           case "addUser-form":
             window.location = "#userList";
             break;
+          case "addCategory-form":
+            window.location = "/";
+            break;
           case "resetpw-form":
-            window.close();
+            window.location = "/login"
             break;
           case "verifytoken-form":
             window.location = "/newpassword";

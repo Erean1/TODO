@@ -33,6 +33,14 @@
       "searchable" : true,
       "visible" : true,
       "orderable" : true
+    },
+    {
+      "name" : "categoryId",
+      "data" : "categoryId",
+      "title" : "Kategori",
+      "searchable" : true,
+      "visible" : true,
+      "orderable" : true
     }
   ]
 }

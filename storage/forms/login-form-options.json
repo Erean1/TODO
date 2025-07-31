@@ -4,14 +4,16 @@
       "type": "text",
       "name": "username",
       "title": "Kullanıcı Adı",
-      "isRequired": true
+      "isRequired": true,
+      "requiredErrorText": "Lütfen doldurunuz"
     },
     {
       "type": "text",
       "name": "password",
       "title": "Şifre",
       "isRequired": true,
-      "inputType": "password"
+      "inputType": "password",
+      "requiredErrorText": "Lütfen doldurunuz"
     }
   ]
 }

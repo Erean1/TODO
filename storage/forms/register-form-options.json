@@ -4,27 +4,46 @@
       "type": "text",
       "name": "displayName",
       "title": "Ad Soyad",
-      "isRequired": true
+      "isRequired": true,
+      "requiredErrorText": "Lütfen doldurunuz"
     },
     {
       "type": "text",
       "name": "username",
       "title": "Kullanıcı Adı",
-      "isRequired": true
+      "isRequired": true,
+      "requiredErrorText": "Lütfen doldurunuz",
+      "validators": [
+        {
+          "type": "text",
+          "minLength": 3,
+          "text": "Kullanıcı Adı minimum 3 karakterden oluşabilir"
+        }
+      ]
     },
     {
       "type": "text",
       "name": "email",
       "title": "E-posta",
       "isRequired": true,
-      "inputType": "email"
+      "inputType": "email",
+      "requiredErrorText": "Lütfen doldurunuz"
     },
     {
       "type": "text",
       "name": "password",
       "title": "Şifre",
       "isRequired": true,
-      "inputType": "password"
+      "inputType": "password",
+      "requiredErrorText": "Lütfen doldurunuz",
+      "validators": [
+        {
+          "type": "text",
+          "minLength": 8,
+          "maxLength": 16,
+          "text": "Şifre en az 8 en fazla 16 karakterden oluşmalıdır"
+        }
+      ]
     }
   ]
 }
