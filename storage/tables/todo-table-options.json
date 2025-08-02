@@ -35,8 +35,8 @@
       "orderable" : true
     },
     {
-      "name" : "categoryId",
-      "data" : "categoryId",
+      "name" : "categoryName",
+      "data" : "categoryName",
       "title" : "Kategori",
       "searchable" : true,
       "visible" : true,

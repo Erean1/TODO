@@ -89,7 +89,8 @@ export async function loadTable(type, dataType) {
   });
 }
 
-$(document).on("click", "button.action-btn", async function () {
+$(document).on("click", "button.action-btn", async function () { // documentte button.actio-btn içerenlerde click olayı gerçekleşince bir callback 
+  // fonksiyonu çalıştır
   // action-btn olan butonlara cilck eventi ekledik
   const id = $(this).data("id"); // data-id diye tanımladık  butonlara onu cektik this.data ile
   const type = $(this).data("type"); // date-type olanları

@@ -23,8 +23,8 @@ class FormController {
 
     let operationID = null;
     if (type === "editTodo-form" || type === "editUser-form") {
-      const pathParts = window.location.pathname.split("/");
-      operationID = pathParts[pathParts.length - 1];
+      const pathParts = window.location.pathname.split("/"); // /edit /:id olark böldük
+      operationID = pathParts[pathParts.length - 1]; // son indexi aldik
     }
 
     if (type === "editTodo-form" && "editUser-form") {
@@ -110,7 +110,7 @@ class FormController {
         }
         const data = await res.json(); 
         if (data.success === false) {
-          this.showError(data.error || "Bir şeyler yalnış gitti");
+          this.showError(data.error || "Bir şeyler yanlış gitti");
           setTimeout(() => {
             window.location.reload();
           }, 1000);
