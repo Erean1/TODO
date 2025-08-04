@@ -350,7 +350,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 31",
-        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip || msg.error) {\n    return [null,msg]\n}\n\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.token}; HttpOnly; Secure; Path=/; Max-age=3600`,]\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.verified = msg.user.validated === false\nmsg.statusCode =302\nmsg.headers.location = \"/\"\n\nreturn msg;",
+        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip || msg.error) {\n    return [null,msg]\n}\n\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.token}; HttpOnly; Secure; Path=/; Max-age=3600`,]\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.verified = msg.user.validated\nmsg.statusCode =302\nmsg.headers.location = \"/\"\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -481,13 +481,14 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Yapılacaklar Listesi</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg bg-dark text-white p-2 sticky-top\">\n    <div class=\"container-fluid\">\n      <a class=\"navbar-brand me-3\" href=\"\">TODO</a>\n      <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarContent\"\n              aria-controls=\"navbarContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n      </button>\n\n      <div class=\"collapse navbar-collapse\" id=\"navbarContent\">\n        <div class=\"d-flex flex-grow-1\">\n          <ul class=\"navbar-nav me-auto\">\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-1\"></i>Görev Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-1\"></i>Görevlerim</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-people me-1\"></i>Biten Görevlerim</a>\n            </li>\n            {{#hasAdmin}}\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-1\"></i>Kullanıcı Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-1\"></i>Kullanıcılar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-people me-1\"></i>Loglar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-people me-1\"></i>Dashboard</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addCategory\"><i class=\"bi bi-people me-1\"></i>Kategori Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#categoryList\"><i class=\"bi bi-people me-1\"></i>Kategoriler</a>\n            </li>\n            {{/hasAdmin}}\n          </ul>\n          {{^verified}}\n          <a class=\"nav-link\" href=\"#\" onclick=\"sendVerificationEmail()\"><i class=\"bi bi-people me-1\"></i>Onayla</a>\n          {{/verified}}\n\n          <div class=\"user-info\">\n            <span>{{user.displayName}} <small class=\"text-white-50\">| {{user.username}}</small></span>\n            <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n          </div>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <div class=\"container py-4\">\n    <div class=\"row\">\n      <div class=\"col-lg-10 mx-auto\">\n        <div id=\"contentContainer\" class=\"card\">\n          <div class=\"card-body p-4\">\n\n            <div class=\"text-center py-5\">\n              <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n              <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n\n  <script>\n    const userEmail  = \"{{user.email}}\";\n    const sendVerificationEmail = async () => {\n    try{\n        const res = await fetch (\"/api/verifyUser\",{\n            method : \"POST\",\n            headers : {\n            \"Content-Type\" : \"application/json\"\n            },\n            body : JSON.stringify({email : userEmail })\n        });\n        if (!res.ok){\n          throw new Error(res.status);\n          }\n            \n          const data = await res.json();\n          console.log(data)\n          alert(\"Lütfen MAİLİNİZİ KONTROL EDİNİZ\")\n    } catch (error){\n        alert(\"Bir Hata oluştu\")\n        window.location = \"/\"\n    }\n  }\n  \n  \n  </script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Yapılacaklar Listesi</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg bg-dark text-white p-2 sticky-top\">\n    <div class=\"container-fluid\">\n      <a class=\"navbar-brand me-3\" href=\"\">TODO</a>\n      <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarContent\"\n              aria-controls=\"navbarContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n      </button>\n\n      <div class=\"collapse navbar-collapse\" id=\"navbarContent\">\n        <div class=\"d-flex flex-grow-1\">\n          <ul class=\"navbar-nav me-auto\">\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-1\"></i>Görev Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-1\"></i>Görevlerim</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-people me-1\"></i>Biten Görevlerim</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userProfile\"><i class=\"bi bi-people me-1\"></i>Profilim</a>\n            </li>\n            {{#hasAdmin}}\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-1\"></i>Kullanıcı Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-1\"></i>Kullanıcılar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-people me-1\"></i>Loglar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-people me-1\"></i>Dashboard</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addCategory\"><i class=\"bi bi-people me-1\"></i>Kategori Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#categoryList\"><i class=\"bi bi-people me-1\"></i>Kategoriler</a>\n            </li>\n            {{/hasAdmin}}\n          </ul>\n          {{^verified}}\n          <a class=\"nav-link\" href=\"#\" onclick=\"sendVerificationEmail()\"><i class=\"bi bi-people me-1\"></i>Onayla</a>\n          {{/verified}}\n\n          <div class=\"user-info\">\n            <span>{{user.displayName}} <small class=\"text-white-50\">| {{user.username}}</small></span>\n            <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n          </div>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <div class=\"container py-4\">\n    <div class=\"row\">\n      <div class=\"col-lg-10 mx-auto\">\n        <div id=\"contentContainer\" class=\"card\">\n          <div class=\"card-body p-4\">\n\n            <div class=\"text-center py-5\">\n              <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n              <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n\n  <script>\n    const userEmail  = \"{{user.email}}\";\n    const sendVerificationEmail = async () => {\n    try{\n        const res = await fetch (\"/api/verifyUser\",{\n            method : \"POST\",\n            headers : {\n            \"Content-Type\" : \"application/json\"\n            },\n            body : JSON.stringify({email : userEmail })\n        });\n        if (!res.ok){\n          throw new Error(res.status);\n          }\n            \n          const data = await res.json();\n          console.log(data)\n          alert(\"Lütfen MAİLİNİZİ KONTROL EDİNİZ\")\n    } catch (error){\n        alert(\"Bir Hata oluştu\")\n        window.location = \"/\"\n    }\n  }\n  \n  \n  </script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
         "output": "str",
         "x": 640,
         "y": 400,
         "wires": [
             [
-                "1b9146e8d8077382"
+                "1b9146e8d8077382",
+                "9874f510a528531d"
             ]
         ]
     },
@@ -714,6 +715,23 @@
         ]
     },
     {
+        "id": "9874f510a528531d",
+        "type": "debug",
+        "z": "d8112b18e3794244",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 340,
+        "wires": []
+    },
+    {
         "id": "0ac019b8f42518dc",
         "type": "http response",
         "z": "7357fc440e36aebb",
@@ -729,7 +747,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 20",
-        "func": "msg.headers =  msg.headers || {};\n\nmsg.headers[\"Set-Cookie\"] = [\n    'accessToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n    'refreshToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n]\nconst logData = {\n    action : \"logout\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"bilinmiyor\"\n}\n\nconst logResponse = {\n    payload : logData\n}\n\n\nreturn [msg,logResponse]",
+        "func": "msg.headers =  msg.headers || {};\n\nmsg.headers[\"Set-Cookie\"] = [\n    'accessToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n    'refreshToken=; HttpOnly; Secure; Path=/; Max-Age=0',\n]\nconst logData = {\n    action : \"logout\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toLocaleString(\"TR\"),\n    ip : msg.req?.ip || \"bilinmiyor\"\n}\n\nconst logResponse = {\n    payload : logData\n}\n\n\nreturn [msg,logResponse]",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -919,7 +937,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "db.todo.opt()",
-        "func": "const date = new Date()\nconst now = date.getTime()\nlet category = null;\nif (msg.payload) {\n    category = msg.payload\n}\n\nconst logData = {\n    action: msg.req?.params.type || \"boş\",\n    user: msg.user?.email || \"\",\n    timestamp: new Date().toISOString(),\n    ip: msg.req?.ip || \"bilinmiyor\"\n}\nconst msgForLog = {\n    payload: logData\n}\nlet done = null;\nif (msg.formData.due_date < date.toISOString() + 24 * 60 * 60 * 1000){\n    done = true;\n} else {\n    done = false\n}\n\nconst due_date = new Date(msg.formData.due_date)\n\nif (msg.req.params.type === \"add\") {\n    const insertQuery = {\n        id: now,\n        name: msg.formData.name,\n        done: done,\n        priority: msg.formData.priority,\n        due_date: due_date,\n        categoryId: category._id,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: msg.user.username || \"\",\n            email: msg.user.email || \"\",\n        },\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\")\n    } \n    msg.payload = insertQuery\n    return [msg, null, msgForLog]\n}\n\n\n\n\n\nlet query = {\n    _id: msg.formData._id\n}\nmsg.payload = [query];\n\n\n\nreturn [null, msg, msgForLog]\n\n\n\n\n",
+        "func": "const date = new Date()\nconst now = date.getTime()\nlet category = null;\nif (msg.payload) {\n    category = msg.payload\n}\n\nconst logData = {\n    action: msg.req?.params.type || \"boş\",\n    user: msg.user?.email || \"\",\n    timestamp: new Date().toLocaleString(\"TR\"),\n    ip: msg.req?.ip || \"bilinmiyor\"\n}\nconst msgForLog = {\n    payload: logData\n}\nlet done = null;\nif (msg.formData.due_date < date.toISOString() + 24 * 60 * 60 * 1000){\n    done = true;\n} else {\n    done = false\n}\n\nconst due_date = new Date(msg.formData.due_date)\n\nif (msg.req.params.type === \"add\") {\n    const insertQuery = {\n        id: now,\n        name: msg.formData.name,\n        done: done,\n        priority: msg.formData.priority,\n        due_date: due_date,\n        categoryId: category._id,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: msg.user.username || \"\",\n            email: msg.user.email || \"\",\n        },\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\")\n    } \n    msg.payload = insertQuery\n    return [msg, null, msgForLog]\n}\n\n\n\n\n\nlet query = {\n    _id: msg.formData._id\n}\nmsg.payload = [query];\n\n\n\nreturn [null, msg, msgForLog]\n\n\n\n\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -1725,7 +1743,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "db.user.opt()",
-        "func": "const date = new Date()\nconst now = date.getTime()\n\n\nconst logData = {\n    action : msg.req.params?.type || \"bilinmiyor\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req.ip ||\"bilinmiyor\"   \n}\nconst msgForLog = {\n    payload : logData\n}\n\nif (msg.req.params.type === \"add\") {\n    msg.payload = {\n        _id: now,\n        active: true,\n        validated : false,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: \"\",\n            email: \"\",\n        },\n        roles : [\"user\"],\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\"),\n        // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n        ...msg.formData // destructing\n    };\n    return [msg,msgForLog]\n}\nmsg.payload = [{    \n    _id : parseInt(msg.formData._id)\n}] \n\nreturn [null,msg,msgForLog]\n\n\n\n\n\n",
+        "func": "const date = new Date()\nconst now = date.getTime()\n\n\nconst logData = {\n    action : msg.req.params?.type || \"bilinmiyor\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toLocaleString(\"TR\"),\n    ip : msg.req.ip ||\"bilinmiyor\"   \n}\nconst msgForLog = {\n    payload : logData\n}\n\nif (msg.req.params.type === \"add\") {\n    msg.payload = {\n        _id: now,\n        active: true,\n        validated : false,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: \"\",\n            email: \"\",\n        },\n        roles : [\"user\"],\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\"),\n        // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n        ...msg.formData // destructing\n    };\n    return [msg,msgForLog]\n}\nmsg.payload = [{    \n    _id : parseInt(msg.formData._id)\n}] \n\nreturn [null,msg,msgForLog]\n\n\n\n\n\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -2150,7 +2168,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 52",
-        "func": "let query = msg.user.roles.includes(\"admin\") ? {\"done\" : true} : {\n    \"stamp.username\" : msg.user.username\n}\n\nmsg.payload = [[\n    {\n        $match : query\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    }\n]]\n\n\nreturn msg;",
+        "func": "let query = msg.user.roles.includes(\"admin\") ? {\"done\" : true} : {\n    \"stamp.username\" : msg.user.username,\n    'done' : true\n}\n\nmsg.payload = [[\n    {\n        $match : query\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    }\n]]\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2309,11 +2327,11 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 200,
+        "x": 140,
         "y": 1920,
         "wires": [
             [
-                "9f6dd865d60aa3ea"
+                "af683b3ffe9bb9d2"
             ]
         ]
     },
@@ -2322,14 +2340,14 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 61",
-        "func": "const type = msg.req.params.type\nconst now = new Date()\nif (![\"add\",\"update\",\"delete\"].includes(type)){\n    msg.payload = {\n        success : false,\n        error : \"Geçersiz İşlem\"\n    }\n    return [null,msg]\n}\n\nif (type === \"add\" && msg.payload?.name){\n    msg.payload = {\n        name : msg.payload.name,\n        stamps : {\n            createdAt : now\n        }\n    }\n    return [msg,null,null]\n}\n\nif (type === \"update\" || type === \"delete\"){\n    msg.payload = {\n        _id : msg.payload._id\n    }\n}\n\nreturn [null,msg,null]",
-        "outputs": 3,
+        "func": "const type = msg.req.params.type\nconst now = new Date()\nif (![\"add\",\"update\",\"delete\"].includes(type)){\n    msg.payload = {\n        success : false,\n        error : \"Geçersiz İşlem\"\n    }\n    return [null,msg]\n}\n\nconst logData = {\n    action : \"Category/\"+msg.req.params.type,\n    user : msg.user?.email || \"Bilinmiyor\",\n    timestamp : new Date().toLocaleString(\"TR\"),\n    ip : msg.req.ip\n}\n\nconst msgForLog = {\n    payload : logData\n}\n\nif (type === \"add\" && msg.payload?.name){\n    msg.payload = {\n        name : msg.payload.name,\n        stamps : {\n            createdAt : now\n        }\n    }\n    return [msg,null,null,msgForLog]\n}\n\nif (type === \"update\" || type === \"delete\"){\n    msg.payload = {\n        _id : msg.payload._id\n    }\n}\n\nreturn [null,msg,null,msgForLog]",
+        "outputs": 4,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
+        "x": 530,
         "y": 1920,
         "wires": [
             [
@@ -2340,6 +2358,9 @@
             ],
             [
                 "9cb0fec2e36beb31"
+            ],
+            [
+                "2dd1603ce7baf7c1"
             ]
         ]
     },
@@ -2361,8 +2382,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 703,
-        "y": 2011.0002269744873,
+        "x": 790,
+        "y": 2000,
         "wires": []
     },
     {
@@ -2377,8 +2398,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 633,
-        "y": 1851.0002269744873,
+        "x": 660,
+        "y": 1840,
         "wires": [
             [
                 "852a76ce607083f3"
@@ -2394,8 +2415,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 823,
-        "y": 1851.0002269744873,
+        "x": 850,
+        "y": 1840,
         "wires": []
     },
     {
@@ -2410,7 +2431,7 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 700,
+        "x": 760,
         "y": 1920,
         "wires": [
             [
@@ -2493,7 +2514,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 63",
-        "func": "msg.payload = msg.payload.map(todo => {\n    if (!(\"completedDate\" in todo)){\n        todo.completedDate = new Date(todo.due_date).toLocaleDateString(\"TR\")\n    }\n    return todo\n})\n\nreturn msg;",
+        "func": "msg.payload = msg.payload.map(todo => {\n    if (!(\"completedDate\" in todo)){\n        todo.completedDate = new Date(todo.due_date).toLocaleDateString(\"TR\")\n    }\n    \n    return todo\n})\nmsg.payload = {\n    data : msg.payload,\n    count: msg.payload.length\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2540,7 +2561,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 65",
-        "func": "const verifyToken = Math.floor(Math.random() * (+99999 + 1 - +10000)) + +10000\nconst expireAt = new Date(Date.now() + 3 * 60 * 1000)\nmsg.otp = verifyToken\nmsg.email = msg.payload.email\nmsg.payload= {\n    email : msg.payload.email,\n    verifyToken,\n    expireAt : expireAt,\n    ip : msg.req.ip,\n    createdAt : new Date()\n}\n\nreturn msg;",
+        "func": "const verifyToken = Math.floor(100000 + Math.random() * 900000);\nconst expireAt = new Date(Date.now() + 3 * 60 * 1000)\nmsg.otp = verifyToken\nmsg.email = msg.payload.email\nmsg.payload= {\n    email : msg.payload.email,\n    verifyToken,\n    expireAt : expireAt,\n    ip : msg.req.ip,\n    createdAt : new Date()\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2835,6 +2856,612 @@
                 "3605e5f5619f8070"
             ]
         ]
+    },
+    {
+        "id": "2dd1603ce7baf7c1",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "logs",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 660,
+        "y": 2080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "af683b3ffe9bb9d2",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "x": 370,
+        "y": 1920,
+        "wires": [
+            [
+                "9f6dd865d60aa3ea"
+            ],
+            [
+                "9f6dd865d60aa3ea"
+            ]
+        ]
+    },
+    {
+        "id": "b056b2886304019b",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/userProfile",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 2520,
+        "wires": [
+            [
+                "fa9c5c96f2c0c8a1",
+                "c3af4d7d8f704dad"
+            ]
+        ]
+    },
+    {
+        "id": "fa9c5c96f2c0c8a1",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "x": 410,
+        "y": 2520,
+        "wires": [
+            [
+                "111d63a2c6ca8852",
+                "8c8f3d11c9fadfc0"
+            ],
+            [
+                "111d63a2c6ca8852"
+            ]
+        ]
+    },
+    {
+        "id": "111d63a2c6ca8852",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 71",
+        "func": "msg.payload = {\n    username : msg.user.username\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 2520,
+        "wires": [
+            [
+                "2b935d13f9e54ce4",
+                "acfd3569694eca8a"
+            ]
+        ]
+    },
+    {
+        "id": "2b935d13f9e54ce4",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 820,
+        "y": 2520,
+        "wires": [
+            [
+                "ac62647dd6c82436",
+                "b078825b2ae1772d"
+            ]
+        ]
+    },
+    {
+        "id": "6688fe77e474fb1e",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1510,
+        "y": 2520,
+        "wires": []
+    },
+    {
+        "id": "ac62647dd6c82436",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 72",
+        "func": "msg.payload = {\n    user_id : msg.payload._id\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 2520,
+        "wires": [
+            [
+                "fbecabf81d704407",
+                "ad562f28a117a33a"
+            ]
+        ]
+    },
+    {
+        "id": "fbecabf81d704407",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1180,
+        "y": 2520,
+        "wires": [
+            [
+                "7d28595e59726b7e",
+                "e6de6db2c2b06cdc"
+            ]
+        ]
+    },
+    {
+        "id": "7d28595e59726b7e",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 73",
+        "func": "msg.payload ={\n    success : true,\n    userProf : msg.payload,\n    userInf : msg.user\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1350,
+        "y": 2520,
+        "wires": [
+            [
+                "6688fe77e474fb1e",
+                "922ece84bf777424"
+            ]
+        ]
+    },
+    {
+        "id": "90bf36d7d3777e37",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/updateBio",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 2780,
+        "wires": [
+            [
+                "8d93f4da80486858"
+            ]
+        ]
+    },
+    {
+        "id": "8d93f4da80486858",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 74",
+        "func": "const userprof_id = msg.payload.userprof_id\nmsg.bio = msg.payload.bio;\nmsg.payload = {\n    _id : userprof_id\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 2780,
+        "wires": [
+            [
+                "b70c084830430e76"
+            ]
+        ]
+    },
+    {
+        "id": "7493c4eaba1edf57",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1410,
+        "y": 2780,
+        "wires": []
+    },
+    {
+        "id": "b70c084830430e76",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 660,
+        "y": 2780,
+        "wires": [
+            [
+                "36af71dac92f2255"
+            ]
+        ]
+    },
+    {
+        "id": "36af71dac92f2255",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 76",
+        "func": "node.warn((typeof msg.payload._id));\nconst bio = msg.bio\nconst id = msg.payload.user_id\nmsg.payload = [\n    { user_id: id },\n{\n    $set: {\n        bio: bio\n    }\n}\n]\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 2780,
+        "wires": [
+            [
+                "2de1fbcb86ba087d"
+            ]
+        ]
+    },
+    {
+        "id": "2de1fbcb86ba087d",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "updateOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 1190,
+        "y": 2780,
+        "wires": [
+            [
+                "7493c4eaba1edf57"
+            ]
+        ]
+    },
+    {
+        "id": "3736271ab3d377e3",
+        "type": "comment",
+        "z": "7357fc440e36aebb",
+        "name": "ÖNEMLİ!!! SOR",
+        "info": "updateOne gönderirken id ile gönderidğimde hata alıyorum user_id ile yaptım bnu sor",
+        "x": 770,
+        "y": 2860,
+        "wires": []
+    },
+    {
+        "id": "5fba918fd704698c",
+        "type": "comment",
+        "z": "7357fc440e36aebb",
+        "name": "ÖNEMLİ",
+        "info": "VERİFYDAN SONRA NEDEN VERİFY KALIYOR ONU SOR",
+        "x": 550,
+        "y": 2860,
+        "wires": []
+    },
+    {
+        "id": "6ba6bb8803a036d3",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/updateLocation",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 2980,
+        "wires": [
+            [
+                "8dbfe2899eacad4e"
+            ]
+        ]
+    },
+    {
+        "id": "8dbfe2899eacad4e",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 75",
+        "func": "msg.location = msg.payload.location;\nmsg.payload = {\n    _id : msg.payload.userprof_id\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 2980,
+        "wires": [
+            [
+                "549d07a035233786"
+            ]
+        ]
+    },
+    {
+        "id": "549d07a035233786",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 710,
+        "y": 2980,
+        "wires": [
+            [
+                "342855bd6524a484"
+            ]
+        ]
+    },
+    {
+        "id": "342855bd6524a484",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 77",
+        "func": "const location = msg.location\nconst user_id = msg.payload.user_id\nmsg.payload = [\n    { user_id : user_id},\n    {\n        $set : {\n        location : location\n        }\n    }\n]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 2980,
+        "wires": [
+            [
+                "d3029d3c1cf2e8ac"
+            ]
+        ]
+    },
+    {
+        "id": "d3029d3c1cf2e8ac",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "updateOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1110,
+        "y": 2980,
+        "wires": [
+            [
+                "fe37c9901b77ca56"
+            ]
+        ]
+    },
+    {
+        "id": "fe37c9901b77ca56",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 2980,
+        "wires": []
+    },
+    {
+        "id": "c3af4d7d8f704dad",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "8c8f3d11c9fadfc0",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590.2857055664062,
+        "y": 2465.4287109375,
+        "wires": []
+    },
+    {
+        "id": "acfd3569694eca8a",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "b078825b2ae1772d",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "ad562f28a117a33a",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "e6de6db2c2b06cdc",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1320,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "922ece84bf777424",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1520,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "29e725ac8d9a80e9",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/updateImage",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 3100,
+        "wires": [
+            [
+                "bf4b693d82e43ce5",
+                "b8be254c43688202"
+            ]
+        ]
+    },
+    {
+        "id": "bf4b693d82e43ce5",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 78",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 3100,
+        "wires": [
+            [
+                "8e4c685f5979bded"
+            ]
+        ]
+    },
+    {
+        "id": "8e4c685f5979bded",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 3100,
+        "wires": []
+    },
+    {
+        "id": "b8be254c43688202",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 3060,
+        "wires": []
     },
     {
         "id": "ea92999f30f3cd81",
@@ -3529,7 +4156,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n</head>\n<body>\n    \n    <div id=\"demo\" class=\"display\" style=\"width:100%\">\n    <table id=\"completedTodos\" class=\"display\" style=\"width:100%\">\n        <thead>\n            <tr>\n            </tr>\n        </thead>\n        <tbody>\n            <!-- Veriler JS ile yüklenecek -->\n        </tbody>\n    </table>\n</div>\n\n\n</body>\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n</head>\n<body>\n\n    <div id=\"demo\" class=\"display\" style=\"width:100%\">\n    <p id=\"todoCount\"> </p>\n    <table id=\"completedTodos\" class=\"display\" style=\"width:100%\">\n        <thead>\n            <tr>\n            </tr>\n        </thead>\n        <tbody>\n            <!-- Veriler JS ile yüklenecek -->\n        </tbody>\n    </table>\n</div>\n\n\n</body>\n</html>",
         "output": "str",
         "x": 980,
         "y": 280,
@@ -3796,6 +4423,89 @@
         "wires": []
     },
     {
+        "id": "8e4b4fa9ea6ac7e1",
+        "type": "http in",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "url": "/userProfile",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 1060,
+        "wires": [
+            [
+                "d714d5e3d6f7281f",
+                "49db7cd365c5a0ec"
+            ]
+        ]
+    },
+    {
+        "id": "d714d5e3d6f7281f",
+        "type": "template",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n    <link  rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <style>\n    .profile-container {\n      max-width: 600px;\n      margin: 50px auto;\n      padding: 30px;\n      background: #fff;\n      border-radius: 15px;\n      box-shadow: 0 4px 12px rgba(0,0,0,0.1);\n    }\n    .profile-img {\n      width: 150px;\n      height: 150px;\n      object-fit: cover;\n      border-radius: 50%;\n      border: 4px solid #007bff;\n    }\n  </style>\n</head>\n<body class=\"bg-light\">\n\n  <div class=\"container\">\n    <div class=\"profile-container text-center\">\n      <div id=\"profile-img-wrapper\">\n        <img src=\"#\" alt=\"Profile Image\" class=\"profile-img mb-3\" id=\"profile-img\">\n      </div>\n      <h2 id=\"profile-name\"></h2>\n      <div class=\"text-muted\" id=\"profile-bio\"></div>\n\n      <div class=\"d-flex justify-content-center mt-4\">\n        <div class=\"text-center mx-4\">\n          <h6 class=\"text-uppercase text-muted\">Location</h6>\n          <div id=\"profile-location\"></div>\n        </div>\n        <div class=\"text-center mx-4\">\n          <h6 class=\"text-uppercase text-muted\">Joined</h6>\n          <p id=\"profile-created\">Date</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</body>\n</html>",
+        "output": "str",
+        "x": 330,
+        "y": 1060,
+        "wires": [
+            [
+                "61dfe26e168310de",
+                "a392e71d2f1cc6e3"
+            ]
+        ]
+    },
+    {
+        "id": "61dfe26e168310de",
+        "type": "http response",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 500,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "49db7cd365c5a0ec",
+        "type": "debug",
+        "z": "9a024a21c0703f56",
+        "name": "debug 20",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "a392e71d2f1cc6e3",
+        "type": "debug",
+        "z": "9a024a21c0703f56",
+        "name": "debug 21",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 1000,
+        "wires": []
+    },
+    {
         "id": "a4154678a5e0e0cc",
         "type": "http in",
         "z": "a494dcc6cc32ec33",
@@ -3905,7 +4615,7 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 3",
-        "func": "const refresh = msg.payload\nmsg.payload = {\n    success: true,\n    accessToken : msg.token,\n    refreshToken : refresh\n    \n};\n\nconst logData = {\n    action : \"login\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"ip yok\"\n}\nconst msgForLog = {\n    payload : logData\n};\n\nmsg.headers = msg.headers || {}; // headers yoksa boş obje atadik \nmsg.headers['Set-Cookie'] = [     // headers içine set-cookie koyduk\n    `accessToken=${msg.payload.accessToken}; HttpOnly; Secure; Path=/; Max-age=3600`,\n    `refreshToken=${msg.payload.refreshToken}; HttpOnly; Secure; Path=/; Max-Age=604800`\n    ]\n// HTTPonly olarak saklanır javascript kodları ile erişilemez\n// Secure : cookienin saedece https üzerinden gönderilmesini sağlar\n// path : =/ sitenin ana sayfası ve alt sayfalarında geçerli\n// max age geçerlilik süresi \n\nreturn [msg,msgForLog];\n",
+        "func": "const refresh = msg.payload\nmsg.payload = {\n    success: true,\n    accessToken : msg.token,\n    refreshToken : refresh\n    \n};\n\nconst logData = {\n    action : \"login\",\n    user : msg.user?.email || \"bilinmiyor\",\n    timestamp : new Date().toLocaleString(\"TR\"),\n    ip : msg.req?.ip || \"ip yok\"\n}\nconst msgForLog = {\n    payload : logData\n};\n\nmsg.headers = msg.headers || {}; // headers yoksa boş obje atadik \nmsg.headers['Set-Cookie'] = [     // headers içine set-cookie koyduk\n    `accessToken=${msg.payload.accessToken}; HttpOnly; Secure; Path=/; Max-age=3600`,\n    `refreshToken=${msg.payload.refreshToken}; HttpOnly; Secure; Path=/; Max-Age=604800`\n    ]\n// HTTPonly olarak saklanır javascript kodları ile erişilemez\n// Secure : cookienin saedece https üzerinden gönderilmesini sağlar\n// path : =/ sitenin ana sayfası ve alt sayfalarında geçerli\n// max age geçerlilik süresi \n\nreturn [msg,msgForLog];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -4091,8 +4801,8 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "function 19",
-        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload){\n    msg.payload = {\n        success:false,\n        error : \"Kullanıcı Adı veya email zaten kullanılıyor\"\n    }\n    return [null, msg];  // hata çıkışı\n}\n\nconst logData = {\n    action : \"register\",\n    user : msg.formData?.email || \"bilinmiyor\",\n    timestamp : new Date().toISOString(),\n    ip : msg.req?.ip || \"\"\n}\n\nmsg.payload = {\n    _id: now,\n    username : msg.formData.username,\n    email : msg.formData.email,\n    displayName : msg.formData.displayName,\n    password : msg.formData.password,\n    active: true,\n    validated : false,\n    stamp: {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.formData.username || \"\",\n        email: msg.formData.email || \"\",\n    },\n    roles: [\"user\"],\n    date: date.toLocaleDateString(\"TR\"),\n    time: date.toLocaleTimeString(\"TR\"),\n    // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n};\n\nconst msgForLog = {\n    payload : logData\n}\n\nreturn [msg,null,msgForLog];",
-        "outputs": 3,
+        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload){\n    msg.payload = {\n        success:false,\n        error : \"Kullanıcı Adı veya email zaten kullanılıyor\"\n    }\n    return [null, msg];  // hata çıkışı\n}\n\nconst logData = {\n    action : \"register\",\n    user : msg.formData?.email || \"bilinmiyor\",\n    timestamp : new Date().toLocaleString(\"TR\"),\n    ip : msg.req?.ip || \"\"\n}\n\nmsg.payload = {\n    _id: now,\n    username : msg.formData.username,\n    email : msg.formData.email,\n    displayName : msg.formData.displayName,\n    password : msg.formData.password,\n    active: true,\n    validated : false,\n    stamp: {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.formData.username || \"\",\n        email: msg.formData.email || \"\",\n    },\n    roles: [\"user\"],\n    date: date.toLocaleDateString(\"TR\"),\n    time: date.toLocaleTimeString(\"TR\"),\n    // eğer başka bir veri varsa bunlarıda ekle dedik password mesela direkt eklenicek\n};\n\nconst userProfileSettings = {\n    user_id : msg.payload._id,\n    profile_img : \"default.png\",\n    bio : \"\",\n    location : \"\",\n    stamps : {\n        createdAt : now,\n        ip : msg.req.ip\n    }\n}\nconst msgForUserProfile = {\n    payload : userProfileSettings\n}\n\nconst msgForLog = {\n    payload : logData\n}\n\nreturn [msg,null,msgForLog,msgForUserProfile];",
+        "outputs": 4,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -4109,6 +4819,9 @@
             ],
             [
                 "5072ed37a8752a0a"
+            ],
+            [
+                "59c28a75128d1d51"
             ]
         ]
     },
@@ -4121,8 +4834,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1283.25,
-        "y": 532.9999809265137,
+        "x": 1270,
+        "y": 460,
         "wires": []
     },
     {
@@ -4155,8 +4868,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1143.25,
-        "y": 592.9999809265137,
+        "x": 1130,
+        "y": 540,
         "wires": []
     },
     {
@@ -4223,8 +4936,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1113.25,
-        "y": 532.9999809265137,
+        "x": 1080,
+        "y": 460,
         "wires": [
             [
                 "5e99b1bb4e1f9782"
@@ -4437,8 +5150,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 1023.25,
-        "y": 652.9999809265137,
+        "x": 1140,
+        "y": 600,
         "wires": [
             []
         ]
@@ -5153,8 +5866,8 @@
         "z": "a494dcc6cc32ec33",
         "name": "BURDAKİ KARIŞIKLILIĞI DÜZELT",
         "info": "",
-        "x": 884,
-        "y": 919.0000767707825,
+        "x": 880,
+        "y": 920,
         "wires": []
     },
     {
@@ -5186,6 +5899,24 @@
         "x": 880,
         "y": 1840,
         "wires": []
+    },
+    {
+        "id": "59c28a75128d1d51",
+        "type": "mongodb4",
+        "z": "a494dcc6cc32ec33",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1120,
+        "y": 660,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "a74d907a106e924b",

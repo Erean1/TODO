@@ -27,8 +27,8 @@ class DashboardController {
       }
       const data = await res.json();
       document.getElementById("totalTodos").textContent += `Toplam Todo Sayısı : ${JSON.stringify(data.todos)} `
-      document.getElementById("completedTodos").textContent += `Tamamlanan Todo Sayısı : ${JSON.stringify(data.unCompletedTodos)} `
-      document.getElementById("uncompletedTodos").textContent += `Tamamlanmayan Todo Sayısı : ${JSON.stringify(data.completedTodos)} `
+      document.getElementById("completedTodos").textContent += `Tamamlanan Todo Sayısı : ${JSON.stringify(data.completedTodos)} `
+      document.getElementById("uncompletedTodos").textContent += `Tamamlanmayan Todo Sayısı : ${JSON.stringify(data.unCompletedTodos)} `
     } catch(error){
       console.error(error)
     }

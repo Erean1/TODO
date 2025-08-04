@@ -54,6 +54,7 @@ export async function loadTable(type, dataType) {
       },
     });
   } else if (dataType === "completedTodos") {
+    document.getElementById("todoCount").innerText = `Tamamlanan Görev Sayısı : ${datas.count}`
     tableJson.columns.push({
       data: null,
       title: "işlemler",

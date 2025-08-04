@@ -4,15 +4,15 @@
     {
       "type": "text",
       "name": "name",
-      "title": "Yeni Görev Ekle",
+      "title": "Kategori İsmi",
       "isRequired": true,
-      "placeHolder": "Planın Nedir?",
+      "placeHolder": "Kategori İsmi",
       "requiredErrorText" : "Lütfen Doldurunuz",
       "validators": [
         {
           "type": "regex",
           "regex": "\\S+",
-          "text": "Lütfen geçerli bir görev girin"
+          "text": "Lütfen geçerli bir kategori girin"
         }
       ]
     }
