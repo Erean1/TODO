@@ -5,20 +5,16 @@ class userProfilePage {
     this.data = null;
   }
 
-  async getDatas() {
+  async fetchUserProfileData() {
     const res = await fetch("/api/userProfile");
     const dataJson = await res.json();
     console.log(dataJson);
     this.data = dataJson;
   }
-  async getPartials() {
+  async loadUserProfileHTML() {
     const res = await fetch("/userProfile");
     const html = await res.text();
-    if (this.data.userInf.validated === false) {
-      alert("Lütfen hesabınızı onaylayınız");
-      window.location = "/";
-      return;
-    }
+
     this.content.innerHTML = html;
   }
   async updateBio() {
@@ -98,7 +94,7 @@ class userProfilePage {
     };
   }
 
-  async loadContent() {
+  async loadPageContent() {
     //bioDiv
     const biodiv = document.createElement("div");
     biodiv.className = "d-flex align-center";
@@ -144,62 +140,84 @@ class userProfilePage {
     locationdiv.appendChild(locationb);
     location.appendChild(locationdiv);
 
-    // profile-img 
+    // profile-img
     const profileImgDiv = document.createElement("div");
-    const profileImg = document.getElementById("profile-img")
-    const profileImgWrapper = document.getElementById("profile-img-wrapper")
+    const profileImg = document.getElementById("profile-img");
+    const profileImgWrapper = document.getElementById("profile-img-wrapper");
     const profileButton = document.createElement("input");
-    profileButton.innerText = "Güncelle"
+    profileButton.innerText = "Güncelle";
     profileButton.type = "file";
-    profileButton.accept = ".jpg,.jpeg,.png"
-    profileButton.style.display = "none"
-    profileImg.src = this.data.userProf?.img || "../img/default_profile.jpeg";
+    profileButton.accept = ".jpg,.jpeg,.png";
+    profileButton.style.display = "none";
+    profileImg.src =
+      this.data.userProf?.profile_img || "../img/default_profile.jpeg";
 
+    profileImgWrapper.appendChild(profileButton);
 
-    profileImgWrapper.appendChild(profileButton)
+    const uploadImageText = document.createElement("p");
 
-    const customBtn = document.createElement("button");
-    customBtn.innerText = "Profile Fotoğrafı Seç"
-    customBtn.onclick = () => profileButton.click()
-    profileImgWrapper.appendChild(customBtn)
+    profileImg.onclick = () => profileButton.click();
+    profileImgWrapper.appendChild(uploadImageText);
 
-    profileButton.addEventListener("change",async(e) => {
-      console.log(e)
+    profileButton.addEventListener("change", async (e) => {
       const file = e.target.files[0];
 
-      const formData = new FormData();
-    
-      formData.append("profileImage",file)
-      formData.append("userprof_id",this.data.userProf._id)
       if (!file) return;
-      await this.loadImage(formData)
-    })
 
+      const reader = new FileReader();
+
+      reader.onloadend = async () => {
+        const base64data = reader.result.split(",")[1];
+
+        const body = {
+          filename: file.name,
+          mimetpye: file.type,
+          userprof_id: this.data.userProf._id,
+          data: base64data,
+        };
+        await this.loadImage(body);
+      };
+      reader.readAsDataURL(file);
+    });
 
     // date
     const dateField = document.getElementById("profile-created");
     dateField.innerText = new Date(
       this.data.userProf.stamps.createdAt
     ).toLocaleString("tr-TR");
+
+    // completedTasks - unCompletedTasks
+
+    const completedTasksF = document.getElementById("profile-completedTasks");
+    completedTasksF.innerText = this.data.userStats.completedTasks.length;
+
+    const unCompletedTasksF = document.getElementById(
+      "profile-unCompletedTasks"
+    );
+    unCompletedTasksF.innerText = this.data.userStats?.unCompletedTasks.length;
   }
-  async loadImage(formData) {
-    const res = await fetch("/api/updateImage",{
-      method : "POST",
-      headers : {"Content-Type" :"application/json"},
-      body : formData
-    })
-    await this.loadPage()
+  async loadImage(body) {
+    const res = await fetch("/api/updateImage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    await this.loadPage();
   }
 
   async init() {
-    await this.getDatas();
-    await this.getPartials();
+    await this.fetchUserProfileData();
+    if (this.data.userInf.validated === false) {
+      alert("Lütfen hesabınızı onaylayınız");
+      window.location = "/";
+      return;
+    }
+    await this.loadUserProfileHTML();
     if (this.data.userProf.bio === "") {
       await this.updateBio();
     } else if (this.data.userProf.bio !== "") {
-      this.loadContent();
+      this.loadPageContent();
     }
-
   }
 }
 

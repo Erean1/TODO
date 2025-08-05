@@ -187,7 +187,8 @@
         "wires": [
             [],
             [
-                "566d6dcd7935c4ef"
+                "566d6dcd7935c4ef",
+                "6c306362d03fdc8d"
             ]
         ]
     },
@@ -411,6 +412,23 @@
         "wires": []
     },
     {
+        "id": "6c306362d03fdc8d",
+        "type": "debug",
+        "z": "85ff2d8e203f5bb5",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 300,
+        "wires": []
+    },
+    {
         "id": "a37416cd213494af",
         "type": "function",
         "z": "db78b07eb18119f0",
@@ -487,8 +505,7 @@
         "y": 400,
         "wires": [
             [
-                "1b9146e8d8077382",
-                "9874f510a528531d"
+                "1b9146e8d8077382"
             ]
         ]
     },
@@ -713,23 +730,6 @@
                 "076fdfc277051bda"
             ]
         ]
-    },
-    {
-        "id": "9874f510a528531d",
-        "type": "debug",
-        "z": "d8112b18e3794244",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 800,
-        "y": 340,
-        "wires": []
     },
     {
         "id": "0ac019b8f42518dc",
@@ -2679,7 +2679,7 @@
         "headers": {
             "location": "/"
         },
-        "x": 1810,
+        "x": 1730,
         "y": 2300,
         "wires": []
     },
@@ -2802,7 +2802,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 70",
-        "func": "msg.headers = msg.headers || {}\nmsg.statusCode = 302\nmsg.headers.location = \"/\"\nreturn msg;",
+        "func": "delete msg.req.cookies.accessToken\nmsg.headers = msg.headers || {};\nmsg.statusCode = 302;\nmsg.headers.location = \"/\"\nmsg.headers['Set-Cookie'] = [\n    'accessToken=; HttpOnly; Path=/; Max-Age=0'\n ]\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2904,8 +2904,7 @@
         "y": 2520,
         "wires": [
             [
-                "fa9c5c96f2c0c8a1",
-                "c3af4d7d8f704dad"
+                "fa9c5c96f2c0c8a1"
             ]
         ]
     },
@@ -2918,8 +2917,7 @@
         "y": 2520,
         "wires": [
             [
-                "111d63a2c6ca8852",
-                "8c8f3d11c9fadfc0"
+                "111d63a2c6ca8852"
             ],
             [
                 "111d63a2c6ca8852"
@@ -2942,8 +2940,7 @@
         "y": 2520,
         "wires": [
             [
-                "2b935d13f9e54ce4",
-                "acfd3569694eca8a"
+                "2b935d13f9e54ce4"
             ]
         ]
     },
@@ -2963,8 +2960,7 @@
         "y": 2520,
         "wires": [
             [
-                "ac62647dd6c82436",
-                "b078825b2ae1772d"
+                "ac62647dd6c82436"
             ]
         ]
     },
@@ -2975,7 +2971,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1510,
+        "x": 1970,
         "y": 2520,
         "wires": []
     },
@@ -2995,8 +2991,7 @@
         "y": 2520,
         "wires": [
             [
-                "fbecabf81d704407",
-                "ad562f28a117a33a"
+                "fbecabf81d704407"
             ]
         ]
     },
@@ -3016,8 +3011,7 @@
         "y": 2520,
         "wires": [
             [
-                "7d28595e59726b7e",
-                "e6de6db2c2b06cdc"
+                "7d28595e59726b7e"
             ]
         ]
     },
@@ -3026,19 +3020,19 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 73",
-        "func": "msg.payload ={\n    success : true,\n    userProf : msg.payload,\n    userInf : msg.user\n}\nreturn msg;",
+        "func": "msg.userProf = msg.payload\nmsg.payload = [[\n    {\n        $match : {\n            \"stamp.username\": msg.user.username\n\n        }\n    }\n]]\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1350,
+        "x": 1390,
         "y": 2520,
         "wires": [
             [
-                "6688fe77e474fb1e",
-                "922ece84bf777424"
+                "51d04393f3949363",
+                "6def05d230866812"
             ]
         ]
     },
@@ -3161,16 +3155,6 @@
         "wires": []
     },
     {
-        "id": "5fba918fd704698c",
-        "type": "comment",
-        "z": "7357fc440e36aebb",
-        "name": "ÖNEMLİ",
-        "info": "VERİFYDAN SONRA NEDEN VERİFY KALIYOR ONU SOR",
-        "x": 550,
-        "y": 2860,
-        "wires": []
-    },
-    {
         "id": "6ba6bb8803a036d3",
         "type": "http in",
         "z": "7357fc440e36aebb",
@@ -3279,7 +3263,229 @@
         "wires": []
     },
     {
-        "id": "c3af4d7d8f704dad",
+        "id": "b81dc5193e073ece",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/updateImage",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 3240,
+        "wires": [
+            [
+                "99e123944c35d697"
+            ]
+        ]
+    },
+    {
+        "id": "99e123944c35d697",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 79",
+        "func": "msg.filename = msg.payload.filename\nmsg.mimetype = msg.payload.mimetpye\nmsg.userprof_id = msg.payload.userprof_id\n\nconst data =msg.payload.data\nconst base64data = data.replace(/^data:\\w+\\/\\w+;base64,/, '');\nconst buffer = Buffer.from(base64data,'base64')\nmsg.payload = buffer\nconst path = `www/images/${msg.filename}`;\nmsg.filepath = path;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 3240,
+        "wires": [
+            [
+                "272ed9fb41ac71ad"
+            ]
+        ]
+    },
+    {
+        "id": "453f5db6ba983aca",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1670,
+        "y": 3240,
+        "wires": []
+    },
+    {
+        "id": "272ed9fb41ac71ad",
+        "type": "file",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "filename": "filepath",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 700,
+        "y": 3240,
+        "wires": [
+            [
+                "d8048b18efe23960"
+            ]
+        ]
+    },
+    {
+        "id": "d8048b18efe23960",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 78",
+        "func": "msg.payload = {\n    _id : msg.userprof_id\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 3240,
+        "wires": [
+            [
+                "dacaba51e1041713"
+            ]
+        ]
+    },
+    {
+        "id": "dacaba51e1041713",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "findOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 1060,
+        "y": 3240,
+        "wires": [
+            [
+                "e0be3144751e4f7a"
+            ]
+        ]
+    },
+    {
+        "id": "e0be3144751e4f7a",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 80",
+        "func": "msg.payload = [\n    {user_id : msg.payload.user_id},\n    {\n        $set : {\n            profile_img : msg.filename.substring(3)\n        }\n    }\n]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 3240,
+        "wires": [
+            [
+                "1c7f779b0ad66981"
+            ]
+        ]
+    },
+    {
+        "id": "1c7f779b0ad66981",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "updateOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 1470,
+        "y": 3240,
+        "wires": [
+            [
+                "453f5db6ba983aca"
+            ]
+        ]
+    },
+    {
+        "id": "edb8d6e275d23247",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2123.71435546875,
+        "y": 2232.571533203125,
+        "wires": []
+    },
+    {
+        "id": "db47c71687b87b50",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 81",
+        "func": "let completedTasks = null\nlet unCompletedTasks = null\ncompletedTasks = msg.payload.filter(task => task.done === true)\nunCompletedTasks = msg.payload.filter(task => task.done === false)\nnode.warn(completedTasks)\n\nlet userStats = {\n    completedTasks,\n    unCompletedTasks\n}\n\n\nmsg.payload = {\n    success: true,\n    userProf: msg.userProf,\n    userInf: msg.user,\n    userStats\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1770,
+        "y": 2520,
+        "wires": [
+            [
+                "6688fe77e474fb1e"
+            ]
+        ]
+    },
+    {
+        "id": "51d04393f3949363",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "aggregate",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 1560,
+        "y": 2520,
+        "wires": [
+            [
+                "db47c71687b87b50",
+                "074edbc6428cb32e"
+            ]
+        ]
+    },
+    {
+        "id": "074edbc6428cb32e",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1640,
+        "y": 2480,
+        "wires": []
+    },
+    {
+        "id": "6def05d230866812",
         "type": "debug",
         "z": "7357fc440e36aebb",
         "name": "debug 2",
@@ -3291,176 +3497,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 340,
-        "y": 2460,
-        "wires": []
-    },
-    {
-        "id": "8c8f3d11c9fadfc0",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 590.2857055664062,
-        "y": 2465.4287109375,
-        "wires": []
-    },
-    {
-        "id": "acfd3569694eca8a",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 780,
-        "y": 2460,
-        "wires": []
-    },
-    {
-        "id": "b078825b2ae1772d",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 960,
-        "y": 2460,
-        "wires": []
-    },
-    {
-        "id": "ad562f28a117a33a",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1140,
-        "y": 2460,
-        "wires": []
-    },
-    {
-        "id": "e6de6db2c2b06cdc",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 7",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1320,
-        "y": 2460,
-        "wires": []
-    },
-    {
-        "id": "922ece84bf777424",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 8",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1520,
-        "y": 2460,
-        "wires": []
-    },
-    {
-        "id": "29e725ac8d9a80e9",
-        "type": "http in",
-        "z": "7357fc440e36aebb",
-        "name": "",
-        "url": "/api/updateImage",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 230,
-        "y": 3100,
-        "wires": [
-            [
-                "bf4b693d82e43ce5",
-                "b8be254c43688202"
-            ]
-        ]
-    },
-    {
-        "id": "bf4b693d82e43ce5",
-        "type": "function",
-        "z": "7357fc440e36aebb",
-        "name": "function 78",
-        "func": "\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 440,
-        "y": 3100,
-        "wires": [
-            [
-                "8e4c685f5979bded"
-            ]
-        ]
-    },
-    {
-        "id": "8e4c685f5979bded",
-        "type": "http response",
-        "z": "7357fc440e36aebb",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 630,
-        "y": 3100,
-        "wires": []
-    },
-    {
-        "id": "b8be254c43688202",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 22",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 400,
-        "y": 3060,
+        "x": 1460,
+        "y": 2440,
         "wires": []
     },
     {
@@ -3666,8 +3704,7 @@
         "y": 630.0001029968262,
         "wires": [
             [
-                "68fc941b50b09f07",
-                "19df57a499217159"
+                "68fc941b50b09f07"
             ]
         ]
     },
@@ -3680,8 +3717,7 @@
         "y": 630.0001029968262,
         "wires": [
             [
-                "afb4034377d9af0a",
-                "f1f27398705cb0b1"
+                "afb4034377d9af0a"
             ],
             [
                 "afb4034377d9af0a"
@@ -3704,8 +3740,7 @@
         "y": 620,
         "wires": [
             [
-                "e75b99079b04948b",
-                "4bd705b08468fd4a"
+                "e75b99079b04948b"
             ]
         ],
         "outputLabels": [
@@ -3728,8 +3763,7 @@
         "y": 577.0000267028809,
         "wires": [
             [
-                "56ad4649d1fcdf3c",
-                "b6092ad57585f0b1"
+                "56ad4649d1fcdf3c"
             ]
         ]
     },
@@ -3749,8 +3783,7 @@
         "y": 577.0000267028809,
         "wires": [
             [
-                "7c99d5ae6806d6c9",
-                "f32b95bfd9516c4e"
+                "7c99d5ae6806d6c9"
             ],
             [
                 "6a40e79f2bf105de"
@@ -3772,8 +3805,7 @@
         "y": 540.0001049041748,
         "wires": [
             [
-                "63a30b5a157b51ba",
-                "2c1bdb49cac66593"
+                "63a30b5a157b51ba"
             ]
         ]
     },
@@ -4321,108 +4353,6 @@
         "wires": []
     },
     {
-        "id": "19df57a499217159",
-        "type": "debug",
-        "z": "9a024a21c0703f56",
-        "name": "debug 23",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 280,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "f1f27398705cb0b1",
-        "type": "debug",
-        "z": "9a024a21c0703f56",
-        "name": "debug 24",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 565,
-        "y": 559,
-        "wires": []
-    },
-    {
-        "id": "4bd705b08468fd4a",
-        "type": "debug",
-        "z": "9a024a21c0703f56",
-        "name": "debug 25",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 740,
-        "y": 500,
-        "wires": []
-    },
-    {
-        "id": "b6092ad57585f0b1",
-        "type": "debug",
-        "z": "9a024a21c0703f56",
-        "name": "debug 26",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 940,
-        "y": 500,
-        "wires": []
-    },
-    {
-        "id": "f32b95bfd9516c4e",
-        "type": "debug",
-        "z": "9a024a21c0703f56",
-        "name": "debug 27",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1180,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "2c1bdb49cac66593",
-        "type": "debug",
-        "z": "9a024a21c0703f56",
-        "name": "debug 28",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1360,
-        "y": 480,
-        "wires": []
-    },
-    {
         "id": "8e4b4fa9ea6ac7e1",
         "type": "http in",
         "z": "9a024a21c0703f56",
@@ -4435,8 +4365,7 @@
         "y": 1060,
         "wires": [
             [
-                "d714d5e3d6f7281f",
-                "49db7cd365c5a0ec"
+                "d714d5e3d6f7281f"
             ]
         ]
     },
@@ -4449,14 +4378,13 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n    <link  rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <style>\n    .profile-container {\n      max-width: 600px;\n      margin: 50px auto;\n      padding: 30px;\n      background: #fff;\n      border-radius: 15px;\n      box-shadow: 0 4px 12px rgba(0,0,0,0.1);\n    }\n    .profile-img {\n      width: 150px;\n      height: 150px;\n      object-fit: cover;\n      border-radius: 50%;\n      border: 4px solid #007bff;\n    }\n  </style>\n</head>\n<body class=\"bg-light\">\n\n  <div class=\"container\">\n    <div class=\"profile-container text-center\">\n      <div id=\"profile-img-wrapper\">\n        <img src=\"#\" alt=\"Profile Image\" class=\"profile-img mb-3\" id=\"profile-img\">\n      </div>\n      <h2 id=\"profile-name\"></h2>\n      <div class=\"text-muted\" id=\"profile-bio\"></div>\n\n      <div class=\"d-flex justify-content-center mt-4\">\n        <div class=\"text-center mx-4\">\n          <h6 class=\"text-uppercase text-muted\">Location</h6>\n          <div id=\"profile-location\"></div>\n        </div>\n        <div class=\"text-center mx-4\">\n          <h6 class=\"text-uppercase text-muted\">Joined</h6>\n          <p id=\"profile-created\">Date</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</body>\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n    <link  rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <style>\n    .profile-container {\n      max-width: 600px;\n      margin: 50px auto;\n      padding: 30px;\n      background: #fff;\n      border-radius: 15px;\n      box-shadow: 0 4px 12px rgba(0,0,0,0.1);\n    }\n    .profile-img {\n  width: 100%;\n  max-width: 200px;\n  height: auto;\n  aspect-ratio: 3 / 4; /* En-boy oranı korunsun */\n  object-fit: cover;\n  border-radius: 12px; /* Hafif oval köşeler */\n  border: 4px solid #007bff;\n  display: block;\n  margin: 0 auto;\n}\n  </style>\n</head>\n<body class=\"bg-light\">\n\n  <div class=\"container\">\n    <div class=\"profile-container text-center\">\n      <div id=\"profile-img-wrapper\">\n        <img src=\"#\" alt=\"Profile Image\" class=\"profile-img mb-3\" id=\"profile-img\">\n      </div>\n      <h2 id=\"profile-name\"></h2>\n      <div class=\"text-muted\" id=\"profile-bio\"></div>\n\n      <div class=\"d-flex justify-content-center mt-4\">\n        <div class=\"text-center mx-4\">\n          <h6 class=\"text-uppercase text-muted\">Location</h6>\n          <div id=\"profile-location\"></div>\n        </div>\n        <div class=\"text-center mx-4\">\n          <h6 class=\"text-uppercase text-muted\">Joined</h6>\n          <p id=\"profile-created\"></p>\n        </div>\n        <div class=\"text-center mx-4\">\n          <h6 class=\"text-uppercase text-muted\">Tamamlanmayanan Görev</h6>\n          <p id=\"profile-unCompletedTasks\"></p>\n        </div>\n          <div class=\"text-center mx-4\">\n          <h6 class=\"text-uppercase text-muted\">Tamamlanan Görev</h6>\n          <p id=\"profile-completedTasks\"></p>\n        </div>\n      </div>\n    </div>\n  </div>\n</body>\n</html>",
         "output": "str",
-        "x": 330,
+        "x": 320,
         "y": 1060,
         "wires": [
             [
-                "61dfe26e168310de",
-                "a392e71d2f1cc6e3"
+                "61dfe26e168310de"
             ]
         ]
     },
@@ -4469,40 +4397,6 @@
         "headers": {},
         "x": 500,
         "y": 1060,
-        "wires": []
-    },
-    {
-        "id": "49db7cd365c5a0ec",
-        "type": "debug",
-        "z": "9a024a21c0703f56",
-        "name": "debug 20",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 320,
-        "y": 1000,
-        "wires": []
-    },
-    {
-        "id": "a392e71d2f1cc6e3",
-        "type": "debug",
-        "z": "9a024a21c0703f56",
-        "name": "debug 21",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 500,
-        "y": 1000,
         "wires": []
     },
     {
@@ -5761,8 +5655,7 @@
                 "69d4a94adf317681"
             ],
             [
-                "0a1f35dcbc51baf3",
-                "27639ebd13512476"
+                "0a1f35dcbc51baf3"
             ]
         ]
     },
@@ -5881,23 +5774,6 @@
         },
         "x": 550,
         "y": 840,
-        "wires": []
-    },
-    {
-        "id": "27639ebd13512476",
-        "type": "debug",
-        "z": "a494dcc6cc32ec33",
-        "name": "debug 19",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 880,
-        "y": 1840,
         "wires": []
     },
     {

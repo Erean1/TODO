@@ -53,7 +53,11 @@ class FormController {
       survey.data = prefillData;
     }
 
-    if (type === "addUser-form" ||type === "addTodo-form" ||type === "addCategory-form") {
+    if (
+      type === "addUser-form" ||
+      type === "addTodo-form" ||
+      type === "addCategory-form"
+    ) {
       (survey.completeText = "Ekle"), (survey.showCompletedPage = false);
     } else if (type === "login-form") {
       survey.completeText = "Giriş yap";
@@ -108,7 +112,7 @@ class FormController {
         if (!res.ok) {
           throw new Error("HATA", res.statusText);
         }
-        const data = await res.json(); 
+        const data = await res.json();
         if (data.success === false) {
           this.showError(data.error || "Bir şeyler yanlış gitti");
           setTimeout(() => {
@@ -140,7 +144,7 @@ class FormController {
             window.location = "/";
             break;
           case "resetpw-form":
-            window.location = "/login"
+            window.location = "/login";
             break;
           case "verifytoken-form":
             window.location = "/newpassword";
