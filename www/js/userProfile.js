@@ -124,8 +124,7 @@ class userProfilePage {
     const location = document.getElementById("profile-location");
 
     const locationp = document.createElement("p");
-    locationp.innerText =
-      this.data.userProf?.location || "Henüz Lokasyon Girmedin";
+    locationp.innerText = this.data.userProf?.location || "Henüz Lokasyon Girmedin";
 
     const locationb = document.createElement("button");
     locationb.innerText = "Güncelle";
@@ -141,7 +140,6 @@ class userProfilePage {
     location.appendChild(locationdiv);
 
     // profile-img
-    const profileImgDiv = document.createElement("div");
     const profileImg = document.getElementById("profile-img");
     const profileImgWrapper = document.getElementById("profile-img-wrapper");
     const profileButton = document.createElement("input");

@@ -65,7 +65,8 @@
       "isRequired" : true,
       "choices" : [
         {"value" : "admin" , "text"  :"admin"},
-        {"value" : "user", "text" : "user"}
+        {"value" : "user", "text" : "user"},
+        {"value" : "moderator", "text" : "moderator"}
       ]
     }
   ]

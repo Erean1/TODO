@@ -59,10 +59,42 @@ class FormController {
       type === "addCategory-form"
     ) {
       (survey.completeText = "Ekle"), (survey.showCompletedPage = false);
+      survey.css = {
+        root : "custom-survey-root",
+        title : "h6 text-primary fw-bold fs-5 text-center",
+        question : {
+          title : "text-dark fw-bold",
+          input : "form-control",
+          mainRoot : "custom-question-container"
+        }
+      }
     } else if (type === "login-form") {
+      survey.css = {
+        title: "h6 text-primary fw-bold fs-2 ",
+        question: {
+          title: "fw-normal text-success",
+          input: "form-control",
+        },
+        navigation: {
+          complete: "btn btn-warning",
+          completeText: "text-secondary",
+        },
+      };
       survey.completeText = "Giriş yap";
       survey.showCompletedPage = false;
     } else if (type === "register-form") {
+      survey.applyTheme(SurveyTheme.LayeredDarkPanelless);
+      survey.css = {
+        title: "h6 text-primary fw-bold fs-2 ",
+        question: {
+          title: "fw-normal text-success",
+          input: "form-control",
+        },
+        navigation: {
+          complete: "btn btn-danger",
+          completeText: "text-secondary",
+        },
+      };
       survey.completeText = "Kayıt Ol";
       survey.showCompletedPage = false;
     } else if (type === "editTodo-form") {
@@ -157,6 +189,7 @@ class FormController {
         console.error("HATA", err);
       }
     });
+
     $("#surveyContainer").Survey({ model: survey }); // $surveyContainer etkiketine survey modelini koy formu oluştur
   }
 }

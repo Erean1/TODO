@@ -175,7 +175,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 4",
-        "func": "// token yoksa hata çevir 2. çıkıştan\nif (msg.statusCode === 401 || msg.token.ip !== msg.req.ip) {\n    msg.payload = {\n        refreshToken : msg.refresh\n    }\n    delete msg.refresh\n    delete msg.token\n    delete msg.error\n    return [null,msg]\n}\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.verified = msg.user.validated\ndelete  msg.refresh\ndelete msg.token\nreturn msg;",
+        "func": "// token yoksa hata çevir 2. çıkıştan\nif (msg.statusCode === 401 || msg.token.ip !== msg.req.ip) {\n    msg.payload = {\n        refreshToken : msg.refresh\n    }\n    delete msg.refresh\n    delete msg.token\n    delete msg.error\n    return [null,msg]\n}\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.verified = msg.user.validated\nmsg.hasModerator = msg.user.roles.includes(\"moderator\")\nmsg.showAdminAndMods = msg.hasAdmin || msg.hasModerator\ndelete  msg.refresh\ndelete msg.token\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -187,8 +187,7 @@
         "wires": [
             [],
             [
-                "566d6dcd7935c4ef",
-                "6c306362d03fdc8d"
+                "566d6dcd7935c4ef"
             ]
         ]
     },
@@ -351,7 +350,7 @@
         "type": "function",
         "z": "85ff2d8e203f5bb5",
         "name": "function 31",
-        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip || msg.error) {\n    return [null,msg]\n}\n\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.token}; HttpOnly; Secure; Path=/; Max-age=3600`,]\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.verified = msg.user.validated\nmsg.statusCode =302\nmsg.headers.location = \"/\"\n\nreturn msg;",
+        "func": "// token yoksa hata çevir 2. çıkıştan\nif (!msg.token || msg.token.ip !== msg.req.ip || msg.error) {\n    return [null,msg]\n}\n\n\nmsg.headers = msg.headers || {};\nmsg.headers['Set-Cookie'] = [\n    `accessToken=${msg.payload.token}; HttpOnly; Secure; Path=/; Max-age=3600`,]\n// token varsa tokeni al user olarak döndür\nmsg.user = msg.token\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\nmsg.hasModerator = msg.user.roles.includes(\"moderator\")\nmsg.verified = msg.user.validated\nmsg.showAdminAndMods = msg.hasAdmin || msg.hasModerator\nmsg.statusCode =302\nmsg.headers.location = \"/\"\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -409,23 +408,6 @@
         },
         "x": 1220,
         "y": 280,
-        "wires": []
-    },
-    {
-        "id": "6c306362d03fdc8d",
-        "type": "debug",
-        "z": "85ff2d8e203f5bb5",
-        "name": "debug 13",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 780,
-        "y": 300,
         "wires": []
     },
     {
@@ -499,7 +481,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Yapılacaklar Listesi</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg bg-dark text-white p-2 sticky-top\">\n    <div class=\"container-fluid\">\n      <a class=\"navbar-brand me-3\" href=\"\">TODO</a>\n      <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarContent\"\n              aria-controls=\"navbarContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n      </button>\n\n      <div class=\"collapse navbar-collapse\" id=\"navbarContent\">\n        <div class=\"d-flex flex-grow-1\">\n          <ul class=\"navbar-nav me-auto\">\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-1\"></i>Görev Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-1\"></i>Görevlerim</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-people me-1\"></i>Biten Görevlerim</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userProfile\"><i class=\"bi bi-people me-1\"></i>Profilim</a>\n            </li>\n            {{#hasAdmin}}\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-1\"></i>Kullanıcı Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-1\"></i>Kullanıcılar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-people me-1\"></i>Loglar</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-people me-1\"></i>Dashboard</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#addCategory\"><i class=\"bi bi-people me-1\"></i>Kategori Ekle</a>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#categoryList\"><i class=\"bi bi-people me-1\"></i>Kategoriler</a>\n            </li>\n            {{/hasAdmin}}\n          </ul>\n          {{^verified}}\n          <a class=\"nav-link\" href=\"#\" onclick=\"sendVerificationEmail()\"><i class=\"bi bi-people me-1\"></i>Onayla</a>\n          {{/verified}}\n\n          <div class=\"user-info\">\n            <span>{{user.displayName}} <small class=\"text-white-50\">| {{user.username}}</small></span>\n            <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n          </div>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <div class=\"container py-4\">\n    <div class=\"row\">\n      <div class=\"col-lg-10 mx-auto\">\n        <div id=\"contentContainer\" class=\"card\">\n          <div class=\"card-body p-4\">\n\n            <div class=\"text-center py-5\">\n              <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n              <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n\n  <script>\n    const userEmail  = \"{{user.email}}\";\n    const sendVerificationEmail = async () => {\n    try{\n        const res = await fetch (\"/api/verifyUser\",{\n            method : \"POST\",\n            headers : {\n            \"Content-Type\" : \"application/json\"\n            },\n            body : JSON.stringify({email : userEmail })\n        });\n        if (!res.ok){\n          throw new Error(res.status);\n          }\n            \n          const data = await res.json();\n          console.log(data)\n          alert(\"Lütfen MAİLİNİZİ KONTROL EDİNİZ\")\n    } catch (error){\n        alert(\"Bir Hata oluştu\")\n        window.location = \"/\"\n    }\n  }\n  \n  \n  </script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>TODO</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n      color: #333 !important;\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n      color: blue;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    @keyframes blink-animation {\n      0% {\n        opacity: 1;\n        color: #dc3545;\n      }\n\n      /* kırmızı */\n      50% {\n        opacity: 0;\n        color: #ffc107;\n      }\n\n      /* sarı */\n      100% {\n        opacity: 1;\n        color: #198754;\n      }\n\n      /* yeşil */\n    }\n\n    .blink {\n      animation: blink-animation 1s infinite;\n    }\n  </style>\n</head>\n\n<body>\n\n  <!-- Sidebar -->\n  <aside class=\"sidebar\">\n    <ul class=\"nav flex-column\" id=\"sidebarNav\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link mt-5\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-2\"></i> Görev Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-2\"></i> Görevlerim</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-check2-circle me-2\"></i> Biten Görevlerim</a>\n      </li>\n      {{#showAdminAndMods}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-2\"></i> Kullanıcı Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-2\"></i> Kullanıcılar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-pie-chart me-2\"></i> Dashboard</a>\n      </li>\n      {{/showAdminAndMods}}\n      {{#hasAdmin}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-database-lock me-2\"></i> Loglar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addCategory\"><i class=\"bi bi-plus-circle-fill me-2\"></i> Kategori Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#categoryList\"><i class=\"bi bi-tag me-2\"></i> Kategoriler</a>\n      </li>\n      {{/hasAdmin}}\n    </ul>\n  </aside>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg p-2 sticky-top\">\n    <div class=\"container-fluid d-flex justify-content-between\">\n      <a class=\"navbar-brand me-3 overflow-hidden\" href=\"/\">TODO</a>\n\n      <div class=\"d-flex align-items-center\">\n        {{^verified}}\n        <a href=\"#\" onclick=\"sendVerificationEmail()\" class=\"btn fw-bold me-3 blink\">Onayla</a>\n        {{/verified}}\n\n        <a class=\"nav-link text-danger me-3\" href=\"#userProfile\"><i class=\"bi bi-person-square text-secondary\"></i>\n          Profilim</a>\n        <div class=\"user-info\">\n          <span>{{user.displayName}} <small class=\"text-dark-50\">| {{user.username}}</small></span>\n          <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <main class=\"main-content \">\n    <div class=\"container py-4 \">\n      <div class=\"row \">\n        <div class=\"col-lg-12 mx-auto\">\n          <div id=\"contentContainer\" class=\"card\">\n            <div class=\"card-body p-4\">\n              <div class=\"text-center py-5\">\n                <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n                <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </main>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n\n  <script>\n    const userEmail  = \"{{user.email}}\";\n    const sendVerificationEmail = async () => {\n      console.log(    \"Fonksiyon çağırıldu\")\n    try{\n        const res = await fetch (\"/api/verifyUser\",{\n            method : \"POST\",\n            headers : {\n            \"Content-Type\" : \"application/json\"\n            },\n            body : JSON.stringify({email : userEmail })\n        });\n        if (!res.ok){\n          throw new Error(res.status);\n          }\n            \n          const data = await res.json();\n          console.log(data)\n          alert(\"Lütfen MAİLİNİZİ KONTROL EDİNİZ\")\n    } catch (error){\n        alert(\"Bir Hata oluştu\")\n        window.location = \"/\"\n    }\n    contentContainer.innerText = \"Verifikasyon Linki Gönderildi \"\n  }\n  \n  \n  </script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
         "output": "str",
         "x": 640,
         "y": 400,
@@ -551,11 +533,12 @@
         "type": "subflow:85ff2d8e203f5bb5",
         "z": "d8112b18e3794244",
         "name": "",
-        "x": 425.85709381103516,
-        "y": 401.14277839660645,
+        "x": 430,
+        "y": 400,
         "wires": [
             [
-                "cdb2acd15c941da3"
+                "cdb2acd15c941da3",
+                "c9a1c29d0cee5d88"
             ],
             [
                 "cdb2acd15c941da3"
@@ -594,8 +577,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 920,
-        "y": 80,
+        "x": 900,
+        "y": 40,
         "wires": [
             []
         ]
@@ -629,8 +612,8 @@
         "type": "function",
         "z": "d8112b18e3794244",
         "name": "function 8",
-        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload) return\nmsg.payload = {\n    \"_id\" : now,\n    \"active\": true,\n    \"roles\": [\n        \"admin\"\n    ],\n    \"validated\" : true,\n    \"stamp\": {\n        \"createdAt\": 1751898167501,\n        \"ip\": \"127.0.0.1\",\n        \"username\": \"Ereans\",\n        \"email\": \"erencit55@gmail.com\"\n    },\n    \"date\": date.toLocaleDateString(\"TR\"),\n    \"time\": date.toLocaleTimeString(\"TR\"),\n    \"username\": \"Ereans\",\n    \"password\": \"$2y$10$NvX/HC/DyIwnlR5PwgosIeR1JQbkG3zgb5aR1WIAoclrd.BQT3aum\",\n    \"email\": \"erencit55@gmail.com\",\n    \"displayName\": \"Eren Çit\"\n}\nreturn msg;",
-        "outputs": 1,
+        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (msg.payload) return\nmsg.payload = {\n    \"_id\" : now,\n    \"active\": true,\n    \"roles\": [\n        \"admin\"\n    ],\n    \"validated\" : true,\n    \"stamp\": {\n        \"createdAt\": 1751898167501,\n        \"ip\": \"127.0.0.1\",\n        \"username\": \"Ereans\",\n        \"email\": \"erencit55@gmail.com\"\n    },\n    \"date\": date.toLocaleDateString(\"TR\"),\n    \"time\": date.toLocaleTimeString(\"TR\"),\n    \"username\": \"Ereans\",\n    \"password\": \"$2y$10$NvX/HC/DyIwnlR5PwgosIeR1JQbkG3zgb5aR1WIAoclrd.BQT3aum\",\n    \"email\": \"erencit55@gmail.com\",\n    \"displayName\": \"Eren Çit\"\n}\nconst userProfile = {\n    user_id : now,\n    profile_img : null,\n    bio : null,\n    location : null,\n    stamps : {\n        createdAt : now,\n        ip : \"127.0.0.1\"\n    }\n}\nconst msgForProf = {\n    payload : userProfile\n}\nreturn [msg,msgForProf];",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -641,6 +624,9 @@
         "wires": [
             [
                 "62fcce3c836f0722"
+            ],
+            [
+                "dd1d015e8bb041df"
             ]
         ]
     },
@@ -732,6 +718,41 @@
         ]
     },
     {
+        "id": "dd1d015e8bb041df",
+        "type": "mongodb4",
+        "z": "d8112b18e3794244",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "user_profile",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 890,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c9a1c29d0cee5d88",
+        "type": "debug",
+        "z": "d8112b18e3794244",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 360,
+        "wires": []
+    },
+    {
         "id": "0ac019b8f42518dc",
         "type": "http response",
         "z": "7357fc440e36aebb",
@@ -797,7 +818,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "db.todo.find()",
-        "func": "const now = new Date()\nlet query = msg.user.roles.includes(\"admin\") ? {done : false,due_date: {$gte : now} } : {\n    \"stamp.username\" : msg.user.username,\n    done : false,\n    due_date : {$gte : now}\n    \n}\nmsg.payload = [[\n    {\n        $match : query\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    },\n]]\n\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\n\n\nreturn msg;",
+        "func": "const now = new Date()\nlet query = msg.user.roles.includes(\"admin\") ? {done : false } : {\n    \"stamp.username\" : msg.user.username,\n    done : false,\n    \n}\nmsg.payload = [[\n    {\n        $match : query\n    },\n    {\n        $sort : {\n            \"stamp.createdAt\" : -1\n        }\n    },\n]]\n\nmsg.hasAdmin = msg.user.roles.includes(\"admin\")\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -937,7 +958,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "db.todo.opt()",
-        "func": "const date = new Date()\nconst now = date.getTime()\nlet category = null;\nif (msg.payload) {\n    category = msg.payload\n}\n\nconst logData = {\n    action: msg.req?.params.type || \"boş\",\n    user: msg.user?.email || \"\",\n    timestamp: new Date().toLocaleString(\"TR\"),\n    ip: msg.req?.ip || \"bilinmiyor\"\n}\nconst msgForLog = {\n    payload: logData\n}\nlet done = null;\nif (msg.formData.due_date < date.toISOString() + 24 * 60 * 60 * 1000){\n    done = true;\n} else {\n    done = false\n}\n\nconst due_date = new Date(msg.formData.due_date)\n\nif (msg.req.params.type === \"add\") {\n    const insertQuery = {\n        id: now,\n        name: msg.formData.name,\n        done: done,\n        priority: msg.formData.priority,\n        due_date: due_date,\n        categoryId: category._id,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: msg.user.username || \"\",\n            email: msg.user.email || \"\",\n        },\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\")\n    } \n    msg.payload = insertQuery\n    return [msg, null, msgForLog]\n}\n\n\n\n\n\nlet query = {\n    _id: msg.formData._id\n}\nmsg.payload = [query];\n\n\n\nreturn [null, msg, msgForLog]\n\n\n\n\n",
+        "func": "const date = new Date()\nconst now = date.getTime()\nlet category = null;\nif (msg.payload) {\n    category = msg.payload\n}\n\nconst logData = {\n    action: msg.req?.params.type || \"boş\",\n    user: msg.user?.email || \"\",\n    timestamp: new Date().toLocaleString(\"TR\"),\n    ip: msg.req?.ip || \"bilinmiyor\"\n}\nconst msgForLog = {\n    payload: logData\n}\n\n\nconst due_date = new Date(msg.formData.due_date)\n\nif (msg.req.params.type === \"add\") {\n    const insertQuery = {\n        id: now,\n        name: msg.formData.name,\n        done: false,\n        priority: msg.formData.priority,\n        due_date: due_date,\n        categoryId: category._id,\n        stamp: {\n            createdAt: now,\n            ip: msg.req.ip,\n            username: msg.user.username || \"\",\n            email: msg.user.email || \"\",\n        },\n        date: date.toLocaleDateString(\"TR\"),\n        time: date.toLocaleTimeString(\"TR\")\n    } \n    msg.payload = insertQuery\n    return [msg, null, msgForLog]\n}\n\n\n\n\n\nlet query = {\n    _id: msg.formData._id\n}\nmsg.payload = [query];\n\n\n\nreturn [null, msg, msgForLog]\n\n\n\n\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -1825,7 +1846,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 14",
-        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (!msg.payload) {\n    msg.payload = {\n        success : false,\n        error: \"Id ile eşleşen bir kayıt bulunamadı.\",\n        formData: msg.formData\n    }\n    return [null, msg];\n}\n\n\nmsg.formData.active  = msg.formData.status === \"active\"\ndelete msg.formData.status\n\nconst recordId = msg.formData._id\ndelete msg.formData._id\n\nmsg.user = msg.payload\nmsg.payload = [\n    {\n        _id : parseInt(recordId)\n    },\n    {\n        $set: {\n            ...msg.formData,\n            stamp : {\n                createdAt : now,\n                ip : msg.req.ip,\n                username : msg.user.username || \"\",\n                email: msg.user.email || \"\"\n            },\n            date : date.toLocaleDateString(\"TR\"),\n            time : date.toLocaleTimeString(\"TR\")\n        }\n    }\n]\n\nreturn msg;",
+        "func": "const date = new Date();\nconst now = date.getTime()\n\nif (!msg.payload) {\n    msg.payload = {\n        success : false,\n        error: \"Id ile eşleşen bir kayıt bulunamadı.\",\n        formData: msg.formData\n    }\n    return [null, msg];\n}\n\n\n\nconst recordId = msg.formData._id\ndelete msg.formData._id\n\nmsg.user = msg.payload\nmsg.payload = [\n    {\n        _id : parseInt(recordId)\n    },\n    {\n        $set: {\n            ...msg.formData,\n            stamp : {\n                createdAt : now,\n                ip : msg.req.ip,\n                username : msg.user.username || \"\",\n                email: msg.user.email || \"\"\n            },\n            date : date.toLocaleDateString(\"TR\"),\n            time : date.toLocaleTimeString(\"TR\")\n        }\n    }\n]\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -2340,7 +2361,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 61",
-        "func": "const type = msg.req.params.type\nconst now = new Date()\nif (![\"add\",\"update\",\"delete\"].includes(type)){\n    msg.payload = {\n        success : false,\n        error : \"Geçersiz İşlem\"\n    }\n    return [null,msg]\n}\n\nconst logData = {\n    action : \"Category/\"+msg.req.params.type,\n    user : msg.user?.email || \"Bilinmiyor\",\n    timestamp : new Date().toLocaleString(\"TR\"),\n    ip : msg.req.ip\n}\n\nconst msgForLog = {\n    payload : logData\n}\n\nif (type === \"add\" && msg.payload?.name){\n    msg.payload = {\n        name : msg.payload.name,\n        stamps : {\n            createdAt : now\n        }\n    }\n    return [msg,null,null,msgForLog]\n}\n\nif (type === \"update\" || type === \"delete\"){\n    msg.payload = {\n        _id : msg.payload._id\n    }\n}\n\nreturn [null,msg,null,msgForLog]",
+        "func": "const type = msg.req.params.type\nconst now = new Date()\nif (![\"add\",\"update\",\"delete\"].includes(type)){\n    msg.payload = {\n        success : false,\n        error : \"Geçersiz İşlem\"\n    }\n    return [null,msg]\n}\n\nif (msg.hasAdmin === false){\n    msg.payload = {\n        success : false,\n        error : \"Bu İşlemi Gerçekleştiremezsiniz\"\n    }\n    return [null,msg]\n}\n\nconst logData = {\n    action : \"Category/\"+msg.req.params.type,\n    user : msg.user?.email || \"Bilinmiyor\",\n    timestamp : new Date().toLocaleString(\"TR\"),\n    ip : msg.req.ip\n}\n\nconst msgForLog = {\n    payload : logData\n}\n\nif (type === \"add\" && msg.payload?.name){\n    msg.payload = {\n        name : msg.payload.name,\n        stamps : {\n            createdAt : now\n        }\n    }\n    return [msg,null,null,msgForLog]\n}\n\nif (type === \"update\" || type === \"delete\"){\n    msg.payload = {\n        _id : msg.payload._id\n    }\n}\n\nreturn [null,msg,null,msgForLog]",
         "outputs": 4,
         "timeout": 0,
         "noerr": 0,
@@ -3031,8 +3052,7 @@
         "y": 2520,
         "wires": [
             [
-                "51d04393f3949363",
-                "6def05d230866812"
+                "51d04393f3949363"
             ]
         ]
     },
@@ -3410,23 +3430,6 @@
         ]
     },
     {
-        "id": "edb8d6e275d23247",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 9",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2123.71435546875,
-        "y": 2232.571533203125,
-        "wires": []
-    },
-    {
         "id": "db47c71687b87b50",
         "type": "function",
         "z": "7357fc440e36aebb",
@@ -3462,44 +3465,9 @@
         "y": 2520,
         "wires": [
             [
-                "db47c71687b87b50",
-                "074edbc6428cb32e"
+                "db47c71687b87b50"
             ]
         ]
-    },
-    {
-        "id": "074edbc6428cb32e",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1640,
-        "y": 2480,
-        "wires": []
-    },
-    {
-        "id": "6def05d230866812",
-        "type": "debug",
-        "z": "7357fc440e36aebb",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1460,
-        "y": 2440,
-        "wires": []
     },
     {
         "id": "ea92999f30f3cd81",
@@ -3527,7 +3495,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n    <link  rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n</head>\n<body>\n        \n        <div id=\"surveyContainer\"> </div> \n    \n</body>\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n    <link  rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n    <style> \n        .custom-survey-root {\n            height : 500px;\n        }\n\n\n\n    </style>\n</head>\n<body>\n      <div id=\"surveyContainer\"> </div> \n    \n</body>\n</html>",
         "output": "str",
         "x": 300,
         "y": 60,
@@ -4609,10 +4577,10 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>SIGNUP</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n\n    .form-wrapper {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .form-card {\n      background: rgba(255, 255, 255, 0.8);\n      padding: 2rem;\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);\n      width: 100%;\n      max-width: 500px;\n      backdrop-filter: blur(10px);\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 1rem;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <div class=\"form-wrapper\">\n    <div class=\"form-card\">\n      <h2>Kayıt Ol</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"register-form\");\n  })();\n</script>\n\n</body>\n\n</html>\n",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>SIGNUP</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/themes/layered-dark-panelless.min.js\"></script>\n\n  <style>\n    body {\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n\n    .form-wrapper {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n    }\n\n    .form-card {\n      background: rgba(255, 255, 255, 0.8);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);\n      width: 100%;\n      max-width : 550px;\n\n      backdrop-filter: blur(10px);\n    }\n\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 1rem;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <div class=\"form-wrapper\">\n    <div class=\"form-card\">\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"register-form\");\n  })();\n</script>\n\n</body>\n\n</html>\n",
         "output": "str",
         "x": 380,
-        "y": 441,
+        "y": 440,
         "wires": [
             [
                 "401206913da407bd"
@@ -4872,7 +4840,7 @@
         "finalize": "",
         "libs": [],
         "x": 1430,
-        "y": 199,
+        "y": 200,
         "wires": [
             [
                 "4ba3f9c3fa97b4fc"
@@ -4888,8 +4856,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 159,
-        "y": 779,
+        "x": 151.8571319580078,
+        "y": 794.7142925262451,
         "wires": [
             [
                 "78b4e530ccb81d0d"
@@ -4905,8 +4873,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1669,
-        "y": 779,
+        "x": 1661.8571319580078,
+        "y": 794.7142925262451,
         "wires": []
     },
     {
@@ -4922,8 +4890,8 @@
         "key": "",
         "signvar": "payload",
         "storetoken": "payload",
-        "x": 589,
-        "y": 779,
+        "x": 581.8571319580078,
+        "y": 794.7142925262451,
         "wires": [
             [
                 "aa3047f4a0c61364"
@@ -4942,8 +4910,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
-        "y": 780,
+        "x": 762.8571319580078,
+        "y": 795.7142925262451,
         "wires": [
             [
                 "a22be95315ef3494"
@@ -4963,8 +4931,8 @@
         "key": "",
         "signvar": "payload",
         "storetoken": "payload",
-        "x": 1329,
-        "y": 779,
+        "x": 1321.8571319580078,
+        "y": 794.7142925262451,
         "wires": [
             [
                 "96f6f26210ec81f5"
@@ -4983,8 +4951,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1509,
-        "y": 779,
+        "x": 1501.8571319580078,
+        "y": 794.7142925262451,
         "wires": [
             [
                 "db5a54ef18e5e7d3"
@@ -5003,8 +4971,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 369,
-        "y": 779,
+        "x": 361.8571319580078,
+        "y": 794.7142925262451,
         "wires": [
             [
                 "a308166d35578658"
@@ -5062,8 +5030,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 960,
-        "y": 780,
+        "x": 952.8571319580078,
+        "y": 795.7142925262451,
         "wires": [
             [
                 "d7abbc50bd1d71bb"
@@ -5082,8 +5050,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1129,
-        "y": 779,
+        "x": 1121.8571319580078,
+        "y": 794.7142925262451,
         "wires": [
             [
                 "cb098f21c287e8cf"
@@ -5116,7 +5084,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Giriş Yap</h2>\n      <div id=\"surveyContainer\"></div>\n      \n    <p><a href=\"/resetpw\">Şifremi Unuttum </a> </p>\n    </div>\n\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"login-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar   d-flex justify-content-center\">\n    <a class=\"navbar-brand text-white nav-link\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <div id=\"surveyContainer\"></div>\n      \n    <p><a href=\"/resetpw\" class=\"nav-link\">Şifremi Unuttum </a> </p>\n    </div>\n\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"login-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
         "output": "str",
         "x": 422,
         "y": 137,
@@ -5163,7 +5131,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Şifre Sıfırla</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"resetpw-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"resetpw-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
         "output": "str",
         "x": 480,
         "y": 1000,
@@ -5360,7 +5328,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <h2>Şifre Sıfırla</h2>\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"newpw-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Giriş Yap</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .navbar {\n      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n    }\n\n    .formContainer {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 2rem;\n    }\n\n    .card {\n      background: rgba(255, 255, 255, 0.85);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);\n      backdrop-filter: blur(10px);\n      width: 100%;\n      max-width: 500px;\n      padding: 2rem;\n    }\n\n    #surveyContainer {\n      margin-top: 1rem;\n    }\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <nav class=\"navbar navbar-light bg-light d-flex justify-content-center\">\n    <a class=\"navbar-brand btn btn-warning mt-2 mb-2\" href=\"/register\">Kayıt Ol</a>\n  </nav>\n\n  <div class=\"formContainer\">\n    <div class=\"card\">\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"newpw-form\");\n  })();\n</script>\n\n\n</body>\n\n</html>\n",
         "output": "str",
         "x": 480,
         "y": 1560,
@@ -5772,8 +5740,8 @@
         "headers": {
             "location": "/login"
         },
-        "x": 550,
-        "y": 840,
+        "x": 542.8571319580078,
+        "y": 855.7142925262451,
         "wires": []
     },
     {
@@ -5795,6 +5763,16 @@
         ]
     },
     {
+        "id": "b015fec641340424",
+        "type": "comment",
+        "z": "a494dcc6cc32ec33",
+        "name": "SORRRR",
+        "info": "",
+        "x": 1080,
+        "y": 1660,
+        "wires": []
+    },
+    {
         "id": "a74d907a106e924b",
         "type": "inject",
         "z": "b3c1ef86c9e1d050",
@@ -5809,7 +5787,7 @@
             }
         ],
         "repeat": "",
-        "crontab": "20 10 * * *",
+        "crontab": "00 12 * * *",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
@@ -5965,13 +5943,13 @@
             }
         ],
         "repeat": "",
-        "crontab": "",
+        "crontab": "00 12 * * *",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 201.9999656677246,
+        "x": 211.9999656677246,
         "y": 317.0000066757202,
         "wires": [
             [

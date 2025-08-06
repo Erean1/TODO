@@ -37,7 +37,9 @@ export async function loadTable(type, dataType) {
       },
     });
   } else if (dataType === "myTodos") {
-    document.getElementById("todoCount").innerText = `Toplam Görev Sayısı : ${datas.count}` 
+    document.getElementById(
+      "todoCount"
+    ).innerText = `Toplam Görev Sayısı : ${datas.count}`;
 
     tableJson.columns.push({
       data: null,
@@ -54,7 +56,9 @@ export async function loadTable(type, dataType) {
       },
     });
   } else if (dataType === "completedTodos") {
-    document.getElementById("todoCount").innerText = `Tamamlanan Görev Sayısı : ${datas.count}`
+    document.getElementById(
+      "todoCount"
+    ).innerText = `Tamamlanan Görev Sayısı : ${datas.count}`;
     tableJson.columns.push({
       data: null,
       title: "işlemler",
@@ -88,9 +92,11 @@ export async function loadTable(type, dataType) {
     columns: tableJson.columns,
     data: datas.data ? datas.data : datas,
   });
+  $(tableId).addClass("table table-striped table-bordered table-hover align-middle text-center")
 }
 
-$(document).on("click", "button.action-btn", async function () { // documentte button.actio-btn içerenlerde click olayı gerçekleşince bir callback 
+$(document).on("click", "button.action-btn", async function () {
+  // documentte button.actio-btn içerenlerde click olayı gerçekleşince bir callback
   // fonksiyonu çalıştır
   // action-btn olan butonlara cilck eventi ekledik
   const id = $(this).data("id"); // data-id diye tanımladık  butonlara onu cektik this.data ile
