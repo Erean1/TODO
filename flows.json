@@ -481,7 +481,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>TODO</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n      color: #333 !important;\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n      color: blue;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    @keyframes blink-animation {\n      0% {\n        opacity: 1;\n        color: #dc3545;\n      }\n\n      /* kırmızı */\n      50% {\n        opacity: 0;\n        color: #ffc107;\n      }\n\n      /* sarı */\n      100% {\n        opacity: 1;\n        color: #198754;\n      }\n\n      /* yeşil */\n    }\n\n    .blink {\n      animation: blink-animation 1s infinite;\n    }\n  </style>\n</head>\n\n<body>\n\n  <!-- Sidebar -->\n  <aside class=\"sidebar\">\n    <ul class=\"nav flex-column\" id=\"sidebarNav\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link mt-5\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-2\"></i> Görev Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-2\"></i> Görevlerim</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-check2-circle me-2\"></i> Biten Görevlerim</a>\n      </li>\n      {{#showAdminAndMods}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-2\"></i> Kullanıcı Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-2\"></i> Kullanıcılar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-pie-chart me-2\"></i> Dashboard</a>\n      </li>\n      {{/showAdminAndMods}}\n      {{#hasAdmin}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-database-lock me-2\"></i> Loglar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addCategory\"><i class=\"bi bi-plus-circle-fill me-2\"></i> Kategori Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#categoryList\"><i class=\"bi bi-tag me-2\"></i> Kategoriler</a>\n      </li>\n      {{/hasAdmin}}\n    </ul>\n  </aside>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg p-2 sticky-top\">\n    <div class=\"container-fluid d-flex justify-content-between\">\n      <a class=\"navbar-brand me-3 overflow-hidden\" href=\"/\">TODO</a>\n\n      <div class=\"d-flex align-items-center\">\n        {{^verified}}\n        <a href=\"#\" onclick=\"sendVerificationEmail()\" class=\"btn fw-bold me-3 blink\">Onayla</a>\n        {{/verified}}\n\n        <a class=\"nav-link text-danger me-3\" href=\"#userProfile\"><i class=\"bi bi-person-square text-secondary\"></i>\n          Profilim</a>\n        <div class=\"user-info\">\n          <span>{{user.displayName}} <small class=\"text-dark-50\">| {{user.username}}</small></span>\n          <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <main class=\"main-content \">\n    <div class=\"container py-4 \">\n      <div class=\"row \">\n        <div class=\"col-lg-12 mx-auto\">\n          <div id=\"contentContainer\" class=\"card\">\n            <div class=\"card-body p-4\">\n              <div class=\"text-center py-5\">\n                <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n                <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </main>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n\n  <script>\n    const userEmail  = \"{{user.email}}\";\n    const sendVerificationEmail = async () => {\n      console.log(    \"Fonksiyon çağırıldu\")\n    try{\n        const res = await fetch (\"/api/verifyUser\",{\n            method : \"POST\",\n            headers : {\n            \"Content-Type\" : \"application/json\"\n            },\n            body : JSON.stringify({email : userEmail })\n        });\n        if (!res.ok){\n          throw new Error(res.status);\n          }\n            \n          const data = await res.json();\n          console.log(data)\n          alert(\"Lütfen MAİLİNİZİ KONTROL EDİNİZ\")\n    } catch (error){\n        alert(\"Bir Hata oluştu\")\n        window.location = \"/\"\n    }\n    contentContainer.innerText = \"Verifikasyon Linki Gönderildi \"\n  }\n  \n  \n  </script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>TODO</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n      color: #333 !important;\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n      color: blue;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    @keyframes blink-animation {\n      0% {\n        opacity: 1;\n        color: #dc3545;\n      }\n\n      /* kırmızı */\n      50% {\n        opacity: 0;\n        color: #ffc107;\n      }\n\n      /* sarı */\n      100% {\n        opacity: 1;\n        color: #198754;\n      }\n\n      /* yeşil */\n    }\n\n    .blink {\n      animation: blink-animation 1s infinite;\n    }\n  </style>\n</head>\n\n<body>\n\n  <!-- Sidebar -->\n  <aside class=\"sidebar\">\n    <ul class=\"nav flex-column\" id=\"sidebarNav\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link mt-5\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-2\"></i> Görev Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-2\"></i> Görevlerim</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-check2-circle me-2\"></i> Biten Görevlerim</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#agenda\"><i class=\"bi bi-check2-circle me-2\"></i>Ajanda</a>\n      </li>\n      {{#showAdminAndMods}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-2\"></i> Kullanıcı Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-2\"></i> Kullanıcılar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-pie-chart me-2\"></i> Dashboard</a>\n      </li>\n      {{/showAdminAndMods}}\n      {{#hasAdmin}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-database-lock me-2\"></i> Loglar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addCategory\"><i class=\"bi bi-plus-circle-fill me-2\"></i> Kategori Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#categoryList\"><i class=\"bi bi-tag me-2\"></i> Kategoriler</a>\n      </li>\n      {{/hasAdmin}}\n    </ul>\n  </aside>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg p-2 sticky-top\">\n    <div class=\"container-fluid d-flex justify-content-between\">\n      <a class=\"navbar-brand me-3 overflow-hidden\" href=\"/\">TODO</a>\n\n      <div class=\"d-flex align-items-center\">\n        {{^verified}}\n        <a href=\"#\" onclick=\"sendVerificationEmail()\" class=\"btn fw-bold me-3 blink\">Onayla</a>\n        {{/verified}}\n\n        <a class=\"nav-link text-danger me-3\" href=\"#userProfile\"><i class=\"bi bi-person-square text-secondary\"></i>\n          Profilim</a>\n        <div class=\"user-info\">\n          <span>{{user.displayName}} <small class=\"text-dark-50\">| {{user.username}}</small></span>\n          <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <main class=\"main-content \">\n    <div class=\"container py-4 \">\n      <div class=\"row \">\n        <div class=\"col-lg-12 mx-auto\">\n          <div id=\"contentContainer\" class=\"card\">\n            <div class=\"card-body p-4\">\n              <div class=\"text-center py-5\">\n                <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n                <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </main>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n\n  <script>\n    const userEmail  = \"{{user.email}}\";\n    const sendVerificationEmail = async () => {\n      console.log(    \"Fonksiyon çağırıldu\")\n    try{\n        const res = await fetch (\"/api/verifyUser\",{\n            method : \"POST\",\n            headers : {\n            \"Content-Type\" : \"application/json\"\n            },\n            body : JSON.stringify({email : userEmail })\n        });\n        if (!res.ok){\n          throw new Error(res.status);\n          }\n            \n          const data = await res.json();\n          console.log(data)\n          alert(\"Lütfen MAİLİNİZİ KONTROL EDİNİZ\")\n    } catch (error){\n        alert(\"Bir Hata oluştu\")\n        window.location = \"/\"\n    }\n    contentContainer.innerText = \"Verifikasyon Linki Gönderildi \"\n  }\n  \n  \n  </script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
         "output": "str",
         "x": 640,
         "y": 400,
@@ -537,8 +537,7 @@
         "y": 400,
         "wires": [
             [
-                "cdb2acd15c941da3",
-                "c9a1c29d0cee5d88"
+                "cdb2acd15c941da3"
             ],
             [
                 "cdb2acd15c941da3"
@@ -734,23 +733,6 @@
         "wires": [
             []
         ]
-    },
-    {
-        "id": "c9a1c29d0cee5d88",
-        "type": "debug",
-        "z": "d8112b18e3794244",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 590,
-        "y": 360,
-        "wires": []
     },
     {
         "id": "0ac019b8f42518dc",
@@ -1043,7 +1025,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 12",
-        "func": "const date = new Date()\nconst now = date.getTime()\nmsg.todo = msg.payload\nif (!msg.todo) {\n    msg.payload = {\n        success: false,\n        error: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg];\n}\n\nif (msg.todo.stamp.username !== msg.user.username && !msg.user.roles.includes(\"admin\")) {\n    msg.payload = {\n        success :false,\n        error: \"Yetkisiz Erişim\"\n    }\n}\n\nif (msg.req.params.type === \"update\" && msg.todo.done) {\n    msg.payload = {\n        success: false,\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\nmsg.payload = [\n    {\n        _id: msg.formData._id\n    },\n]\n\n\nif (msg.req.params.type === \"trash\") {\n    msg.operation = \"deleteOne\"\n} else if (msg.req.params.type === \"schedule\") {\n    let scheduleOptions = msg.scheduleOptions = {\n        \"crontiMethod\": \"onIntervalTime\",\n        \"crontiArgs\": [\n            msg.formData.datetime,\n            msg.formData.datetime\n        ]\n    }\n    msg.payload.push({\n        $set: {\n            schedule: {\n                formData: msg.formData,\n                options: scheduleOptions\n            },\n        }\n    })\n    msg.operation = \"updateOne\"\n} else {\n    msg.operation = \"updateOne\"\n    switch (msg.req.params.type) {\n        case \"complete\":\n            msg.payload.push({\n                $set: {\n                    completedDate : new Date().toLocaleDateString(\"TR\"),\n                    done: true\n                }\n            })\n            break;\n        case \"open\":\n            msg.payload.push({\n                $set: {\n                    done: false\n                }\n            })\n            break;\n        case \"update\":\n            msg.payload.push({\n                $set: {\n                    name: msg.formData.name\n                }\n            })\n            break;\n    }\n    msg.payload[1].$set.stamp = {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.user.username || \"\",\n        email: msg.user.email || \"\"\n    }\n    msg.payload[1].$set.date = date.toLocaleDateString(\"TR\"),\n        msg.payload[1].$set.time = date.toLocaleTimeString(\"TR\")\n}\n\n\nreturn msg.scheduleOptions ? [msg, null, msg] : msg;",
+        "func": "const date = new Date()\nconst now = date.getTime()\nmsg.todo = msg.payload\nif (!msg.todo) {\n    msg.payload = {\n        success: false,\n        error: \"Id ile eşleşen bir kayıt bulunamadı.\"\n    }\n    return [null, msg];\n}\n\nif (msg.todo.stamp.username !== msg.user.username && !msg.user.roles.includes(\"admin\")) {\n    msg.payload = {\n        success :false,\n        error: \"Yetkisiz Erişim\"\n    }\n}\n\nif (msg.req.params.type === \"update\" && msg.todo.done) {\n    msg.payload = {\n        success: false,\n        message: \"Tamamlanan işler güncellenemez.\"\n    }\n    return [null, msg];\n}\nmsg.payload = [\n    {\n        _id: msg.formData._id\n    },\n]\n\n\nif (msg.req.params.type === \"trash\") {\n    msg.operation = \"deleteOne\"\n} else if (msg.req.params.type === \"schedule\") {\n    if (msg.user.validated === false) {\n        msg.payload = {\n            success: false,\n            message: \"Email Onayla\"\n        }\n        msg.headers = msg.headers || {};\n        msg.statusCode = 302;\n        msg.headers.location = \"/\";\n        return [null,msg,null]\n    }\n    let scheduleOptions = msg.scheduleOptions = {\n        \"crontiMethod\": \"onIntervalTime\",\n        \"crontiArgs\": [\n            msg.formData.datetime,\n            msg.formData.datetime\n        ]\n    }\n    msg.payload.push({\n        $set: {\n            schedule: {\n                formData: msg.formData,\n                options: scheduleOptions\n            },\n        }\n    })\n    msg.operation = \"updateOne\"\n} else {\n    msg.operation = \"updateOne\"\n    switch (msg.req.params.type) {\n        case \"complete\":\n            msg.payload.push({\n                $set: {\n                    completedDate : new Date().toLocaleDateString(\"TR\"),\n                    done: true\n                }\n            })\n            break;\n        case \"open\":\n            msg.payload.push({\n                $set: {\n                    done: false\n                }\n            })\n            break;\n        case \"update\":\n            msg.payload.push({\n                $set: {\n                    name: msg.formData.name\n                }\n            })\n            break;\n    }\n    msg.payload[1].$set.stamp = {\n        createdAt: now,\n        ip: msg.req.ip,\n        username: msg.user.username || \"\",\n        email: msg.user.email || \"\"\n    }\n    msg.payload[1].$set.date = date.toLocaleDateString(\"TR\"),\n        msg.payload[1].$set.time = date.toLocaleTimeString(\"TR\")\n}\n\n\nreturn msg.scheduleOptions ? [msg, null, msg] : msg;",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -1222,7 +1204,8 @@
         "y": 718.8571338653564,
         "wires": [
             [
-                "c87badb39970cdda"
+                "c87badb39970cdda",
+                "8cfd7b3c0cad7f1d"
             ]
         ]
     },
@@ -1231,7 +1214,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "header",
-        "func": "if (msg.schedule) {\n    msg.payload  = [\n        {\n            _id : msg.formData._id\n        },\n        {\n            $set : {\n                schedule: msg.response\n            }\n        }\n    ]\n    return [null,msg]\n}\n\n\nmsg.from = \"noreply <noreply@todo.com\"\nmsg.to = msg.user.email\nreturn msg;",
+        "func": "\nif (msg.schedule) {\n    msg.payload  = [\n        {\n            _id : msg.formData._id\n        },\n        {\n            $set : {\n                schedule: msg.response\n            }\n        }\n    ]\n    return [null,msg]\n}\n\n\nmsg.from = \"noreply <noreply@todo.com\"\nmsg.to = msg.user.email\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -1280,8 +1263,8 @@
         "maxTimeMS": "0",
         "handleDocId": true,
         "name": "",
-        "x": 1472.6113510131836,
-        "y": 750.0793628692627,
+        "x": 1570,
+        "y": 760,
         "wires": [
             []
         ]
@@ -1981,7 +1964,7 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 1650,
+        "x": 1630,
         "y": 460,
         "wires": []
     },
@@ -3434,7 +3417,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 81",
-        "func": "let completedTasks = null\nlet unCompletedTasks = null\ncompletedTasks = msg.payload.filter(task => task.done === true)\nunCompletedTasks = msg.payload.filter(task => task.done === false)\nnode.warn(completedTasks)\n\nlet userStats = {\n    completedTasks,\n    unCompletedTasks\n}\n\n\nmsg.payload = {\n    success: true,\n    userProf: msg.userProf,\n    userInf: msg.user,\n    userStats\n}\nreturn msg;",
+        "func": "let completedTasks = null\nlet unCompletedTasks = null\ncompletedTasks = msg.payload.filter(task => task.done === true)\nunCompletedTasks = msg.payload.filter(task => task.done === false)\n\nlet userStats = {\n    completedTasks,\n    unCompletedTasks\n}\n\n\nmsg.payload = {\n    success: true,\n    userProf: msg.userProf,\n    userInf: msg.user,\n    userStats\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3468,6 +3451,283 @@
                 "db47c71687b87b50"
             ]
         ]
+    },
+    {
+        "id": "89ef7113a7a6045e",
+        "type": "comment",
+        "z": "7357fc440e36aebb",
+        "name": "AGENDA OPERATIONS",
+        "info": "",
+        "x": 300,
+        "y": 3380,
+        "wires": []
+    },
+    {
+        "id": "d75011c5c7f625c1",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/getNotes",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 260,
+        "y": 3460,
+        "wires": [
+            [
+                "bf0d541a390a8591"
+            ]
+        ]
+    },
+    {
+        "id": "befabd614f4a7155",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 82",
+        "func": "let query = {\n    date : msg.payload.date,\n    user : msg.user.username\n}\n\nmsg.payload = [[\n    {\n    $match : query\n    }\n]]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 3460,
+        "wires": [
+            [
+                "3bdb0e57eefb4549"
+            ]
+        ]
+    },
+    {
+        "id": "80019e8803a5aee1",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1010,
+        "y": 3460,
+        "wires": []
+    },
+    {
+        "id": "dd72a2ac2d1c88cc",
+        "type": "http in",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "url": "/api/note-operations/:type",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 270,
+        "y": 3560,
+        "wires": [
+            [
+                "9938d339f12c2daf"
+            ]
+        ]
+    },
+    {
+        "id": "ca4b72f2b239cf30",
+        "type": "function",
+        "z": "7357fc440e36aebb",
+        "name": "function 83",
+        "func": "const date = msg.payload.date;\nconst note = msg.payload.note\nconst datee = new Date()\nconst now = datee.getTime()\n\nif (msg.payload.note === \"\"){\n    msg.payload = {\n        success : false,\n        message : \"Lütfen Doldurunuz\"\n    }\n    return [null,null,null,msg]\n}\n\nif (msg.req.params.type === \"add\") {\n    msg.payload = {\n        user: msg.user.username,\n        content: note,\n        status : \"inProgress\",\n        stamps: {\n            createdAt: now,\n            ip: msg.req.ip\n        },\n        date: date\n    }\n    return [msg,null,null]\n}else if (msg.req.params.type === \"delete\"){\n    msg.payload = {\n        _id : msg.payload?._id\n    }\n    return [null,msg,null]\n} else if (msg.req.params.type === \"updateStatus\"){\n    msg.payload =[ \n        {\n        _id : msg.payload?._id\n        },\n        {\n            $set : {\n                status : msg.payload.status\n            }\n        }\n    ]\n    return [null,null,msg]\n}\n\n\n",
+        "outputs": 4,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 3560,
+        "wires": [
+            [
+                "f96305a60341a1c7"
+            ],
+            [
+                "a42ad3a59ec2493e"
+            ],
+            [
+                "2885935e409e8314"
+            ],
+            [
+                "a7ea0707c3fc7b31"
+            ]
+        ]
+    },
+    {
+        "id": "bf8fc8b94935c7bd",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1190,
+        "y": 3520,
+        "wires": []
+    },
+    {
+        "id": "f96305a60341a1c7",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "notes",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 960,
+        "y": 3520,
+        "wires": [
+            [
+                "bf8fc8b94935c7bd"
+            ]
+        ]
+    },
+    {
+        "id": "9938d339f12c2daf",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "x": 550,
+        "y": 3560,
+        "wires": [
+            [
+                "ca4b72f2b239cf30"
+            ],
+            [
+                "ca4b72f2b239cf30"
+            ]
+        ]
+    },
+    {
+        "id": "3bdb0e57eefb4549",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "notes",
+        "operation": "aggregate",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 840,
+        "y": 3460,
+        "wires": [
+            [
+                "80019e8803a5aee1"
+            ]
+        ]
+    },
+    {
+        "id": "a42ad3a59ec2493e",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "notes",
+        "operation": "deleteOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 970,
+        "y": 3600,
+        "wires": [
+            [
+                "7e216aed03ae4abf"
+            ]
+        ]
+    },
+    {
+        "id": "7e216aed03ae4abf",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1190,
+        "y": 3600,
+        "wires": []
+    },
+    {
+        "id": "bf0d541a390a8591",
+        "type": "subflow:85ff2d8e203f5bb5",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "x": 470,
+        "y": 3460,
+        "wires": [
+            [
+                "befabd614f4a7155"
+            ],
+            [
+                "befabd614f4a7155"
+            ]
+        ]
+    },
+    {
+        "id": "2885935e409e8314",
+        "type": "mongodb4",
+        "z": "7357fc440e36aebb",
+        "clientNode": "eb3bb1a5b4cedf9b",
+        "mode": "collection",
+        "collection": "notes",
+        "operation": "updateOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": true,
+        "name": "",
+        "x": 1050,
+        "y": 3720,
+        "wires": [
+            [
+                "760d6fc6b2f78e69"
+            ]
+        ]
+    },
+    {
+        "id": "760d6fc6b2f78e69",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1250,
+        "y": 3720,
+        "wires": []
+    },
+    {
+        "id": "a7ea0707c3fc7b31",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 800,
+        "y": 3660,
+        "wires": []
+    },
+    {
+        "id": "8cfd7b3c0cad7f1d",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 680,
+        "wires": []
     },
     {
         "id": "ea92999f30f3cd81",
@@ -4365,6 +4625,53 @@
         "headers": {},
         "x": 500,
         "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "37044787183de976",
+        "type": "http in",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "url": "/agenda",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 730,
+        "y": 460,
+        "wires": [
+            [
+                "73f8aa77a21d6b81"
+            ]
+        ]
+    },
+    {
+        "id": "73f8aa77a21d6b81",
+        "type": "template",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html><html lang=\"en\"><head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Agenda</title>\n  <link rel=\"stylesheet\" href=\"https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css\">\n  <link rel=\"stylesheet\" href=\"/resources/demos/style.css\">\n  <script src=\"https://code.jquery.com/jquery-3.7.1.js\"></script>\n  <script src=\"https://code.jquery.com/ui/1.14.1/jquery-ui.js\"></script>\n<style>\n    body {\n      font-family: Arial, sans-serif;\n      background: #f4f6f8;\n      display: flex;\n      flex-direction: column;\n    }\n\n    h1 {\n      color: #333;\n      margin-bottom: 20px;\n    }\n\n    .input-group {\n      display: flex;\n      gap: 10px;\n      margin-bottom: 20px;\n      flex-wrap: wrap;\n      justify-content: center;\n    }\n\n    input[type=\"date\"],\n    input[type=\"text\"],\n    button {\n      padding: 10px;\n      border: 1px solid #ccc;\n      border-radius: 6px;\n      font-size: 14px;\n    }\n\n    button {\n      cursor: pointer;\n      background: #007bff;\n      color: white;\n      border: none;\n      transition: 0.3s;\n    }\n\n    button:hover {\n      background: #0056b3;\n    }\n\n    #noteUl {\n      list-style: none;\n      padding: 0;\n      max-width: 400px;\n      width: 100%;\n    }\n\n    #noteUl li {\n      background: white;\n      padding: 12px;\n      margin-bottom: 10px;\n      border-radius: 8px;\n      box-shadow: 0 2px 5px rgba(0,0,0,0.1);\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    #noteUl button {\n      background: #dc3545;\n      padding: 6px 12px;\n      border-radius: 4px;\n      font-size: 12px;\n    }\n\n    #noteUl button:hover {\n      background: #b02a37;\n    }\n  </style>\n</head>\n<body>\n \n  <h1>🗓 Agenda</h1>\n  <div class=\"input-group\">\n    <input type=\"date\" name=\"date\" id=\"date\" />\n    <input type=\"text\" name=\"note\" id=\"note\" placeholder=\"Notunuzu yazın...\" />\n    <button id=\"noteButton\">Ekle</button>\n  </div>\n  <ul id=\"noteUl\"></ul>\n\n\n \n \n \n\n\n\n</body>\n\n</html>",
+        "output": "str",
+        "x": 940,
+        "y": 460,
+        "wires": [
+            [
+                "ee79a47a4f0c7a81"
+            ]
+        ]
+    },
+    {
+        "id": "ee79a47a4f0c7a81",
+        "type": "http response",
+        "z": "9a024a21c0703f56",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1140,
+        "y": 460,
         "wires": []
     },
     {

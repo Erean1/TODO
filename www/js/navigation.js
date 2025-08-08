@@ -27,9 +27,8 @@ class SPAController {
   async loadPage() {
     const hash = window.location.hash.substring(1); // #logout ---> logout
     this.content.innerHTML = "Yükleniyor..."; // içerik yüklenene kadar Yükleniyor yazcak
-
+    // Routers    
     const routes = {
-      // routerlerimi belirledim ve routerlerimde neler göndericem bunları belirledim
       myTodos: ["myTodos", "table", "todo-table"],
       addTodo: ["addTodo", "form"],
       addUser: ["addUser", "form"],
@@ -39,13 +38,14 @@ class SPAController {
       addCategory: ["addCategory", "form"],
       categoryList: ["categoryList", "table", "category-table"],
     };
+    // active attrb
     document.querySelectorAll(".nav-link").forEach((el) => {
       el.classList.remove("blink");
       el.style.color = "";
     });
     const link = document.querySelector(`a[href="#${hash}"]`);
     link.classList.add("blink");
-
+    // ! ------------
     if (Object.keys(routes).includes(hash)) {
       await this.loadContent(...routes[hash]);
       return;
@@ -69,6 +69,13 @@ class SPAController {
       );
       userProfileP.init();
       return;
+    } else if (hash === "agenda"){
+      const res  = await fetch(`/${hash}`);
+      const html = await res.text();
+      this.content.innerHTML = html
+      const module = await import("./agenda.js");
+      const agendaPage = module.default.init()
+      return;
     }
   }
 
@@ -79,7 +86,6 @@ class SPAController {
     window.addEventListener("hashchange", this.loadPage.bind(this));
 
     window.addEventListener("DOMContentLoaded", () => {
-      this.chooseTheme();
       if (window.location.hash) {
         this.loadPage();
       } else {
