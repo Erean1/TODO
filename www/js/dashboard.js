@@ -27,9 +27,9 @@ class DashboardController {
         throw new Error("Cold not fetch resources");
       }
       const data = await res.json();
-      document.getElementById("totalTodos").textContent += `Toplam Todo Sayısı : ${data.todos} `
-      document.getElementById("completedTodos").textContent += `Tamamlanan Todo Sayısı : ${data.completedTodos} `
-      document.getElementById("uncompletedTodos").textContent += `Tamamlanmayan Todo Sayısı : ${data.unCompletedTodos} `
+      document.getElementById("totalTodos").textContent += `${data.todos} `
+      document.getElementById("completedTodos").textContent += `${data.completedTodos} `
+      document.getElementById("uncompletedTodos").textContent += `${data.unCompletedTodos} `
     } catch(error){
       console.error(error)
     }

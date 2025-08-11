@@ -141,11 +141,17 @@ class FormController {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
-        if (!res.ok) {
-          throw new Error("HATA", res.statusText);
-        }
         const data = await res.json();
+
+        if (!res.ok) {
+          this.showError(data.error || "Bir Şeyler Yanlış Gitti");
+          setTimeout(() => {
+            window.location.reload()
+          },1000)
+          return;
+        }
         if (data.success === false) {
+          console.log(data.error)
           this.showError(data.error || "Bir şeyler yanlış gitti");
           setTimeout(() => {
             window.location.reload();

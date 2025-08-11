@@ -1,16 +1,20 @@
 export async function loadTable(type, dataType) {
   const res = await fetch(`/api/tables/${type}`); // table.json u çektik
+  console.log("TablejsonRes",res)
   const tableJson = await res.json(); // değişkene atadık
-
+  console.log("TableJson:",tableJson)
+  console.log(dataType)
   const dataRes = await fetch(`/api/${dataType}`); //tabloda göstereceğim datalar
+  console.log("Datares",dataRes)
   const datas = await dataRes.json();
-
+  console.log("Datas" ,datas)
+  console.log(datas)
   let tableId = null;
   switch (dataType) {
     case "myTodos":
       tableId = "#todoTable";
       break;
-    case "userList":
+    case "users":
       tableId = "#userTable";
       break;
     case "logs":
@@ -23,7 +27,7 @@ export async function loadTable(type, dataType) {
       tableId = "#categoryTable";
       break;
   }
-  if (dataType === "userList") {
+  if (dataType === "users") {
     tableJson.columns.push({
       // tablenin columns listesine push islemi
       data: null, // datası null

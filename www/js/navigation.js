@@ -9,9 +9,13 @@ class SPAController {
   }
   // Sayfa içeriğini yükler
   async loadContent(type, kind, tableId) {
-    try {
+    console.log("Çağrıldı",type,kind,tableId)
+    try { 
       const res = await fetch("/" + type); // partials htmllerime örneğin /myTodos buna istek attık res aldık
+      console.log("Response",res)
       const html = await res.text(); // gelen isteği text şeklinde htmlye attık
+      console.log("HTML CONTENT LOADED")
+      console.log(html)
       this.content.innerHTML = html; // contentin içine innerHTML ile html yi yazdırdık ardık sayfamız gözüküyor
       if (kind === "form") {
         // kind === form ise
@@ -32,7 +36,7 @@ class SPAController {
       myTodos: ["myTodos", "table", "todo-table"],
       addTodo: ["addTodo", "form"],
       addUser: ["addUser", "form"],
-      userList: ["userList", "table", "user-table"],
+      userList: ["users", "table", "user-table"],
       logs: ["logs", "table", "log-table"],
       completedTodos: ["completedTodos", "table", "completedTodos-table"],
       addCategory: ["addCategory", "form"],
