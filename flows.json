@@ -2,7 +2,7 @@
     {
         "id": "d8112b18e3794244",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Main Flow",
         "disabled": false,
         "info": "",
         "env": []
@@ -481,7 +481,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>TODO</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n      color: #333 !important;\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n      color: blue;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    @keyframes blink-animation {\n      0% {\n        opacity: 1;\n        color: #dc3545;\n      }\n\n      /* kırmızı */\n      50% {\n        opacity: 0;\n        color: #ffc107;\n      }\n\n      /* sarı */\n      100% {\n        opacity: 1;\n        color: #198754;\n      }\n\n      /* yeşil */\n    }\n\n    .blink {\n      animation: blink-animation 1s infinite;\n    }\n  </style>\n</head>\n\n<body>\n\n  <!-- Sidebar -->\n  <aside class=\"sidebar\">\n    <ul class=\"nav flex-column\" id=\"sidebarNav\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link mt-5\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-2\"></i> Görev Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-2\"></i> Görevlerim</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-check2-circle me-2\"></i> Biten Görevlerim</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#agenda\"><i class=\"bi bi-check2-circle me-2\"></i>Ajanda</a>\n      </li>\n      {{#showAdminAndMods}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-2\"></i> Kullanıcı Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-2\"></i> Kullanıcılar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-pie-chart me-2\"></i> Dashboard</a>\n      </li>\n      {{/showAdminAndMods}}\n      {{#hasAdmin}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-database-lock me-2\"></i> Loglar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addCategory\"><i class=\"bi bi-plus-circle-fill me-2\"></i> Kategori Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#categoryList\"><i class=\"bi bi-tag me-2\"></i> Kategoriler</a>\n      </li>\n      {{/hasAdmin}}\n    </ul>\n  </aside>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg p-2 sticky-top\">\n    <div class=\"container-fluid d-flex justify-content-between\">\n      <a class=\"navbar-brand me-3 overflow-hidden\" href=\"/\">TODO</a>\n\n      <div class=\"d-flex align-items-center\">\n        {{^verified}}\n        <a href=\"#\" onclick=\"sendVerificationEmail()\" class=\"btn fw-bold me-3 blink\">Onayla</a>\n        {{/verified}}\n\n        <a class=\"nav-link text-danger me-3\" href=\"#userProfile\"><i class=\"bi bi-person-square text-secondary\"></i>\n          Profilim</a>\n        <div class=\"user-info\">\n          <span>{{user.displayName}} <small class=\"text-dark-50\">| {{user.username}}</small></span>\n          <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <main class=\"main-content \">\n    <div class=\"container py-4 \">\n      <div class=\"row \">\n        <div class=\"col-lg-12 mx-auto\">\n          <div id=\"contentContainer\" class=\"card\">\n            <div class=\"card-body p-4\">\n              <div class=\"text-center py-5\">\n                <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n                <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </main>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n\n  <script>\n    const userEmail  = \"{{user.email}}\";\n    const sendVerificationEmail = async () => {\n      console.log(    \"Fonksiyon çağırıldu\")\n    try{\n        const res = await fetch (\"/api/verifyUser\",{\n            method : \"POST\",\n            headers : {\n            \"Content-Type\" : \"application/json\"\n            },\n            body : JSON.stringify({email : userEmail })\n        });\n        if (!res.ok){\n          throw new Error(res.status);\n          }\n            \n          const data = await res.json();\n          console.log(data)\n          alert(\"Lütfen MAİLİNİZİ KONTROL EDİNİZ\")\n    } catch (error){\n        alert(\"Bir Hata oluştu\")\n        window.location = \"/\"\n    }\n    contentContainer.innerText = \"Verifikasyon Linki Gönderildi \"\n  }\n  \n  \n  </script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>TODO</title>\n\n  <!-- CSS -->\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link rel=\"stylesheet\" href=\"/font/bootstrap-icons.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n  <link href=\"https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css\">\n  <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css\" />\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n\n\n  <!-- Custom CSS -->\n  <style>\n    :root {\n      --primary-color: #4e73df;\n      --secondary-color: #f8f9fc;\n      --accent-color: #2e59d9;\n      --text-dark: #5a5c69;\n    }\n\n    body {\n      background-color: #f8f9fc;\n      color: var(--text-dark);\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    }\n\n    .navbar {\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);\n      color: #333 !important;\n    }\n\n    .navbar-brand {\n      font-weight: 800;\n      letter-spacing: 1px;\n      color: blue;\n    }\n\n    .nav-link {\n      font-weight: 500;\n      padding: 0.5rem 1rem;\n      border-radius: 0.35rem;\n      transition: all 0.3s;\n    }\n\n    .nav-link:hover {\n      background-color: rgba(255, 255, 255, 0.1);\n    }\n\n    .card {\n      border: none;\n      border-radius: 0.35rem;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);\n      margin-bottom: 1.5rem;\n    }\n\n    .card-header {\n      background-color: var(--secondary-color);\n      border-bottom: 1px solid #e3e6f0;\n      font-weight: 600;\n      padding: 1rem 1.35rem;\n    }\n\n    .btn-primary {\n      background-color: var(--primary-color);\n      border-color: var(--primary-color);\n    }\n\n    .btn-primary:hover {\n      background-color: var(--accent-color);\n      border-color: var(--accent-color);\n    }\n\n    .user-info {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    .user-avatar {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background-color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: bold;\n      color: var(--primary-color);\n    }\n\n    .admin-btn {\n      width: 50px;\n      height: 50px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.3);\n    }\n\n    /* Responsive adjustments */\n    @media (max-width: 768px) {\n      .navbar .container-fluid {\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .navbar .d-flex {\n        width: 100%;\n        justify-content: space-between;\n        margin-top: 0.5rem;\n      }\n\n      .nav-link {\n        padding: 0.5rem;\n        font-size: 0.9rem;\n      }\n\n      .user-info {\n        flex-direction: column;\n        align-items: flex-end;\n        gap: 0.2rem;\n      }\n\n      .user-info span {\n        font-size: 0.8rem;\n      }\n    }\n\n    @media (max-width: 576px) {\n      .navbar .d-flex:first-child {\n        flex-wrap: wrap;\n      }\n\n      .nav-link {\n        margin-bottom: 0.2rem;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    .sidebar {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 240px;\n      height: 100vh;\n      background-color: #343a40;\n      padding: 1rem;\n      overflow-y: auto;\n      z-index: 1000;\n    }\n\n    .sidebar .nav-link {\n      color: #dee2e6;\n      padding: 0.75rem 1rem;\n      border-radius: 0.25rem;\n      transition: background 0.3s, color 0.3s;\n    }\n\n    .sidebar .nav-link:hover,\n    .sidebar .nav-link.active {\n      background-color: #495057;\n      color: #fff;\n    }\n\n    .main-content {\n      margin-left: 240px;\n      padding: 2rem 1rem;\n    }\n\n    /* Mobilde sidebar yukarı gelsin */\n    @media (max-width: 768px) {\n      .sidebar {\n        position: relative;\n        width: 100%;\n        height: auto;\n      }\n\n      .main-content {\n        margin-left: 0;\n      }\n    }\n\n    @keyframes blink-animation {\n      0% {\n        opacity: 1;\n        color: #dc3545;\n      }\n\n      /* kırmızı */\n      50% {\n        opacity: 0;\n        color: #ffc107;\n      }\n\n      /* sarı */\n      100% {\n        opacity: 1;\n        color: #198754;\n      }\n\n      /* yeşil */\n    }\n\n    .blink {\n      animation: blink-animation 1s infinite;\n    }\n  </style>\n</head>\n\n<body>\n\n  <!-- Sidebar -->\n  <aside class=\"sidebar\">\n    <ul class=\"nav flex-column\" id=\"sidebarNav\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link mt-5\" href=\"#addTodo\"><i class=\"bi bi-plus-circle me-2\"></i> Görev Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#myTodos\"><i class=\"bi bi-list-check me-2\"></i> Görevlerim</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#completedTodos\"><i class=\"bi bi-check2-circle me-2\"></i> Biten Görevlerim</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#agenda\"><i class=\"bi bi-check2-circle me-2\"></i>Ajanda</a>\n      </li>\n      {{#showAdminAndMods}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addUser\"><i class=\"bi bi-person-plus me-2\"></i> Kullanıcı Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#userList\"><i class=\"bi bi-people me-2\"></i> Kullanıcılar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#dashboard\"><i class=\"bi bi-pie-chart me-2\"></i> Dashboard</a>\n      </li>\n      {{/showAdminAndMods}}\n      {{#hasAdmin}}\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#logs\"><i class=\"bi bi-database-lock me-2\"></i> Loglar</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#addCategory\"><i class=\"bi bi-plus-circle-fill me-2\"></i> Kategori Ekle</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#categoryList\"><i class=\"bi bi-tag me-2\"></i> Kategoriler</a>\n      </li>\n      {{/hasAdmin}}\n    </ul>\n  </aside>\n  <!-- Navbar -->\n  <nav class=\"navbar navbar-expand-lg p-2 sticky-top\">\n    <div class=\"container-fluid d-flex justify-content-between\">\n      <a class=\"navbar-brand me-3 overflow-hidden\" href=\"/\">TODO</a>\n\n      <div class=\"d-flex align-items-center\">\n        {{^verified}}\n        <a href=\"#\" onclick=\"sendVerificationEmail()\" class=\"btn fw-bold me-3 blink\">Onayla</a>\n        {{/verified}}\n\n        <a class=\"nav-link text-danger me-3\" href=\"#userProfile\"><i class=\"bi bi-person-square text-secondary\"></i>\n          Profilim</a>\n        <div class=\"user-info\">\n          <span>{{user.displayName}} <small class=\"text-dark-50\">| {{user.username}}</small></span>\n          <a href=\"#logout\" class=\"btn btn-sm btn-danger ms-2\"><i class=\"bi bi-power\"></i> Çıkış</a>\n        </div>\n      </div>\n    </div>\n  </nav>\n\n  <!-- Main Content -->\n  <main class=\"main-content \">\n    <div class=\"container py-4 \">\n      <div class=\"row \">\n        <div class=\"col-lg-12 mx-auto\">\n          <div id=\"contentContainer\" class=\"card\">\n            <div class=\"card-body p-4\">\n              <div class=\"text-center py-5\">\n                <i class=\"bi bi-list-task\" style=\"font-size: 3rem; color: #ddd;\"></i>\n                <h5 class=\"mt-3 text-muted\">Bir bölüm seçin</h5>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </main>\n\n\n\n  <!-- JavaScript -->\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"\n    integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/2.3.2/js/dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js\"></script>\n  <script src=\"https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js\"></script>\n  <script src=\"/js/bootstrap.bundle.min.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n\n\n  <script>\n    const userEmail  = \"{{user.email}}\";\n    const sendVerificationEmail = async () => {\n    try{\n        const res = await fetch (\"/api/verifyUser\",{\n            method : \"POST\",\n            headers : {\n            \"Content-Type\" : \"application/json\"\n            },\n            body : JSON.stringify({email : userEmail })\n        });\n        if (!res.ok){\n          throw new Error(res.status);\n          }\n            \n          const data = await res.json();\n          console.log(data)\n          alert(\"Lütfen MAİLİNİZİ KONTROL EDİNİZ\")\n    } catch (error){\n        alert(\"Bir Hata oluştu\")\n        window.location = \"/\"\n    }\n    contentContainer.innerText = \"Verifikasyon Linki Gönderildi \"\n  }\n  \n  \n  </script>\n\n  <script>\n    // Initialize tooltips\n    document.addEventListener('DOMContentLoaded', function() {\n      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));\n      const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {\n        return new bootstrap.Tooltip(tooltipTriggerEl);\n      });\n\n    });\n\n  </script>\n</body>\n\n</html>",
         "output": "str",
         "x": 640,
         "y": 400,
@@ -511,7 +511,8 @@
         "y": 175.0000467300415,
         "wires": [
             [
-                "9c7170ee9629c746"
+                "9c7170ee9629c746",
+                "7f9a93fad3e42fbd"
             ]
         ]
     },
@@ -524,8 +525,8 @@
         "links": [
             "76e21d0b94ca381e"
         ],
-        "x": 945.9999694824219,
-        "y": 175.0000467300415,
+        "x": 945,
+        "y": 180,
         "wires": []
     },
     {
@@ -665,7 +666,8 @@
         "y": 175.0000467300415,
         "wires": [
             [
-                "fb078a267fd993bc"
+                "fb078a267fd993bc",
+                "ad597b72553c6bfd"
             ]
         ]
     },
@@ -681,11 +683,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 310.9999694824219,
-        "y": 175.0000467300415,
+        "x": 310,
+        "y": 180,
         "wires": [
             [
-                "272298e2863c7120"
+                "272298e2863c7120",
+                "e75ea1816664b38a"
             ]
         ]
     },
@@ -712,7 +715,8 @@
         "y": 175.0000467300415,
         "wires": [
             [
-                "076fdfc277051bda"
+                "076fdfc277051bda",
+                "2e7ec307fbdc3b17"
             ]
         ]
     },
@@ -733,6 +737,74 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "7f9a93fad3e42fbd",
+        "type": "debug",
+        "z": "d8112b18e3794244",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 232.1999969482422,
+        "y": 142.1999969482422,
+        "wires": []
+    },
+    {
+        "id": "e75ea1816664b38a",
+        "type": "debug",
+        "z": "d8112b18e3794244",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ad597b72553c6bfd",
+        "type": "debug",
+        "z": "d8112b18e3794244",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "2e7ec307fbdc3b17",
+        "type": "debug",
+        "z": "d8112b18e3794244",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 240,
+        "wires": []
     },
     {
         "id": "0ac019b8f42518dc",
@@ -862,7 +934,7 @@
             "content-type": "application/json"
         },
         "x": 1560,
-        "y": 280,
+        "y": 300,
         "wires": []
     },
     {
@@ -888,7 +960,8 @@
         "y": 560,
         "wires": [
             [
-                "740bd08d424da0d9"
+                "740bd08d424da0d9",
+                "b3eb63cf5054cb71"
             ]
         ]
     },
@@ -901,7 +974,8 @@
         "y": 560,
         "wires": [
             [
-                "2cf1c9ccf564e8d6"
+                "2cf1c9ccf564e8d6",
+                "10cb1e23d74deeca"
             ],
             [
                 "2cf1c9ccf564e8d6"
@@ -924,7 +998,8 @@
         "y": 560,
         "wires": [
             [
-                "3eecaa28767f6aab"
+                "3eecaa28767f6aab",
+                "c0d309867e7dcd9d"
             ],
             [
                 "4f89f5bfbc63161c"
@@ -954,7 +1029,8 @@
                 "a31da0fe609e8a3e"
             ],
             [
-                "d39bd054e0ace37e"
+                "d39bd054e0ace37e",
+                "a1bbde4d36be8d49"
             ],
             [
                 "461c351409a6d868"
@@ -1032,11 +1108,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1350,
+        "x": 1370,
         "y": 460,
         "wires": [
             [
-                "3f6932f99e2dab32"
+                "3f6932f99e2dab32",
+                "dc1aaf13ced2e642"
             ],
             [
                 "cbc9619dada1ac64"
@@ -1062,7 +1139,8 @@
         "y": 400,
         "wires": [
             [
-                "116d4707fcf4d9ee"
+                "116d4707fcf4d9ee",
+                "ed62adb219200359"
             ]
         ]
     },
@@ -1102,7 +1180,7 @@
         "headers": {
             "location": "/"
         },
-        "x": 2080,
+        "x": 2020,
         "y": 400,
         "wires": []
     },
@@ -1204,8 +1282,7 @@
         "y": 718.8571338653564,
         "wires": [
             [
-                "c87badb39970cdda",
-                "8cfd7b3c0cad7f1d"
+                "c87badb39970cdda"
             ]
         ]
     },
@@ -1214,7 +1291,7 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "header",
-        "func": "\nif (msg.schedule) {\n    msg.payload  = [\n        {\n            _id : msg.formData._id\n        },\n        {\n            $set : {\n                schedule: msg.response\n            }\n        }\n    ]\n    return [null,msg]\n}\n\n\nmsg.from = \"noreply <noreply@todo.com\"\nmsg.to = msg.user.email\nreturn msg;",
+        "func": "if (msg.schedule) {\n    msg.payload  = [\n        {\n            _id : msg.formData._id\n        },\n        {\n            $set : {\n                schedule: msg.response\n            }\n        }\n    ]\n    return [null,msg]\n}\n\n\nmsg.from = \"noreply <noreply@todo.com\"\nmsg.to = msg.user.email\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -1914,8 +1991,8 @@
         "type": "function",
         "z": "7357fc440e36aebb",
         "name": "function 24",
-        "func": "msg.payload = {\n    success : true\n}\nreturn msg;",
-        "outputs": 1,
+        "func": "\nmsg.payload = {\n    success : true\n}\n\n\n\nreturn msg.req.params.type === \"schedule\" ? [null,msg] : msg;",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -1925,7 +2002,11 @@
         "y": 400,
         "wires": [
             [
-                "e34bf97f96bd77ce"
+                "e34bf97f96bd77ce",
+                "bbdb0fc425342609"
+            ],
+            [
+                "185324b8f268dffe"
             ]
         ]
     },
@@ -1938,8 +2019,8 @@
         "headers": {
             "content-type": "application/json"
         },
-        "x": 820,
-        "y": 760,
+        "x": 840,
+        "y": 620,
         "wires": []
     },
     {
@@ -2263,8 +2344,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 191,
-        "y": 1768.0003395080566,
+        "x": 180,
+        "y": 1760,
         "wires": [
             [
                 "5791ac6a06324467"
@@ -2283,8 +2364,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 441,
-        "y": 1768.0003395080566,
+        "x": 430,
+        "y": 1760,
         "wires": [
             [
                 "8d2518ea5f22e5e2"
@@ -2303,8 +2384,8 @@
         "maxTimeMS": "0",
         "handleDocId": false,
         "name": "",
-        "x": 641,
-        "y": 1768.0003395080566,
+        "x": 650,
+        "y": 1760,
         "wires": [
             [
                 "cbabf5f050a1dbe8"
@@ -2318,8 +2399,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 791,
-        "y": 1768.0003395080566,
+        "x": 810,
+        "y": 1760,
         "wires": []
     },
     {
@@ -2940,7 +3021,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
+        "x": 630,
         "y": 2520,
         "wires": [
             [
@@ -3713,7 +3794,7 @@
         "wires": []
     },
     {
-        "id": "8cfd7b3c0cad7f1d",
+        "id": "b3eb63cf5054cb71",
         "type": "debug",
         "z": "7357fc440e36aebb",
         "name": "debug 1",
@@ -3725,8 +3806,133 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 680,
+        "x": 390,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "10cb1e23d74deeca",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c0d309867e7dcd9d",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 878.2000122070312,
+        "y": 436.6000061035156,
+        "wires": []
+    },
+    {
+        "id": "a1bbde4d36be8d49",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1200,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "dc1aaf13ced2e642",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1480,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "ed62adb219200359",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1760,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "bbdb0fc425342609",
+        "type": "debug",
+        "z": "7357fc440e36aebb",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1980,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "185324b8f268dffe",
+        "type": "http response",
+        "z": "7357fc440e36aebb",
+        "name": "",
+        "statusCode": "302",
+        "headers": {
+            "location": "/"
+        },
+        "x": 2000,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "da0ec8051fb8858a",
+        "type": "comment",
+        "z": "7357fc440e36aebb",
+        "name": "PROFILE OPERATIONSSSSSSSSSSSSSS",
+        "info": "",
+        "x": 850,
+        "y": 2460,
         "wires": []
     },
     {
@@ -3804,7 +4010,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n</head>\n<body>\n    <div id=\"todoCount\"> </div> \n    <br>\n<div id=\"demo\" class=\"display\" style=\"width:100%\">\n    \n    <table id=\"todoTable\" class=\"display\" style=\"width:100%\">\n        <thead>\n            <tr>\n            </tr>\n        </thead>\n        <tbody>\n            <!-- Veriler JS ile yüklenecek -->\n        </tbody>\n    </table>\n</div>\n\n\n    \n\n</body>\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n</head>\n<body>\n    <div id=\"todoCount\"> </div> \n    <br>\n<div id=\"demo\" class=\"display\" style=\"width:100%\">\n    \n    <table id=\"todoTable\" class=\"display\" style=\"width:100%\">\n        <thead>\n            <tr>\n            </tr>\n        </thead>\n        <tbody>\n        </tbody>\n    </table>\n</div>\n\n\n    \n\n</body>\n</html>",
         "output": "str",
         "x": 305.7142868041992,
         "y": 179.9999861717224,
@@ -4463,7 +4669,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n    <style>\n        :root {\n            --primary-color: #4361ee;\n            --secondary-color: #3f37c9;\n            --accent-color: #4895ef;\n            --success-color: #4cc9f0;\n            --light-color: #f8f9fa;\n            --dark-color: #212529;\n        }\n        \n        body {\n            background-color: #f5f7fb;\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            color: var(--dark-color);\n        }\n        \n        #dashboard {\n            max-width: 1200px;\n            margin: 2rem auto;\n            padding: 0 1rem;\n        }\n        \n        .card {\n            border: none;\n            border-radius: 12px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);\n            transition: transform 0.3s ease, box-shadow 0.3s ease;\n            height: 100%;\n        }\n        \n        .card:hover {\n            transform: translateY(-5px);\n            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);\n        }\n        \n        .card-header {\n            background-color: white;\n            border-bottom: 1px solid rgba(0, 0, 0, 0.05);\n            border-radius: 12px 12px 0 0 !important;\n            padding: 1.25rem 1.5rem;\n        }\n        \n        .card-title {\n            font-weight: 600;\n            color: var(--primary-color);\n            margin-bottom: 0;\n            font-size: 1.1rem;\n            display: flex;\n            align-items: center;\n        }\n        \n        .card-title i {\n            margin-right: 0.5rem;\n            font-size: 1.2rem;\n        }\n        \n        .stat-card {\n            text-align: center;\n            padding: 1.5rem;\n        }\n        \n        .stat-value {\n            font-weight: 700;\n            font-size: 2rem;\n            color: var(--primary-color);\n            margin: 0.5rem 0;\n        }\n        \n        .stat-label {\n            color: #6c757d;\n            font-size: 0.9rem;\n        }\n        \n        .progress {\n            height: 8px;\n            border-radius: 4px;\n            margin-top: 0.5rem;\n        }\n        \n        .chart-container {\n            position: relative;\n            height: 250px;\n            padding: 1rem;\n        }\n        \n        .badge {\n            font-weight: 500;\n            padding: 0.35em 0.65em;\n        }\n        \n        .user-avatar {\n            width: 40px;\n            height: 40px;\n            border-radius: 50%;\n            background-color: var(--accent-color);\n            color: white;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-weight: 600;\n            margin-right: 0.75rem;\n        }\n        \n        .recent-activity {\n            list-style: none;\n            padding-left: 0;\n        }\n        \n        .recent-activity li {\n            padding: 0.75rem 0;\n            border-bottom: 1px solid rgba(0, 0, 0, 0.05);\n        }\n        \n        .recent-activity li:last-child {\n            border-bottom: none;\n        }\n        \n        .activity-time {\n            font-size: 0.75rem;\n            color: #6c757d;\n        }\n        \n        @media (max-width: 768px) {\n            .stat-value {\n                font-size: 1.5rem;\n            }\n        }\n    </style>\n</head>\n<body>\n    \n<section id=\"dashboard\">\n    <div class=\"row mb-4\">\n        <div class=\"col-12\">\n            <h2 class=\"fw-bold\">Dashboard</h2>\n        </div>\n    </div>\n\n    <div class=\"row g-4 mb-4\">\n        <!-- User Stats Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-people-fill\"></i> Total Users\n                </div>\n                <div class=\"stat-value\" id=\"totalUsers\"></div>\n\n            </div>\n        </div>\n\n        <!-- Active Users Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-person-check-fill\"></i> Active Users\n                </div>\n                <div class=\"stat-value\" id=\"activeUsers\"></div>\n            </div>\n        </div>\n        \n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-person-check-fill\"></i> Passive Users\n                </div>\n                <div class=\"stat-value\" id=\"passiveUsers\"></div>\n            </div>\n        </div>\n\n        <!-- Todo Stats Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-list-check\"></i> Total Todos\n                </div>\n                <div class=\"stat-value\" id=\"totalTodos\"></div>\n            </div>\n        </div>\n\n        <!-- Completed Todos Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-check-circle-fill\"></i> Completed Todos\n                </div>\n                <div class=\"stat-value\" id=\"completedTodos\"></div>\n            </div>\n        </div>\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-check-circle-fill\"></i> UnCompleted Todos\n                </div>\n                <div class=\"stat-value\" id=\"uncompletedTodos\"></div>\n            </div>\n        </div>\n    </div>\n\n</section>\n\n\n\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n</body>\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\" integrity=\"sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=\" crossorigin=\"anonymous\"></script>\n    <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" type=\"text/css\" rel=\"stylesheet\">\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n    <style>\n        :root {\n            --primary-color: #4361ee;\n            --secondary-color: #3f37c9;\n            --accent-color: #4895ef;\n            --success-color: #4cc9f0;\n            --light-color: #f8f9fa;\n            --dark-color: #212529;\n        }\n        \n        body {\n            background-color: #f5f7fb;\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            color: var(--dark-color);\n        }\n        \n        #dashboard {\n            max-width: 1200px;\n            margin: 2rem auto;\n            padding: 0 1rem;\n        }\n        \n        .card {\n            border: none;\n            border-radius: 12px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);\n            transition: transform 0.3s ease, box-shadow 0.3s ease;\n            height: 100%;\n        }\n        \n        .card:hover {\n            transform: translateY(-5px);\n            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);\n        }\n        \n        .card-header {\n            background-color: white;\n            border-bottom: 1px solid rgba(0, 0, 0, 0.05);\n            border-radius: 12px 12px 0 0 !important;\n            padding: 1.25rem 1.5rem;\n        }\n        \n        .card-title {\n            font-weight: 600;\n            color: var(--primary-color);\n            margin-bottom: 0;\n            font-size: 1.1rem;\n            display: flex;\n            align-items: center;\n        }\n        \n        .card-title i {\n            margin-right: 0.5rem;\n            font-size: 1.2rem;\n        }\n        \n        .stat-card {\n            text-align: center;\n            padding: 1.5rem;\n        }\n        \n        .stat-value {\n            font-weight: 700;\n            font-size: 2rem;\n            color: var(--primary-color);\n            margin: 0.5rem 0;\n        }\n        \n        .stat-label {\n            color: #6c757d;\n            font-size: 0.9rem;\n        }\n        \n        .progress {\n            height: 8px;\n            border-radius: 4px;\n            margin-top: 0.5rem;\n        }\n        \n        .chart-container {\n            position: relative;\n            height: 250px;\n            padding: 1rem;\n        }\n        \n        .badge {\n            font-weight: 500;\n            padding: 0.35em 0.65em;\n        }\n        \n        .user-avatar {\n            width: 40px;\n            height: 40px;\n            border-radius: 50%;\n            background-color: var(--accent-color);\n            color: white;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-weight: 600;\n            margin-right: 0.75rem;\n        }\n        \n        .recent-activity {\n            list-style: none;\n            padding-left: 0;\n        }\n        \n        .recent-activity li {\n            padding: 0.75rem 0;\n            border-bottom: 1px solid rgba(0, 0, 0, 0.05);\n        }\n        \n        .recent-activity li:last-child {\n            border-bottom: none;\n        }\n        \n        .activity-time {\n            font-size: 0.75rem;\n            color: #6c757d;\n        }\n        \n        @media (max-width: 768px) {\n            .stat-value {\n                font-size: 1.5rem;\n            }\n        }\n    </style>\n</head>\n<body>\n    \n<section id=\"dashboard\">\n    <div class=\"row mb-4\">\n        <div class=\"col-12\">\n            <h2 class=\"fw-bold\">Dashboard</h2>\n        </div>\n    </div>\n\n    <div class=\"row g-4 mb-4\">\n        <!-- User Stats Card -->\n        <div class=\"col-12 col-md-6 col-lg-3\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-people-fill\"></i> Toplam Kullanıcı Sayısı\n                </div>\n                <div class=\"stat-value\" id=\"totalUsers\"></div>\n\n            </div>\n        </div>\n\n        <!-- Active Users Card -->\n        <div class=\"col-12 col-md-6 col-lg-3\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-person-check-fill\"></i> Aktif Kullanıcılar\n                </div>\n                <div class=\"stat-value\" id=\"activeUsers\"></div>\n            </div>\n        </div>\n        \n        <div class=\"col-12 col-md-6 col-lg-3\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-person-check-fill\"></i> Pasif Kullanıcılar\n                </div>\n                <div class=\"stat-value\" id=\"passiveUsers\"></div>\n            </div>\n        </div>\n        <div class=\"col-12 col-md-6 col-lg-3\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-person-check-fill\"></i> Son 3 günde Kayıt Yapan Kullanıcılar\n                </div>\n                <div class=\"stat-value\" id=\"lastThreeDaysUsers\"></div>\n            </div>\n        </div>    \n        <!-- Todo Stats Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-list-check\"></i> Total Todos\n                </div>\n                <div class=\"stat-value\" id=\"totalTodos\"></div>\n            </div>\n        </div>\n\n        <!-- Completed Todos Card -->\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-check-circle-fill\"></i> Completed Todos\n                </div>\n                <div class=\"stat-value\" id=\"completedTodos\"></div>\n            </div>\n        </div>\n        <div class=\"col-12 col-md-6 col-lg-4\">\n            <div class=\"card stat-card\">\n                <div class=\"stat-label\">\n                    <i class=\"bi bi-check-circle-fill\"></i> UnCompleted Todos\n                </div>\n                <div class=\"stat-value\" id=\"uncompletedTodos\"></div>\n            </div>\n        </div>\n    </div>\n\n</section>\n\n\n\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n</body>\n</html>",
         "output": "str",
         "x": 300,
         "y": 380,
@@ -4884,7 +5090,7 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>SIGNUP</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/themes/layered-dark-panelless.min.js\"></script>\n\n  <style>\n    body {\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n\n    .form-wrapper {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n    }\n\n    .form-card {\n      background: rgba(255, 255, 255, 0.8);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);\n      width: 100%;\n      max-width : 550px;\n\n      backdrop-filter: blur(10px);\n    }\n\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 1rem;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <div class=\"form-wrapper\">\n    <div class=\"form-card\">\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"register-form\");\n  })();\n</script>\n\n</body>\n\n</html>\n",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Kayıt Ol</title>\n\n  <link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\">\n  <link href=\"https://unpkg.com/survey-core/defaultV2.min.css\" rel=\"stylesheet\" />\n  <link href=\"https://unpkg.com/survey-core/survey-core.min.css\" rel=\"stylesheet\" />\n    <script type=\"text/javascript\" src=\"https://unpkg.com/survey-core/themes/layered-dark-panelless.min.js\"></script>\n\n  <style>\n    body {\n      background: linear-gradient(to right, #8e44ad, #2c3e50);\n      height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n\n    .form-wrapper {\n      flex: 1;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n    }\n\n    .form-card {\n      background: rgba(255, 255, 255, 0.8);\n      border-radius: 1rem;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);\n      width: 100%;\n      max-width : 550px;\n\n      backdrop-filter: blur(10px);\n    }\n\n\n    h2 {\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 1rem;\n      color: #343a40;\n    }\n  </style>\n\n  <script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-core/survey.core.min.js\"></script>\n  <script src=\"https://unpkg.com/survey-js-ui/survey-js-ui.min.js\"></script>\n  <script type=\"module\" src=\"/js/form.js\"></script>\n  <script type=\"module\" src=\"/js/navigation.js\"></script>\n</head>\n\n<body>\n\n  <div class=\"form-wrapper\">\n    <div class=\"form-card\">\n      <div id=\"surveyContainer\"></div>\n    </div>\n  </div>\n\n<script type=\"module\">\n  import FormController from \"/js/form.js\";\n  const fc = new FormController();\n  (async () => {\n    await fc.loadForm(\"register-form\");\n  })();\n</script>\n\n</body>\n\n</html>\n",
         "output": "str",
         "x": 380,
         "y": 440,
@@ -4927,7 +5133,7 @@
         "type": "function",
         "z": "a494dcc6cc32ec33",
         "name": "validation",
-        "func": "msg.formData = msg.payload;\n\nif (!msg.formData.username || !msg.formData.displayName || !msg.formData.email || !msg.formData.password){\n    msg.payload = {\n        success : false,\n        error : \"Lütfen Tüm Alanları Doldurun\"\n    }\n    return [null,msg]\n}\n\nif (msg.formData.username.length < 3)\n{\n    msg.payload = {\n        success : false,\n        error : \"Kullanıcı Adı En az 3 karakterden oluşbilir\"\n    }\n}\n\nif (msg.formData.password.length < 8 && msg.formData.password.length > 16){\n    msg.payload = {\n        success : false,\n        error : \"Şifre minimum 8 maxiumim 16 karakter olabilir\" \n    }\n\n}\n\n\nlet query = {\n    $or : [\n        {\n            username : msg.formData.username,\n        },\n        {\n            email : msg.formData.email\n        }\n    ]\n}\n\nmsg.payload = [query]\n\n\n\n\n\nreturn msg;",
+        "func": "msg.formData = msg.payload;\n\nif (!msg.formData.username || !msg.formData.displayName || !msg.formData.email || !msg.formData.password){\n    msg.payload = {\n        success : false,\n        error : \"Lütfen Tüm Alanları Doldurun\"\n    }\n    return [null,msg]\n}\n\nif (msg.formData.username.length < 3)\n{\n    msg.payload = {\n        success : false,\n        error : \"Kullanıcı Adı En az 3 karakterden oluşabilir\"\n    }\n}\n\nif (msg.formData.password.length < 8 && msg.formData.password.length > 16){\n    msg.payload = {\n        success : false,\n        error : \"Şifre minimum 8 maxiumim 16 karakter olabilir\" \n    }\n\n}\n\n\nlet query = {\n    $or : [\n        {\n            username : msg.formData.username,\n        },\n        {\n            email : msg.formData.email\n        }\n    ]\n}\n\nmsg.payload = [query]\n\n\nreturn msg;",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -4977,8 +5183,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 903.25,
-        "y": 552.9999809265137,
+        "x": 910,
+        "y": 560,
         "wires": [
             [
                 "d9cbac2404fe6a7a"
@@ -5020,8 +5226,8 @@
         "match": "match",
         "outputs": 1,
         "rounds": 10,
-        "x": 710.25,
-        "y": 557,
+        "x": 710,
+        "y": 560,
         "wires": [
             [
                 "10ed3dc0692b9af7"
@@ -5127,7 +5333,7 @@
         "signvar": "payload",
         "storetoken": "payload",
         "x": 1600,
-        "y": 199,
+        "y": 200,
         "wires": [
             [
                 "32f2dacd509a22a8"
@@ -6070,16 +6276,6 @@
         ]
     },
     {
-        "id": "b015fec641340424",
-        "type": "comment",
-        "z": "a494dcc6cc32ec33",
-        "name": "SORRRR",
-        "info": "",
-        "x": 1080,
-        "y": 1660,
-        "wires": []
-    },
-    {
         "id": "a74d907a106e924b",
         "type": "inject",
         "z": "b3c1ef86c9e1d050",
@@ -6231,8 +6427,8 @@
         "z": "b3c1ef86c9e1d050",
         "name": "Her sabah 9 da bitime 3 gün kalan görevleri bulur mail atar",
         "info": "",
-        "x": 310,
-        "y": 40,
+        "x": 330,
+        "y": 80,
         "wires": []
     },
     {
@@ -6487,7 +6683,8 @@
         "y": 300,
         "wires": [
             [
-                "e2cb00ab2ed96569"
+                "e2cb00ab2ed96569",
+                "9a1239ea245a080f"
             ]
         ]
     },
@@ -6775,7 +6972,8 @@
         "y": 460,
         "wires": [
             [
-                "5ff1dc9f9dfd6606"
+                "5ff1dc9f9dfd6606",
+                "86c15db218d2093e"
             ]
         ]
     },
@@ -6858,5 +7056,39 @@
                 "50cbcfb859db4354"
             ]
         ]
+    },
+    {
+        "id": "9a1239ea245a080f",
+        "type": "debug",
+        "z": "d3c4fb0cefa46834",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1650,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "86c15db218d2093e",
+        "type": "debug",
+        "z": "d3c4fb0cefa46834",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2080,
+        "y": 420,
+        "wires": []
     }
 ]

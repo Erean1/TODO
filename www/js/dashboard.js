@@ -11,9 +11,10 @@ class DashboardController {
       }
       const data = await res.json();
 
-      document.getElementById("totalUsers").textContent +=`Toplam Kullanıcı Sayısı : ${JSON.stringify(data.lastthreedaysusers)} `
-      document.getElementById("activeUsers").textContent +=`Aktif Kullanıcı Sayısı : ${JSON.stringify(data.activeUserCount)} `
-      document.getElementById("passiveUsers").textContent +=`Pasif Kullanıcı Sayısı : ${JSON.stringify(data.passiveUserCount)} `
+      document.getElementById("totalUsers").textContent +=`${data.lastthreedaysusers} `
+      document.getElementById("activeUsers").textContent +=`${data.activeUserCount} `
+      document.getElementById("passiveUsers").textContent +=`${data.passiveUserCount} `
+      document.getElementById("lastThreeDaysUsers").textContent +=`${data.lastthreedaysusers} `
     } catch (error) {
       console.error(error);
     }
@@ -26,9 +27,9 @@ class DashboardController {
         throw new Error("Cold not fetch resources");
       }
       const data = await res.json();
-      document.getElementById("totalTodos").textContent += `Toplam Todo Sayısı : ${JSON.stringify(data.todos)} `
-      document.getElementById("completedTodos").textContent += `Tamamlanan Todo Sayısı : ${JSON.stringify(data.completedTodos)} `
-      document.getElementById("uncompletedTodos").textContent += `Tamamlanmayan Todo Sayısı : ${JSON.stringify(data.unCompletedTodos)} `
+      document.getElementById("totalTodos").textContent += `Toplam Todo Sayısı : ${data.todos} `
+      document.getElementById("completedTodos").textContent += `Tamamlanan Todo Sayısı : ${data.completedTodos} `
+      document.getElementById("uncompletedTodos").textContent += `Tamamlanmayan Todo Sayısı : ${data.unCompletedTodos} `
     } catch(error){
       console.error(error)
     }
@@ -40,6 +41,5 @@ class DashboardController {
   }
 }
 
-const dash = new DashboardController();
 
 export default DashboardController;

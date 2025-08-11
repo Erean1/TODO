@@ -27,7 +27,7 @@ class FormController {
       operationID = pathParts[pathParts.length - 1]; // son indexi aldik
     }
 
-    if (type === "editTodo-form" && "editUser-form") {
+    if (type === "editTodo-form" || type === "editUser-form") {
       formJson.elements.push({
         type: "html",
         name: "cancel-button",
@@ -87,7 +87,7 @@ class FormController {
       survey.css = {
         title: "h6 text-primary fw-bold fs-2 ",
         question: {
-          title: "fw-normal text-success",
+          title: "fw-bold text-success",
           input: "form-control",
         },
         navigation: {
@@ -152,7 +152,6 @@ class FormController {
           }, 1000);
           return;
         }
-
         switch (type) {
           case "login-form":
             window.location.href = "/";
@@ -195,3 +194,5 @@ class FormController {
 }
 
 export default FormController;
+
+

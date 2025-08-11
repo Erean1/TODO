@@ -102,7 +102,6 @@ $(document).on("click", "button.action-btn", async function () {
   const id = $(this).data("id"); // data-id diye tanımladık  butonlara onu cektik this.data ile
   const type = $(this).data("type"); // date-type olanları
   const tableType = $(this).data("tableId"); // date-tableId olanları
-
   try {
     if (tableType === "categoryTable") {
       const res = await fetch(`/api/category-operation/${type}`, {
